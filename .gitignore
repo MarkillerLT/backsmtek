@@ -1,0 +1,11 @@
+# Docker
+docker-compose.override.yml
+*.log
+
+# Laravel (extra seguridad)
+.env
+/vendor
+/node_modules
+
+# OS
+.DS_Store
