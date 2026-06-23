@@ -104,6 +104,46 @@ header {
     transition: background-color var(--transition), box-shadow var(--transition);
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.auth-links a {
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: .8rem 1.4rem;
+    border-radius: var(--radius-sm);
+    transition:
+        background-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+.auth-links a:hover {
+    background: var(--bg-section-alt);
+}
+
+.auth-links .cta-nav {
+    background: var(--acentos);
+    color: #1a2a38;
+    font-weight: 700;
+}
+
+.auth-links .cta-nav:hover {
+    background: #e09800;
+    transform: translateY(-2px);
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -1032,36 +1072,64 @@ footer a:hover {
     }
 }
 
+/* @media (max-width: 768px) { */
+/* .hamburger { */
+/* display: flex; */
+/* } */
+
+/* .navegacion-principal { */
+/* display: none; */
+/* flex-direction: column; */
+/* align-items: stretch; */
+/* gap: 0; */
+/* padding: 0; */
+/* } */
+
+/* .navegacion-principal.abierto { */
+/* display: flex; */
+/* } */
+
+/* .navegacion-principal a { */
+/* border-bottom: 1px solid rgba(255, 255, 255, 0.1); */
+/* padding: 1.5rem 2.5rem; */
+/* } */
+
+/* .navegacion-principal a.cta-nav { */
+/* margin-left: 0; */
+/* border-radius: 0; */
+/* } */
+
+/* .footer-inner { */
+/* flex-direction: column; */
+/* text-align: center; */
+/* } */
+/* } */
 @media (max-width: 768px) {
-    .hamburger {
-        display: flex;
+
+    .contenedor {
+        width: calc(100% - 2rem);
     }
 
     .navegacion-principal {
-        display: none;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0;
-        padding: 0;
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: .4rem;
+
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+
+        padding: .5rem 0;
     }
 
-    .navegacion-principal.abierto {
-        display: flex;
+    .navegacion-principal::-webkit-scrollbar {
+        display: none;
     }
 
     .navegacion-principal a {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 1.5rem 2.5rem;
-    }
-
-    .navegacion-principal a.cta-nav {
-        margin-left: 0;
-        border-radius: 0;
-    }
-
-    .footer-inner {
-        flex-direction: column;
-        text-align: center;
+        flex-shrink: 0;
+        white-space: nowrap;
     }
 }
 

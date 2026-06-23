@@ -54,6 +54,23 @@
           SMTEK
         </div>
       </div>
+<div class="header-actions">
+
+        <div class="auth-links">
+            @if (Route::has('login'))
+                @auth
+                    <a href="{{ url('/dashboard') }}">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}">Ingresar</a>
+
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="cta-nav">
+                            Registrarse
+                        </a>
+                    @endif
+                @endauth
+            @endif
+        </div>
 
       <button
         id="dark-toggle"
@@ -80,6 +97,7 @@
           <div class="toggle-thumb"></div>
         </div>
       </button>
+    </div>
     </header>
 
     <!-- Nav Bar -->
