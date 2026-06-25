@@ -123,6 +123,7 @@
                                 value="{{ old('last_name') }}"
                                 placeholder="Pérez"
                                 autocomplete="family-name"
+                                required
                             />
                         </div>
                     </div>
@@ -138,6 +139,7 @@
                             placeholder="correo@ejemplo.com"
                             required
                             autocomplete="username"
+                            required
                         />
                         @error('email')
                             <span class="register-error">{{ $message }}</span>
