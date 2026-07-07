@@ -393,7 +393,6 @@
             color: var(--AzulOscuro);
         }
 
-        /* ══════════════════ RESPONSIVE ══════════════════ */
         @media (max-width: 600px) {
             .register-card {
                 padding: 3rem 2rem;
@@ -410,10 +409,6 @@
             }
         }
     </style>
-
-    {{-- ╔══════════════════════════════════════════════════════════╗
-         ║  DARK MODE — mismo script que el resto del sitio       ║
-         ╚══════════════════════════════════════════════════════════╝ --}}
     <script src="assets/js/script.js"></script>
 
 </x-guest-layout>
