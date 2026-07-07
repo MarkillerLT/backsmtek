@@ -2,13 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
-Route::get('/prueba',function () {
-    return 'Hola desde la ruta de prueba';
 });
 
 Route::middleware([
@@ -16,11 +13,13 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
 
-Route::get('/admin', [AdminController::class, 'index'])
-    ->middleware('auth.admin')
-    ->name('admin.index');
+    Route::get('/dashboard', [UserController::class, 'index'])
+        ->name('dashboard');
+
+    Route::middleware('auth.admin')->group(function () {
+        Route::get('/admin', [AdminController::class, 'index'])
+            ->name('admin.index');
+    });
+
+});
