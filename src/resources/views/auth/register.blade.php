@@ -1,6 +1,6 @@
 <x-guest-layout>
     <header>
-        <div class="logo">
+       <div class="logo">
         <img
           id="logo-img"
           src="assets/img/1.svg"
