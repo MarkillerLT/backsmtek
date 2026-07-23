@@ -307,9 +307,6 @@
         .kpi-delta.up   { color: var(--contrastes); }
         .kpi-delta.down { color: var(--error); }
 
-        /* ══════════════════════════════════════════════════
-           FILA CENTRAL: gráfica + resumen movimientos
-        ══════════════════════════════════════════════════ */
         .dashboard-row {
             display: grid;
             grid-template-columns: 1fr 38rem;
@@ -577,26 +574,28 @@
         <aside class="admin-sidebar" id="adminSidebar">
 
             {{-- Logo --}}
-<div class="logo">
-        <img
-          id="logo-img"
-          src="assets/img/1.svg"
-          alt="SMTEK Logo"
-          onerror="
-            this.style.display = 'none';
-            document.getElementById('logo-fallback').style.display = 'flex';
-          "
-        />
+    <a href="/">
+        <div class="logo">
+            <img
+                id="logo-img"
+                src="assets/img/1.svg"
+                alt="SMTEK Logo"
+                onerror="
+                this.style.display = 'none';
+                document.getElementById('logo-fallback').style.display = 'flex';"
+            />
         <div id="logo-fallback" class="logo-placeholder" style="display: none">
-          SMTEK
+            SMTEK
         </div>
       </div>
+    </a>
 
             {{-- Menú principal --}}
             <nav class="sidebar-nav">
                 <div class="sidebar-label">Principal</div>
 
-                <a href="#" class="sidebar-link activo">
+                <a href="{{ route('admin.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.index') ? 'activo' : '' }}">
                     <span class="s-icon">📊</span>
                     Dashboard
                 </a>
@@ -608,10 +607,20 @@
 
                 <div class="sidebar-label">Gestión</div>
 
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">📋</span>
+                <a href="{{ route('admin.productos.index') }}" class="sidebar-link">
+                    <span class="s-icon">📦</span>
+                    Productos
+                </a>
+
+                <a href="{{ route('admin.cotizaciones.index') }}" class="sidebar-link">
+                <span class="s-icon">📋</span>
                     Cotizaciones
-                    <span class="s-badge">4</span>
+
+                @if(isset($cotizacionesPendientes) && $cotizacionesPendientes > 0)
+                    <span class="s-badge">
+                        {{ $cotizacionesPendientes }}
+                    </span>
+                @endif
                 </a>
 
                 <a href="#" class="sidebar-link">
@@ -623,6 +632,7 @@
                     <span class="s-icon">👥</span>
                     Usuarios
                 </a>
+
             </nav>
 
             {{-- Logout en el sidebar --}}
@@ -673,31 +683,31 @@
 
                 {{-- Derecha: dark mode + logout --}}
                 <div class="topbar-actions">
-<button
-        id="dark-toggle"
-        class="dark-toggle"
-        aria-label="Cambiar modo de color"
-        type="button"
-      >
-        <span class="toggle-icon" aria-hidden="true">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1em"
-            height="1em"
-            viewBox="0 0 24 24"
-          >
-            <title xmlns="">dark</title>
-            <path
-              fill="currentColor"
-              d="M12.741 20.917a9.4 9.4 0 0 1-1.395-.105a9.141 9.141 0 0 1-1.465-17.7a1.18 1.18 0 0 1 1.21.281a1.27 1.27 0 0 1 .325 1.293a8.1 8.1 0 0 0-.353 2.68a8.27 8.27 0 0 0 4.366 6.857a7.6 7.6 0 0 0 3.711.993a1.242 1.242 0 0 1 .994 1.963a9.15 9.15 0 0 1-7.393 3.738M10.261 4.05a.2.2 0 0 0-.065.011a8.137 8.137 0 1 0 9.131 12.526a.22.22 0 0 0 .013-.235a.23.23 0 0 0-.206-.136a8.6 8.6 0 0 1-4.188-1.116a9.27 9.27 0 0 1-4.883-7.7a9.1 9.1 0 0 1 .4-3.008a.29.29 0 0 0-.069-.285a.18.18 0 0 0-.133-.057"
-            />
-          </svg>
-        </span>
-        <span class="toggle-label">Modo Oscuro</span>
-        <div class="toggle-track" aria-hidden="true">
-          <div class="toggle-thumb"></div>
-        </div>
-      </button>
+                <button
+                    id="dark-toggle"
+                    class="dark-toggle"
+                    aria-label="Cambiar modo de color"
+                    type="button"
+                >
+                <span class="toggle-icon" aria-hidden="true">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 24 24"
+                    >
+                    <title xmlns="">dark</title>
+                    <path
+                        fill="currentColor"
+                        d="M12.741 20.917a9.4 9.4 0 0 1-1.395-.105a9.141 9.141 0 0 1-1.465-17.7a1.18 1.18 0 0 1 1.21.281a1.27 1.27 0 0 1 .325 1.293a8.1 8.1 0 0 0-.353 2.68a8.27 8.27 0 0 0 4.366 6.857a7.6 7.6 0 0 0 3.711.993a1.242 1.242 0 0 1 .994 1.963a9.15 9.15 0 0 1-7.393 3.738M10.261 4.05a.2.2 0 0 0-.065.011a8.137 8.137 0 1 0 9.131 12.526a.22.22 0 0 0 .013-.235a.23.23 0 0 0-.206-.136a8.6 8.6 0 0 1-4.188-1.116a9.27 9.27 0 0 1-4.883-7.7a9.1 9.1 0 0 1 .4-3.008a.29.29 0 0 0-.069-.285a.18.18 0 0 0-.133-.057"
+                    />
+                </svg>
+                </span>
+                <span class="toggle-label">Modo Oscuro</span>
+                <div class="toggle-track" aria-hidden="true">
+                    <div class="toggle-thumb"></div>
+                </div>
+                </button>
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -742,7 +752,7 @@
                     <div class="kpi-card">
                         <div class="kpi-icon rojo">👥</div>
                         <div class="kpi-info">
-                            <div class="kpi-valor">247</div>
+                            <div class="kpi-valor">{{$user}}</div>
                             <div class="kpi-label">Usuarios registrados</div>
                             <div class="kpi-delta up">▲ 8 nuevos esta semana</div>
                         </div>

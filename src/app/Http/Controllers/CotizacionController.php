@@ -8,6 +8,15 @@ use Illuminate\Http\Request;
 
 class CotizacionController extends Controller
 {
+    public function index()
+    {
+        $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')
+        ->count();
+
+        $cotizaciones = Cotizacion::latest()->get();
+
+        return view('admin.cotizaciones.index', compact('cotizaciones'));
+    }
     public function create()
     {
         return view('cotizaciones.create');
@@ -39,4 +48,25 @@ class CotizacionController extends Controller
             ->with('success', '¡Tu solicitud de cotización fue enviada correctamente!');
 
     }
+    public function show(Cotizacion $cotizacion)
+    {
+        return view('admin.cotizaciones.show', compact('cotizacion'));
+    }
+    public function update(Request $request, Cotizacion $cotizacion)
+    {
+        $request->validate([
+            'estado' => [
+                'required',
+                'in:pendiente,en_proceso,respondida,cancelada'
+            ],
+        ]);
+
+        $cotizacion->update([
+            'estado' => $request->estado,
+        ]);
+
+        return redirect()
+            ->route('admin.cotizaciones.show', $cotizacion)
+            ->with('success', 'Estado actualizado correctamente.');
+     }
 }

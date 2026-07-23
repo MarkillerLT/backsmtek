@@ -577,24 +577,24 @@
         <aside class="admin-sidebar" id="adminSidebar">
 
             {{-- Logo --}}
-<div class="logo">
-        <img
-          id="logo-img"
-          src="assets/img/1.svg"
-          alt="SMTEK Logo"
-          onerror="
-            this.style.display = 'none';
-            document.getElementById('logo-fallback').style.display = 'flex';
-          "
-        />
+<a href="/">
+        <div class="logo">
+            <img
+                id="logo-img"
+                src="assets/img/1.svg"
+                alt="SMTEK Logo"
+                onerror="
+                this.style.display = 'none';
+                document.getElementById('logo-fallback').style.display = 'flex';"
+            />
         <div id="logo-fallback" class="logo-placeholder" style="display: none">
-          SMTEK
+            SMTEK
         </div>
       </div>
-
+    </a>
             {{-- Menú principal --}}
             <nav class="sidebar-nav">
-                <div class="sidebar-label">$$$$$$</div>
+                <div class="sidebar-label">Principal</div>
 
                 <a href="#" class="sidebar-link activo">
                     <span class="s-icon">📊</span>
@@ -669,7 +669,7 @@
                 </div>
 
                 {{-- Centro: título --}}
-                <div class="topbar-title">Dashboard</div>
+                <div class="topbar-title">USUARIO</div>
 
                 {{-- Derecha: dark mode + logout --}}
                 <div class="topbar-actions">

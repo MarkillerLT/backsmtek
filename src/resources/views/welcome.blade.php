@@ -59,7 +59,11 @@
         <div class="auth-links">
             @if (Route::has('login'))
                 @auth
+                    @if(auth()->user()->rol === 'admin')
+                        <a href="{{ url('/admin') }}">Panel de Administración</a>
+                @else
                     <a href="{{ url('/dashboard') }}">Dashboard</a>
+                @endif
                 @else
                     <a href="{{ route('login') }}">Ingresar</a>
 
@@ -119,7 +123,7 @@
           <a href="#">Servicios</a>
           <a href="#">Contacto</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-          <a href="#" style="font-family: bold">Trabaja con nosotros</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
         </nav>
       </div>
     </div>

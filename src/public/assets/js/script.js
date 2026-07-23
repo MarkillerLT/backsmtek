@@ -11,8 +11,10 @@
   const toggleLabel = document.querySelector(".toggle-label");
   const logoImg = document.getElementById("logo-img");
 
-  const LOGO_LIGHT = "assets/img/1.svg";
-  const LOGO_DARK  = "assets/img/1b.svg";
+  const LOGO_LIGHT = "/assets/img/1.svg";
+  const LOGO_DARK  = "/assets/img/1b.svg";
+  // const LOGO_LIGHT = window.SMTEK?.logoLight || "/assets/img/1.svg";
+  // const LOGO_DARK  = window.SMTEK?.logoDark || "/assets/img/1b.svg";
 
   const LABEL_LIGHT = "Modo Oscuro";
   const LABEL_DARK  = "Modo Claro";
@@ -146,3 +148,13 @@
     });
   }
 })();
+
+// ── Sidebar admin (mobile) ─────────────────────────────
+const sidebarToggle = document.getElementById("sidebarToggle");
+const adminSidebar = document.getElementById("adminSidebar");
+
+if (sidebarToggle && adminSidebar) {
+  sidebarToggle.addEventListener("click", function () {
+    adminSidebar.classList.toggle("open");
+  });
+}
