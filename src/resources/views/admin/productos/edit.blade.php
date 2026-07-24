@@ -637,470 +637,112 @@
         .sidebar-overlay.activo { display: block; }
     </style>
 
-    <div class="admin-wrapper" id="adminWrapper">
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-        <aside class="admin-sidebar" id="adminSidebar">
-            <a href="/">
-                <div class="logo">
-                <img
-                    id="logo-img"
-                    src="{{ asset('assets/img/1.svg')}}"
-                    alt="SMTEK Logo"
-                    onerror="
-                    this.style.display = 'none';
-                    document.getElementById('logo-fallback').style.display = 'flex';"
-                />
-                    <div id="logo-fallback" class="logo-placeholder" style="display: none">
-                        SMTEK
-                    </div>
-                </div>
+    <x-admin.layout
+        :cotizacionesPendientes="$cotizacionesPendientes"
+        title="Editar Producto">
+
+        <form
+            action="{{ route('admin.productos.update', $producto) }}"
+            method="POST"
+            enctype="multipart/form-data">
+
+            @csrf
+            @method('PUT')
+
+            <div>
+                <label for="nombre">Nombre</label><br>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    value="{{ old('nombre', $producto->nombre) }}"
+                    required>
+            </div>
+
+            <br>
+
+            <div>
+                <label for="descripcion">Descripción</label><br>
+
+                <textarea
+                    id="descripcion"
+                    name="descripcion"
+                    rows="5">{{ old('descripcion', $producto->descripcion) }}</textarea>
+            </div>
+
+            <br>
+
+            <div>
+                <label for="precio">Precio</label><br>
+
+                <input
+                    type="number"
+                    id="precio"
+                    name="precio"
+                    step="0.01"
+                    min="0"
+                    value="{{ old('precio', $producto->precio) }}"
+                    required>
+            </div>
+
+            <br>
+
+            <div>
+                <label for="stock">Stock</label><br>
+
+                <input
+                    type="number"
+                    id="stock"
+                    name="stock"
+                    min="0"
+                    value="{{ old('stock', $producto->stock) }}"
+                    required>
+            </div>
+
+            <br>
+
+            <div>
+                <label for="clasificacion">Clasificación</label><br>
+
+                <input
+                    type="text"
+                    id="clasificacion"
+                    name="clasificacion"
+                    value="{{ old('clasificacion', $producto->clasificacion) }}">
+            </div>
+
+            <br>
+
+            <div>
+                <label for="imagen">Imagen</label><br>
+
+                <input
+                    type="file"
+                    id="imagen"
+                    name="imagen"
+                    accept="image/*">
+
+                @if($producto->imagen)
+                    <br><br>
+
+                    <img
+                        src="{{ asset('storage/' . $producto->imagen) }}"
+                        alt="{{ $producto->nombre }}"
+                        style="max-width:200px;">
+                @endif
+            </div>
+
+            <br>
+
+            <button type="submit">
+                Guardar cambios
+            </button>
+
+            <a href="{{ route('admin.productos.index') }}">
+                Cancelar
             </a>
 
-            <nav class="sidebar-nav">
-                <div class="sidebar-label">Principal</div>
-
-                <a href="{{ route('dashboard') }}" class="sidebar-link">
-                    <span class="s-icon">📊</span> Dashboard
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">👤</span> Perfil
-                </a>
-
-                <div class="sidebar-label">Gestión</div>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">📋</span> Cotizaciones
-                    <span class="s-badge">4</span>
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">💼</span> Ventas
-                </a>
-
-                <a href="{{ route('admin.productos.index') }}" class="sidebar-link activo">
-                    <span class="s-icon">📦</span> Productos
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">👥</span> Usuarios
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;cursor:pointer;font-family:inherit;">
-                        <span class="s-icon">🚪</span> Cerrar sesión
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- ╔══════════════════════════════════════════╗
-             ║  ÁREA PRINCIPAL                         ║
-             ╚══════════════════════════════════════════╝ --}}
-        <div class="admin-main">
-
-            {{-- Topbar --}}
-            <div class="admin-topbar">
-                <div style="display:flex;align-items:center;gap:1.4rem;">
-                    <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Menú">
-                        <span></span><span></span><span></span>
-                    </button>
-                    <div class="topbar-user">
-                        <div class="topbar-avatar">
-                            @if (Auth::user()->profile_photo_url)
-                                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
-                            @else
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            @endif
-                        </div>
-                        <div>
-                            <div class="topbar-username">{{ Auth::user()->name }}</div>
-                            <div class="topbar-role">Administrador</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="topbar-title">Agregar Producto</div>
-
-                <div class="topbar-actions">
-                    <button class="dark-toggle" id="darkToggle" aria-label="Modo oscuro">
-                        <span class="toggle-icon" id="toggleIcon">🌙</span>
-                        <span class="toggle-label" id="toggleLabel">Oscuro</span>
-                        <div class="toggle-track"><div class="toggle-thumb"></div></div>
-                    </button>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="topbar-logout">
-                            <span>🚪</span><span>Cerrar sesión</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            {{-- Contenido --}}
-            <div class="admin-content">
-
-                {{-- Toolbar: título + breadcrumb --}}
-                <div class="prod-toolbar">
-                    <div class="prod-toolbar-left">
-                        <h1>Agregar Producto</h1>
-                        <div class="prod-breadcrumb">
-                            <a href="{{ route('dashboard') }}">Dashboard</a>
-                            <span>›</span>
-                            <a href="{{ route('admin.productos.index') }}">Productos</a>
-                            <span>›</span>
-                            <span>Nuevo</span>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Layout: form + preview --}}
-                <div class="create-layout">
-
-                    {{-- ── Columna izquierda: formulario ── --}}
-                    <form
-                        action="{{ route('admin.productos.update', $producto) }}"
-                        method="POST"
-                        enctype="multipart/form-data"
-                        id="formProducto"
-                        novalidate
-                    >
-                        @csrf
-                        @method('PUT')
-
-                        {{-- Panel: información general --}}
-                        <div class="panel" style="margin-bottom:2.4rem;">
-                            <div class="panel-header">
-                                <div>
-                                    <h2 class="panel-title">Información general</h2>
-                                    <p class="panel-subtitle">Datos básicos del producto</p>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-grid">
-
-                                    {{-- Nombre --}}
-                                    <div class="form-field full">
-                                        <label for="nombre">Nombre del producto <span class="field-req">*</span></label>
-                                        <input
-                                            type="text"
-                                            id="nombre"
-                                            name="nombre"
-                                            value="{{ old('nombre', $producto->nombre) }}"
-                                            placeholder="Ej. Sensor de proximidad Banner"
-                                            required
-                                            autofocus
-                                        />
-                                        @error('nombre')
-                                            <span class="field-error">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    {{-- Clasificación --}}
-                                    <div class="form-field">
-                                        <label for="clasificacion">Clasificación</label>
-                                        <input
-                                            type="text"
-                                            id="clasificacion"
-                                            name="clasificacion"
-                                            value="{{ old('clasificacion', $producto->clasificacion) }}"
-                                            placeholder="Ej. Sensores industriales"
-                                        />
-                                        @error('clasificacion')
-                                            <span class="field-error">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    {{-- Precio --}}
-                                    <div class="form-field">
-                                        <label for="precio">Precio <span class="field-req">*</span></label>
-                                        <div class="input-prefix-wrap">
-                                            <span class="input-prefix">$</span>
-                                            <input
-                                                type="number"
-                                                id="precio"
-                                                name="precio"
-                                                step="0.01"
-                                                min="0"
-                                                value="{{ old('precio', $producto->precio) }}"
-                                                placeholder="0.00"
-                                                required
-                                            />
-                                        </div>
-                                        @error('precio')
-                                            <span class="field-error">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    {{-- Stock --}}
-                                    <div class="form-field">
-                                        <label for="stock">Stock <span class="field-req">*</span></label>
-                                        <input
-                                            type="number"
-                                            id="stock"
-                                            name="stock"
-                                            min="0"
-                                            value="{{ old('stock', $producto->stock) }}"
-                                            placeholder="0"
-                                            required
-                                        />
-                                        @error('stock')
-                                            <span class="field-error">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                    {{-- Descripción --}}
-                                    <div class="form-field full">
-                                        <label for="descripcion">Descripción</label>
-                                        <textarea
-                                            id="descripcion"
-                                            name="descripcion"
-                                            rows="4"
-                                            placeholder="Describe el producto: características, aplicaciones, especificaciones técnicas..."
-                                        >{{ old('descripcion', $producto->descripcion) }}</textarea>
-                                        @error('descripcion')
-                                            <span class="field-error">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-
-                                </div>{{-- /.form-grid --}}
-                            </div>
-                        </div>
-
-                        {{-- Panel: imagen --}}
-                        <div class="panel" style="margin-bottom:2.4rem;">
-                            <div class="panel-header">
-                                <div>
-                                    <h2 class="panel-title">Imagen del producto</h2>
-                                    <p class="panel-subtitle">JPG, PNG o WEBP · Máx. 2 MB</p>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="img-dropzone" id="imgDropzone">
-                                    <input
-                                        type="file"
-                                        id="imagen"
-                                        name="imagen"
-                                        accept="image/*"
-                                        class="img-input-hidden"
-                                    />
-                                    <div class="img-dropzone-content" id="imgContent">
-                                        <span class="img-dz-icon">🖼️</span>
-                                        <span class="img-dz-label">Arrastra la imagen aquí o <u>haz clic para seleccionar</u></span>
-                                        <span class="img-dz-hint">JPG, PNG, WEBP · Máx. 2 MB</span>
-                                    </div>
-                                </div>
-                                @error('imagen')
-                                    <span class="field-error" style="margin-top:0.6rem;display:block;">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- Botones --}}
-                        <div class="form-actions">
-                            <button type="submit" class="btn-guardar">
-                                💾 Guardar producto
-                            </button>
-                            <a href="{{ route('admin.productos.index') }}" class="btn-cancelar">
-                                ✕ Cancelar
-                            </a>
-                        </div>
-
-                    </form>
-
-                    {{-- ── Columna derecha: preview ── --}}
-                    <div>
-                        <div class="panel preview-panel">
-                            <div class="panel-header">
-                                <div>
-                                    <h2 class="panel-title">Vista previa</h2>
-                                    <p class="panel-subtitle">Así se verá la imagen</p>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-
-                                {{-- Info del archivo --}}
-                                <div class="preview-file-info" id="previewFileInfo">
-                                    <span style="font-size:1.6rem;">🖼️</span>
-                                    <span class="preview-file-name" id="previewFileName"></span>
-                                    <span class="preview-file-size" id="previewFileSize"></span>
-                                    <button type="button" class="btn-quitar-img" id="btnQuitarImg" aria-label="Quitar imagen">✕</button>
-                                </div>
-
-                                {{-- Preview de la imagen --}}
-                                <div class="preview-img-wrap" id="previewWrap">
-                                    <div class="preview-placeholder" id="previewPlaceholder">
-                                        <span>📷</span>
-                                        <span>Sin imagen seleccionada</span>
-                                    </div>
-                                    <img id="previewImg" src="" alt="Preview" style="display:none;" />
-                                </div>
-
-                                {{-- Resumen del producto --}}
-                                <div style="border-top:1px solid var(--border-color);padding-top:1.8rem;margin-top:0.4rem;">
-                                    <p style="font-size:1.2rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);margin:0 0 1.2rem;">Resumen</p>
-                                    <div style="display:flex;flex-direction:column;gap:1rem;">
-                                        <div style="display:flex;justify-content:space-between;font-size:1.4rem;">
-                                            <span style="color:var(--text-muted);">Nombre</span>
-                                            <span id="resNombre" style="font-weight:600;color:var(--text-heading);text-align:right;max-width:16rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">—</span>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;font-size:1.4rem;">
-                                            <span style="color:var(--text-muted);">Clasificación</span>
-                                            <span id="resClasif" style="font-weight:600;color:var(--text-heading);">—</span>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;font-size:1.4rem;">
-                                            <span style="color:var(--text-muted);">Precio</span>
-                                            <span id="resPrecio" style="font-weight:700;color:var(--contrastes);">—</span>
-                                        </div>
-                                        <div style="display:flex;justify-content:space-between;font-size:1.4rem;">
-                                            <span style="color:var(--text-muted);">Stock</span>
-                                            <span id="resStock" style="font-weight:600;color:var(--text-heading);">—</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>{{-- /.create-layout --}}
-
-            </div>{{-- /.admin-content --}}
-        </div>{{-- /.admin-main --}}
-    </div>{{-- /.admin-wrapper --}}
-    <script src="{{asset('assets/js/script.js')}}"></script>
-    <script>
-        // ── Dark mode ──
-        (function () {
-            const btn   = document.getElementById('darkToggle');
-            const icon  = document.getElementById('toggleIcon');
-            const label = document.getElementById('toggleLabel');
-
-            function apply(dark) {
-                document.body.classList.toggle('dark-mode', dark);
-                if (icon)  icon.textContent  = dark ? '☀️' : '🌙';
-                if (label) label.textContent = dark ? 'Claro' : 'Oscuro';
-            }
-
-            const stored      = localStorage.getItem('smtek-dark');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            apply(stored !== null ? stored === '1' : prefersDark);
-
-            btn?.addEventListener('click', function () {
-                const isDark = document.body.classList.contains('dark-mode');
-                apply(!isDark);
-                localStorage.setItem('smtek-dark', !isDark ? '1' : '0');
-            });
-        })();
-
-        // ── Sidebar mobile ──
-        (function () {
-            const toggle  = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('adminSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-
-            function open()  { sidebar.classList.add('abierto');    overlay.classList.add('activo'); }
-            function close() { sidebar.classList.remove('abierto'); overlay.classList.remove('activo'); }
-
-            toggle?.addEventListener('click', () => sidebar.classList.contains('abierto') ? close() : open());
-            overlay?.addEventListener('click', close);
-        })();
-
-        // ── Preview de imagen ──
-        (function () {
-            const input       = document.getElementById('imagen');
-            const dropzone    = document.getElementById('imgDropzone');
-            const content     = document.getElementById('imgContent');
-            const previewImg  = document.getElementById('previewImg');
-            const placeholder = document.getElementById('previewPlaceholder');
-            const fileInfo    = document.getElementById('previewFileInfo');
-            const fileName    = document.getElementById('previewFileName');
-            const fileSize    = document.getElementById('previewFileSize');
-            const btnQuitar   = document.getElementById('btnQuitarImg');
-
-            function formatSize(bytes) {
-                if (bytes < 1024)       return bytes + ' B';
-                if (bytes < 1048576)    return (bytes / 1024).toFixed(1) + ' KB';
-                return (bytes / 1048576).toFixed(1) + ' MB';
-            }
-
-            function showPreview(file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    previewImg.src = e.target.result;
-                    previewImg.style.display = 'block';
-                    placeholder.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-
-                fileName.textContent = file.name;
-                fileSize.textContent = formatSize(file.size);
-                fileInfo.classList.add('visible');
-
-                // Cambiar estilo del dropzone
-                content.querySelector('.img-dz-label').innerHTML = '✅ <u>Cambiar imagen</u>';
-                dropzone.style.borderStyle = 'solid';
-                dropzone.style.borderColor = 'var(--contrastes)';
-            }
-
-            function clearPreview() {
-                input.value = '';
-                previewImg.src = '';
-                previewImg.style.display = 'none';
-                placeholder.style.display = 'flex';
-                fileInfo.classList.remove('visible');
-                content.querySelector('.img-dz-label').innerHTML = 'Arrastra la imagen aquí o <u>haz clic para seleccionar</u>';
-                dropzone.style.borderStyle = 'dashed';
-                dropzone.style.borderColor = 'var(--border-color)';
-            }
-
-            input.addEventListener('change', function () {
-                if (this.files[0]) showPreview(this.files[0]);
-            });
-
-            // Drag & drop
-            dropzone.addEventListener('dragover',  e => { e.preventDefault(); dropzone.classList.add('drag-over'); });
-            dropzone.addEventListener('dragleave', ()  => dropzone.classList.remove('drag-over'));
-            dropzone.addEventListener('drop', function (e) {
-                e.preventDefault();
-                dropzone.classList.remove('drag-over');
-                const file = e.dataTransfer.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const dt = new DataTransfer();
-                    dt.items.add(file);
-                    input.files = dt.files;
-                    showPreview(file);
-                }
-            });
-
-            btnQuitar?.addEventListener('click', clearPreview);
-        })();
-
-        // ── Resumen en vivo (panel lateral) ──
-        (function () {
-            const fields = {
-                nombre:        { input: 'nombre',        el: 'resNombre',  format: v => v || '—' },
-                clasificacion: { input: 'clasificacion',  el: 'resClasif',  format: v => v || '—' },
-                precio:        { input: 'precio',         el: 'resPrecio',  format: v => v ? '$' + parseFloat(v).toLocaleString('es-MX', {minimumFractionDigits:2}) : '—' },
-                stock:         { input: 'stock',          el: 'resStock',   format: v => v !== '' ? v + ' uds.' : '—' },
-            };
-
-            Object.values(fields).forEach(({ input, el, format }) => {
-                const inputEl = document.getElementById(input);
-                const resEl   = document.getElementById(el);
-                if (!inputEl || !resEl) return;
-
-                inputEl.addEventListener('input', function () {
-                    resEl.textContent = format(this.value);
-                });
-
-                // Inicializar con old() si viene de un error de validación
-                if (inputEl.value) resEl.textContent = format(inputEl.value);
-            });
-        })();
-    </script>
-
+        </form>
+    </x-admin.layout>
 </x-app-layout>

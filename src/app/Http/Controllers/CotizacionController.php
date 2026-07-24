@@ -15,7 +15,10 @@ class CotizacionController extends Controller
 
         $cotizaciones = Cotizacion::latest()->get();
 
-        return view('admin.cotizaciones.index', compact('cotizaciones'));
+        return view('admin.cotizaciones.index', compact(
+            'cotizaciones',
+            'cotizacionesPendientes'
+        ));
     }
     public function create()
     {
@@ -50,9 +53,15 @@ class CotizacionController extends Controller
     }
     public function show(Cotizacion $cotizacion)
     {
-        return view('admin.cotizaciones.show', compact('cotizacion'));
+        $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')
+            ->count();
+
+        return view('admin.cotizaciones.show', compact(
+            'cotizacion',
+            'cotizacionesPendientes'
+        ));
     }
-    public function update(Request $request, Cotizacion $cotizacion)
+     public function update(Request $request, Cotizacion $cotizacion)
     {
         $request->validate([
             'estado' => [

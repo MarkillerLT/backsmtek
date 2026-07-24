@@ -14,9 +14,8 @@
     />
 
     <!-- Styles -->
-    <link rel="stylesheet" href="assets/css/normalize.css" />
-    <link rel="stylesheet" href="assets/css/styles.css" />
-
+        <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
+        <link rel="stylesheet" href="{{asset('assets/css/normalize.css')}}" />
     <!-- animacion principal -->
     <style>
       .reveal {

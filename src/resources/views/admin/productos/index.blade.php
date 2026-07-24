@@ -657,362 +657,255 @@
 
         .sidebar-overlay.activo { display: block; }
     </style>
+    <x-admin.layout
+        title="Productos"
+        :cotizacionesPendientes="$cotizacionesPendientes">
 
-    {{-- ════════════════════════════════════════════════════════════
-         WRAPPER
-    ════════════════════════════════════════════════════════════ --}}
-    <div class="admin-wrapper" id="adminWrapper">
+        {{-- ── Toolbar: título + botón agregar ── --}}
+        <div class="prod-toolbar">
+            <div class="prod-toolbar-left">
+                <h1>Productos</h1>
+                <p>Gestiona el catálogo de productos de SMTEK</p>
+            </div>
 
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        {{-- ╔══════════════════════════════════════════╗
-             ║  SIDEBAR                                ║
-             ╚══════════════════════════════════════════╝ --}}
-        <aside class="admin-sidebar" id="adminSidebar">
-                <a href="/">
-            <div class="logo">
-                <img
-                    id="logo-img"
-                    src="{{ asset('assets/img/1.svg')}}"
-                    alt="SMTEK Logo"
-                    onerror="
-                    this.style.display = 'none';
-                    document.getElementById('logo-fallback').style.display = 'flex';"
-                />
-                    <div id="logo-fallback" class="logo-placeholder" style="display: none">
-                        SMTEK
-                    </div>
-                </div>
+            <a href="{{ route('admin.productos.create') }}" class="btn-agregar">
+                ＋ Agregar producto
             </a>
-            <nav class="sidebar-nav">
-                <div class="sidebar-label">Principal</div>
-
-                <a href="{{ route('dashboard') }}" class="sidebar-link">
-                    <span class="s-icon">📊</span> Dashboard
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">👤</span> Perfil
-                </a>
-
-                <div class="sidebar-label">Gestión</div>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">📋</span> Cotizaciones
-                    <span class="s-badge">4</span>
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">💼</span> Ventas
-                </a>
-
-                <a href="{{ route('admin.productos.index') }}" class="sidebar-link activo">
-                    <span class="s-icon">📦</span> Productos
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">👥</span> Usuarios
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;cursor:pointer;font-family:inherit;">
-                        <span class="s-icon">🚪</span> Cerrar sesión
-                    </button>
-                </form>
-            </div>
-        </aside>
-
-        {{-- ╔══════════════════════════════════════════╗
-             ║  ÁREA PRINCIPAL                         ║
-             ╚══════════════════════════════════════════╝ --}}
-        <div class="admin-main">
-
-            {{-- ── TOPBAR ── --}}
-            <div class="admin-topbar">
-
-                {{-- Izquierda: hamburguesa (mobile) + usuario --}}
-                <div style="display:flex;align-items:center;gap:1.4rem;">
-                    <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Menú">
-                        <span></span><span></span><span></span>
-                    </button>
-
-                    <div class="topbar-user">
-                        {{-- Avatar: si el usuario tiene foto de perfil de Jetstream --}}
-                        <div class="topbar-avatar">
-                            @if (Auth::user()->profile_photo_url)
-                                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
-                            @else
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            @endif
-                        </div>
-                        <div>
-                            <div class="topbar-username">{{ Auth::user()->name }}</div>
-                            <div class="topbar-role">Administrador</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Centro: título --}}
-                <div class="topbar-title">Dashboard</div>
-
-                {{-- Derecha: dark mode + logout --}}
-                <div class="topbar-actions">
-                <button
-                    id="dark-toggle"
-                    class="dark-toggle"
-                    aria-label="Cambiar modo de color"
-                    type="button"
-                >
-                <span class="toggle-icon" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 24 24"
-                    >
-                    <title xmlns="">dark</title>
-                    <path
-                        fill="currentColor"
-                        d="M12.741 20.917a9.4 9.4 0 0 1-1.395-.105a9.141 9.141 0 0 1-1.465-17.7a1.18 1.18 0 0 1 1.21.281a1.27 1.27 0 0 1 .325 1.293a8.1 8.1 0 0 0-.353 2.68a8.27 8.27 0 0 0 4.366 6.857a7.6 7.6 0 0 0 3.711.993a1.242 1.242 0 0 1 .994 1.963a9.15 9.15 0 0 1-7.393 3.738M10.261 4.05a.2.2 0 0 0-.065.011a8.137 8.137 0 1 0 9.131 12.526a.22.22 0 0 0 .013-.235a.23.23 0 0 0-.206-.136a8.6 8.6 0 0 1-4.188-1.116a9.27 9.27 0 0 1-4.883-7.7a9.1 9.1 0 0 1 .4-3.008a.29.29 0 0 0-.069-.285a.18.18 0 0 0-.133-.057"
-                    />
-                </svg>
-                </span>
-                <span class="toggle-label">Modo Oscuro</span>
-                <div class="toggle-track" aria-hidden="true">
-                    <div class="toggle-thumb"></div>
-                </div>
-                </button>
-
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="topbar-logout">
-                            <span>🚪</span>
-                            <span>Cerrar sesión</span>
-                        </button>
-                    </form>
-                </div>
-
-            </div>{{-- /.admin-topbar --}}
-
-
-            {{-- Contenido --}}
-            <div class="admin-content">
-
-                {{-- ── Toolbar: título + botón agregar ── --}}
-                <div class="prod-toolbar">
-                    <div class="prod-toolbar-left">
-                        <h1>Productos</h1>
-                        <p>Gestiona el catálogo de productos de SMTEK</p>
-                    </div>
-                    <a href="{{ route('admin.productos.create') }}" class="btn-agregar">
-                        ＋ Agregar producto
-                    </a>
-                </div>
-
-                {{-- ── Panel con tabla ── --}}
-                <div class="panel">
-                    <div class="panel-header">
-                        <div>
-                            <h2 class="panel-title">Catálogo</h2>
-                            <p class="panel-count">
-                                {{ $productos->count() }} {{ $productos->count() === 1 ? 'producto registrado' : 'productos registrados' }}
-                            </p>
-                        </div>
-
-                        {{-- Búsqueda rápida en cliente --}}
-                        <div class="prod-search">
-                            <span>🔍</span>
-                            <input
-                                type="text"
-                                id="buscarProducto"
-                                placeholder="Buscar producto..."
-                                autocomplete="off"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="prod-table-wrap">
-                        <table class="prod-table" id="tablaProductos">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Imagen</th>
-                                    <th>Nombre</th>
-                                    <th>Clasificación</th>
-                                    <th>Precio</th>
-                                    <th>Stock</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($productos as $producto)
-                                    <tr>
-                                        {{-- ID --}}
-                                        <td>
-                                            <span class="prod-id">#{{ $producto->id }}</span>
-                                        </td>
-
-                                        {{-- Imagen --}}
-                                        <td>
-                                            <div class="prod-img-wrap">
-                                                @if($producto->imagen)
-                                                    <img
-                                                        src="{{ asset('storage/' . $producto->imagen) }}"
-                                                        alt="{{ $producto->nombre }}"
-                                                    >
-                                                @else
-                                                    <span class="prod-img-empty">Sin imagen</span>
-                                                @endif
-                                            </div>
-                                        </td>
-
-                                        {{-- Nombre --}}
-                                        <td>
-                                            <span class="prod-nombre">{{ $producto->nombre }}</span>
-                                        </td>
-
-                                        {{-- Clasificación --}}
-                                        <td>
-                                            <span class="prod-clasif">{{ $producto->clasificacion }}</span>
-                                        </td>
-
-                                        {{-- Precio --}}
-                                        <td>
-                                            <span class="prod-precio">${{ number_format($producto->precio, 2) }}</span>
-                                        </td>
-
-                                        {{-- Stock con semáforo visual --}}
-                                        <td>
-                                            @if($producto->stock <= 0)
-                                                <span class="prod-stock cero">🔴 Agotado</span>
-                                            @elseif($producto->stock <= 5)
-                                                <span class="prod-stock bajo">🟡 {{ $producto->stock }}</span>
-                                            @else
-                                                <span class="prod-stock ok">🟢 {{ $producto->stock }}</span>
-                                            @endif
-                                        </td>
-
-                                        {{-- Acciones --}}
-                                        <td>
-                                            <div class="prod-acciones">
-                                                <a href="{{ route('admin.productos.edit', $producto) }}" class="btn-editar">
-                                                    ✏️ Editar
-                                                </a>
-
-                                                {{-- Botón que abre el modal, NO submit directo --}}
-                                                <button
-                                                    type="button"
-                                                    class="btn-eliminar"
-                                                    onclick="abrirModal('{{ $producto->id }}', '{{ addslashes($producto->nombre) }}')"
-                                                >
-                                                    🗑 Eliminar
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="7" class="prod-empty">
-                                            <span class="prod-empty-icon">📭</span>
-                                            <div class="prod-empty-msg">No hay productos registrados</div>
-                                            <div class="prod-empty-sub">
-                                                <a href="{{ route('admin.productos.create') }}" style="color:var(--AzulSmtek);font-weight:700;">
-                                                    Agrega el primero aquí
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>{{-- /.panel --}}
-
-            </div>{{-- /.admin-content --}}
-        </div>{{-- /.admin-main --}}
-    </div>{{-- /.admin-wrapper --}}
-
-    {{-- ══════════════════════════════════════════════
-         MODAL DE CONFIRMACIÓN ELIMINAR
-    ══════════════════════════════════════════════ --}}
-    <div class="modal-overlay" id="modalEliminar">
-        <div class="modal-box">
-            <div class="modal-icon">🗑️</div>
-            <h3 class="modal-title">¿Eliminar producto?</h3>
-            <p class="modal-desc" id="modalDesc">
-                Esta acción no se puede deshacer.
-            </p>
-            <div class="modal-actions">
-                <button type="button" class="btn-modal-cancel" onclick="cerrarModal()">
-                    Cancelar
-                </button>
-                <form id="formEliminar" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn-modal-confirm">
-                        Sí, eliminar
-                    </button>
-                </form>
-            </div>
         </div>
-    </div>
 
-    <script src="{{asset('assets/js/script.js')}}"></script>
-    <script>
-         // ── Sidebar mobile ──
-        (function () {
-            const toggle  = document.getElementById('sidebarToggle');
-            const sidebar = document.getElementById('adminSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
+        {{-- Panel --}}
+        <div class="panel">
 
-            function open()  { sidebar.classList.add('abierto');    overlay.classList.add('activo'); }
-            function close() { sidebar.classList.remove('abierto'); overlay.classList.remove('activo'); }
+            <div class="panel-header">
 
-            toggle?.addEventListener('click', () => sidebar.classList.contains('abierto') ? close() : open());
-            overlay?.addEventListener('click', close);
-        })();
+                <div>
+                    <h2 class="panel-title">Catálogo</h2>
 
-        // ── Búsqueda rápida en tabla ──
-        document.getElementById('buscarProducto')?.addEventListener('input', function () {
-            const q    = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#tablaProductos tbody tr');
+                    <p class="panel-count">
+                        {{ $productos->count() }}
+                        {{ $productos->count() == 1 ? 'producto registrado' : 'productos registrados' }}
+                    </p>
+                </div>
 
-            rows.forEach(row => {
-                // ignora la fila de vacío
-                if (row.querySelector('.prod-empty')) return;
-                const texto = row.textContent.toLowerCase();
-                row.style.display = texto.includes(q) ? '' : 'none';
-            });
-        });
+                <div class="prod-search">
+                    <span>🔍</span>
 
-        // ── Modal confirmar eliminar ──
-        function abrirModal(id, nombre) {
-            const modal = document.getElementById('modalEliminar');
-            const form  = document.getElementById('formEliminar');
-            const desc  = document.getElementById('modalDesc');
+                    <input
+                        type="text"
+                        id="buscarProducto"
+                        placeholder="Buscar producto..."
+                        autocomplete="off">
+                </div>
 
-            // Construye la URL del route destroy dinámicamente
-            form.action = '{{ url("admin/productos") }}/' + id;
-            desc.textContent = 'Vas a eliminar "' + nombre + '". Esta acción no se puede deshacer.';
-            modal.classList.add('activo');
-        }
+            </div>
 
-        function cerrarModal() {
-            document.getElementById('modalEliminar').classList.remove('activo');
-        }
+            <div class="prod-table-wrap">
 
-        // Cerrar modal con Escape
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') cerrarModal();
-        });
+                <table class="prod-table" id="tablaProductos">
 
-        // Cerrar modal al click fuera del box
-        document.getElementById('modalEliminar')?.addEventListener('click', function (e) {
-            if (e.target === this) cerrarModal();
-        });
-    </script>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Clasificación</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+
+                        @forelse($productos as $producto)
+
+                            <tr>
+
+                                <td>
+                                    <span class="prod-id">
+                                        #{{ $producto->id }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="prod-img-wrap">
+
+                                        @if($producto->imagen)
+
+                                            <img
+                                                src="{{ asset('storage/'.$producto->imagen) }}"
+                                                alt="{{ $producto->nombre }}">
+
+                                        @else
+
+                                            <span class="prod-img-empty">
+                                                Sin imagen
+                                            </span>
+
+                                        @endif
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="prod-nombre">
+                                        {{ $producto->nombre }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="prod-clasif">
+                                        {{ $producto->clasificacion }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="prod-precio">
+                                        ${{ number_format($producto->precio,2) }}
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    @if($producto->stock <= 0)
+
+                                        <span class="prod-stock cero">
+                                            🔴 Agotado
+                                        </span>
+
+                                    @elseif($producto->stock <=5)
+
+                                        <span class="prod-stock bajo">
+                                            🟡 {{ $producto->stock }}
+                                        </span>
+
+                                    @else
+
+                                        <span class="prod-stock ok">
+                                            🟢 {{ $producto->stock }}
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+
+                                    <div class="prod-acciones">
+
+                                        <a
+                                            href="{{ route('admin.productos.edit',$producto) }}"
+                                            class="btn-editar">
+
+                                            ✏️ Editar
+
+                                        </a>
+
+                                        <button
+                                            type="button"
+                                            class="btn-eliminar"
+                                            onclick="abrirModal('{{ $producto->id }}','{{ addslashes($producto->nombre) }}')">
+
+                                            🗑 Eliminar
+
+                                        </button>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="7" class="prod-empty">
+
+                                    <span class="prod-empty-icon">
+                                        📭
+                                    </span>
+
+                                    <div class="prod-empty-msg">
+                                        No hay productos registrados
+                                    </div>
+
+                                    <div class="prod-empty-sub">
+
+                                        <a
+                                            href="{{ route('admin.productos.create') }}"
+                                            style="color:var(--AzulSmtek);font-weight:700;">
+
+                                            Agrega el primero aquí
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        {{-- Modal --}}
+        <div class="modal-overlay" id="modalEliminar">
+
+            <div class="modal-box">
+
+                <div class="modal-icon">
+                    🗑️
+                </div>
+
+                <h3 class="modal-title">
+                    ¿Eliminar producto?
+                </h3>
+
+                <p class="modal-desc" id="modalDesc">
+                    Esta acción no se puede deshacer.
+                </p>
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="btn-modal-cancel"
+                        onclick="cerrarModal()">
+
+                        Cancelar
+
+                    </button>
+
+                    <form
+                        id="formEliminar"
+                        method="POST">
+
+                        @csrf
+                        @method('DELETE')
+
+                        <button
+                            type="submit"
+                            class="btn-modal-confirm">
+
+                            Sí, eliminar
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </x-admin.layout>
 </x-app-layout>

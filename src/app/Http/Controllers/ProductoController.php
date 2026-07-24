@@ -19,7 +19,10 @@ class ProductoController extends Controller
         $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')
             ->count();
         $productos = Producto::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.productos.index', compact('productos'));
+        return view('admin.productos.index', compact(
+            'productos',
+            'cotizacionesPendientes'
+        ));
     }
 
     /**
@@ -27,7 +30,9 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        return view('admin.productos.create');
+        $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')
+            ->count();
+        return view('admin.productos.create', compact('cotizacionesPendientes'));
     }
 
     /**
@@ -76,7 +81,12 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
-         return view('admin.productos.edit', compact('producto'));
+        $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')->count();
+
+        return view('admin.productos.edit', compact(
+            'producto',
+            'cotizacionesPendientes'
+        ));
     }
 
     /**

@@ -8,9 +8,9 @@
     --error: #e24b4a;
     --AzulOscuro: #1a6880;
     --AzulClaro: #e8f4f8;
-    /* --FondoHero: rgb(26, 104, 128, 0.15); */
     --FondoHero: rgba(255, 255, 255, 0.55);
     --H1Negro: #000000;
+    --svg: #000000;
 
     --bg-body: var(--fondo);
     --bg-header: var(--blanco);
@@ -45,6 +45,7 @@ body.dark-mode {
     --bg-footer: #0f1922;
     --FondoHero: rgba(0, 0, 0, 0.65);
     --H1Negro: #ffffff;
+    --svg: #ffffff;
 
     --text-primary: #c8d8e4;
     --text-heading: #e8f4f8;
@@ -88,6 +89,10 @@ img {
 .contenedor {
     width: min(120rem, 100% - 4rem);
     margin-inline: auto;
+}
+
+.s-icon {
+    color: var(--svg);
 }
 
 /* ===== HEADER ===== */

@@ -15,7 +15,7 @@
     />
 
     <!-- Styles -->
-    <link rel="stylesheet" href="{{('assets/css/normalize.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/normalize.css')}}" />
 <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
 
         <!-- Scripts -->

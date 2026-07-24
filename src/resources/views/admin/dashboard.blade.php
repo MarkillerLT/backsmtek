@@ -560,392 +560,59 @@
         }
     </style>
 
-    {{-- ════════════════════════════════════════════════════════════
-         WRAPPER PRINCIPAL
-    ════════════════════════════════════════════════════════════ --}}
-    <div class="admin-wrapper" id="adminWrapper">
+    <x-admin.layout
+        title="Dashboard"
+        :cotizacionesPendientes="$cotizacionesPendientes ?? 0"
+    >
 
-        {{-- Overlay mobile --}}
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-        {{-- ╔══════════════════════════════════════════════════╗
-             ║  SIDEBAR                                        ║
-             ╚══════════════════════════════════════════════════╝ --}}
-        <aside class="admin-sidebar" id="adminSidebar">
-
-            {{-- Logo --}}
-    <a href="/">
-        <div class="logo">
-            <img
-                id="logo-img"
-                src="assets/img/1.svg"
-                alt="SMTEK Logo"
-                onerror="
-                this.style.display = 'none';
-                document.getElementById('logo-fallback').style.display = 'flex';"
-            />
-        <div id="logo-fallback" class="logo-placeholder" style="display: none">
-            SMTEK
-        </div>
-      </div>
-    </a>
-
-            {{-- Menú principal --}}
-            <nav class="sidebar-nav">
-                <div class="sidebar-label">Principal</div>
-
-                <a href="{{ route('admin.index') }}"
-                    class="sidebar-link {{ request()->routeIs('admin.index') ? 'activo' : '' }}">
-                    <span class="s-icon">📊</span>
-                    Dashboard
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">👤</span>
-                    Perfil
-                </a>
-
-                <div class="sidebar-label">Gestión</div>
-
-                <a href="{{ route('admin.productos.index') }}" class="sidebar-link">
-                    <span class="s-icon">📦</span>
-                    Productos
-                </a>
-
-                <a href="{{ route('admin.cotizaciones.index') }}" class="sidebar-link">
-                <span class="s-icon">📋</span>
-                    Cotizaciones
-
-                @if(isset($cotizacionesPendientes) && $cotizacionesPendientes > 0)
-                    <span class="s-badge">
-                        {{ $cotizacionesPendientes }}
-                    </span>
-                @endif
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">💼</span>
-                    Ventas
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    <span class="s-icon">👥</span>
-                    Usuarios
-                </a>
-
-            </nav>
-
-            {{-- Logout en el sidebar --}}
-            <div class="sidebar-footer">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;cursor:pointer;font-family:inherit;">
-                        <span class="s-icon">🚪</span>
-                        Cerrar sesión
-                    </button>
-                </form>
+        {{-- ── KPI Cards ───────────────────────────────────────── --}}
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-icon azul">📈</div>
+                <div class="kpi-info">
+                    <div class="kpi-valor">$284,500</div>
+                    <div class="kpi-label">Ventas del mes</div>
+                    <div class="kpi-delta up">▲ 12.4% vs mes anterior</div>
+                </div>
             </div>
 
-        </aside>{{-- /.admin-sidebar --}}
-
-        {{-- ╔══════════════════════════════════════════════════╗
-             ║  ÁREA PRINCIPAL                                 ║
-             ╚══════════════════════════════════════════════════╝ --}}
-        <div class="admin-main">
-
-            {{-- ── TOPBAR ── --}}
-            <div class="admin-topbar">
-
-                {{-- Izquierda: hamburguesa (mobile) + usuario --}}
-                <div style="display:flex;align-items:center;gap:1.4rem;">
-                    <button class="sidebar-toggle-btn" id="sidebarToggle" aria-label="Menú">
-                        <span></span><span></span><span></span>
-                    </button>
-
-                    <div class="topbar-user">
-                        {{-- Avatar: si el usuario tiene foto de perfil de Jetstream --}}
-                        <div class="topbar-avatar">
-                            @if (Auth::user()->profile_photo_url)
-                                <img src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}">
-                            @else
-                                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                            @endif
-                        </div>
-                        <div>
-                            <div class="topbar-username">{{ Auth::user()->name }}</div>
-                            <div class="topbar-role">Administrador</div>
-                        </div>
-                    </div>
+            <div class="kpi-card">
+                <div class="kpi-icon verde">✅</div>
+                <div class="kpi-info">
+                    <div class="kpi-valor">38</div>
+                    <div class="kpi-label">Servicios completados</div>
+                    <div class="kpi-delta up">▲ 5 más que el mes pasado</div>
                 </div>
+            </div>
 
-                {{-- Centro: título --}}
-                <div class="topbar-title">Dashboard</div>
-
-                {{-- Derecha: dark mode + logout --}}
-                <div class="topbar-actions">
-                <button
-                    id="dark-toggle"
-                    class="dark-toggle"
-                    aria-label="Cambiar modo de color"
-                    type="button"
-                >
-                <span class="toggle-icon" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 24 24"
-                    >
-                    <title xmlns="">dark</title>
-                    <path
-                        fill="currentColor"
-                        d="M12.741 20.917a9.4 9.4 0 0 1-1.395-.105a9.141 9.141 0 0 1-1.465-17.7a1.18 1.18 0 0 1 1.21.281a1.27 1.27 0 0 1 .325 1.293a8.1 8.1 0 0 0-.353 2.68a8.27 8.27 0 0 0 4.366 6.857a7.6 7.6 0 0 0 3.711.993a1.242 1.242 0 0 1 .994 1.963a9.15 9.15 0 0 1-7.393 3.738M10.261 4.05a.2.2 0 0 0-.065.011a8.137 8.137 0 1 0 9.131 12.526a.22.22 0 0 0 .013-.235a.23.23 0 0 0-.206-.136a8.6 8.6 0 0 1-4.188-1.116a9.27 9.27 0 0 1-4.883-7.7a9.1 9.1 0 0 1 .4-3.008a.29.29 0 0 0-.069-.285a.18.18 0 0 0-.133-.057"
-                    />
-                </svg>
-                </span>
-                <span class="toggle-label">Modo Oscuro</span>
-                <div class="toggle-track" aria-hidden="true">
-                    <div class="toggle-thumb"></div>
+            <div class="kpi-card">
+                <div class="kpi-icon amarillo">📋</div>
+                <div class="kpi-info">
+                    <div class="kpi-valor">12</div>
+                    <div class="kpi-label">Cotizaciones pendientes</div>
+                    <div class="kpi-delta down">▼ 3 sin respuesta +7d</div>
                 </div>
-                </button>
+            </div>
 
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="topbar-logout">
-                            <span>🚪</span>
-                            <span>Cerrar sesión</span>
-                        </button>
-                    </form>
+            <div class="kpi-card">
+                <div class="kpi-icon rojo">👥</div>
+                <div class="kpi-info">
+                    <div class="kpi-valor">{{ $user }}</div>
+                    <div class="kpi-label">Usuarios registrados</div>
+                    <div class="kpi-delta up">▲ 8 nuevos esta semana</div>
                 </div>
+            </div>
+        </div>
 
-            </div>{{-- /.admin-topbar --}}
+        {{-- Dashboard --}}
+        <div class="dashboard-row">
 
-            {{-- ── CONTENIDO CON SCROLL ── --}}
-            <div class="admin-content">
+            {{-- Panel gráfica --}}
+            <div class="panel">
+            </div>
+            <div class="panel">
+            </div>
+        </div>
 
-                {{-- ── KPI Cards ── --}}
-                <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-icon azul">📈</div>
-                        <div class="kpi-info">
-                            <div class="kpi-valor">$284,500</div>
-                            <div class="kpi-label">Ventas del mes</div>
-                            <div class="kpi-delta up">▲ 12.4% vs mes anterior</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon verde">✅</div>
-                        <div class="kpi-info">
-                            <div class="kpi-valor">38</div>
-                            <div class="kpi-label">Servicios completados</div>
-                            <div class="kpi-delta up">▲ 5 más que el mes pasado</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon amarillo">📋</div>
-                        <div class="kpi-info">
-                            <div class="kpi-valor">12</div>
-                            <div class="kpi-label">Cotizaciones pendientes</div>
-                            <div class="kpi-delta down">▼ 3 sin respuesta +7d</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon rojo">👥</div>
-                        <div class="kpi-info">
-                            <div class="kpi-valor">{{$user}}</div>
-                            <div class="kpi-label">Usuarios registrados</div>
-                            <div class="kpi-delta up">▲ 8 nuevos esta semana</div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- ── Fila central: gráfica + movimientos ── --}}
-                <div class="dashboard-row">
-
-                    {{-- Gráfica de ventas de servicios --}}
-                    <div class="panel">
-                        <div class="panel-header">
-                            <div>
-                                <h2 class="panel-title">Ventas de Servicios</h2>
-                                <p class="panel-subtitle">Comparativo mensual 2025 — 2026</p>
-                            </div>
-                            <span class="panel-badge">Anual</span>
-                        </div>
-                        <div class="panel-body">
-                            <div class="chart-wrap">
-                                {{-- Gráfica SVG sin librerías externas --}}
-                                <svg class="bar-chart" viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" aria-label="Ventas de servicios por mes">
-                                    <!-- Líneas guía horizontales -->
-                                    <line x1="40" y1="20"  x2="690" y2="20"  stroke="var(--border-color)" stroke-width="1"/>
-                                    <line x1="40" y1="73"  x2="690" y2="73"  stroke="var(--border-color)" stroke-width="1"/>
-                                    <line x1="40" y1="126" x2="690" y2="126" stroke="var(--border-color)" stroke-width="1"/>
-                                    <line x1="40" y1="179" x2="690" y2="179" stroke="var(--border-color)" stroke-width="1"/>
-                                    <line x1="40" y1="232" x2="690" y2="232" stroke="var(--border-color)" stroke-width="1"/>
-
-                                    <!-- Etiquetas eje Y -->
-                                    <text x="34" y="24"  font-size="11" fill="var(--text-muted)" text-anchor="end">$300k</text>
-                                    <text x="34" y="77"  font-size="11" fill="var(--text-muted)" text-anchor="end">$225k</text>
-                                    <text x="34" y="130" font-size="11" fill="var(--text-muted)" text-anchor="end">$150k</text>
-                                    <text x="34" y="183" font-size="11" fill="var(--text-muted)" text-anchor="end">$75k</text>
-                                    <text x="34" y="236" font-size="11" fill="var(--text-muted)" text-anchor="end">$0</text>
-
-                                    <!-- Datos 2025 (barras azul claro) y 2026 (barras azul SMTEK) -->
-                                    <!-- Mes Ene -->
-                                    <rect x="52"  y="120" width="22" height="112" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="76"  y="95"  width="22" height="137" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Feb -->
-                                    <rect x="108" y="110" width="22" height="122" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="132" y="80"  width="22" height="152" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Mar -->
-                                    <rect x="164" y="90"  width="22" height="142" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="188" y="60"  width="22" height="172" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Abr -->
-                                    <rect x="220" y="100" width="22" height="132" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="244" y="75"  width="22" height="157" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes May -->
-                                    <rect x="276" y="85"  width="22" height="147" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="300" y="55"  width="22" height="177" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Jun -->
-                                    <rect x="332" y="130" width="22" height="102" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="356" y="100" width="22" height="132" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Jul -->
-                                    <rect x="388" y="115" width="22" height="117" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="412" y="85"  width="22" height="147" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Ago -->
-                                    <rect x="444" y="105" width="22" height="127" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="468" y="70"  width="22" height="162" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Sep -->
-                                    <rect x="500" y="95"  width="22" height="137" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="524" y="60"  width="22" height="172" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Oct -->
-                                    <rect x="556" y="80"  width="22" height="152" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="580" y="45"  width="22" height="187" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Nov -->
-                                    <rect x="612" y="70"  width="22" height="162" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="636" y="40"  width="22" height="192" rx="4" fill="var(--AzulSmtek)" opacity="0.92"/>
-                                    <!-- Mes Dic -->
-                                    <rect x="660" y="55"  width="14" height="177" rx="4" fill="var(--AzulClaro)" opacity="0.9"/>
-                                    <rect x="676" y="30"  width="14" height="202" rx="4" fill="var(--acentos)"   opacity="0.92"/>
-
-                                    <!-- Etiquetas eje X -->
-                                    <text x="75"  y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Ene</text>
-                                    <text x="131" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Feb</text>
-                                    <text x="187" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Mar</text>
-                                    <text x="243" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Abr</text>
-                                    <text x="299" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">May</text>
-                                    <text x="355" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Jun</text>
-                                    <text x="411" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Jul</text>
-                                    <text x="467" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Ago</text>
-                                    <text x="523" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Sep</text>
-                                    <text x="579" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Oct</text>
-                                    <text x="635" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Nov</text>
-                                    <text x="683" y="248" font-size="11" fill="var(--text-muted)" text-anchor="middle">Dic</text>
-                                </svg>
-                            </div>
-
-                            {{-- Leyenda --}}
-                            <div class="chart-legend">
-                                <div class="legend-item">
-                                    <div class="legend-dot" style="background:var(--AzulClaro);border:2px solid var(--AzulSmtek);"></div>
-                                    <span>2025</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot" style="background:var(--AzulSmtek);"></div>
-                                    <span>2026</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-dot" style="background:var(--acentos);"></div>
-                                    <span>2026 Dic (proyección)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Resumen de movimientos --}}
-                    <div class="panel">
-                        <div class="panel-header">
-                            <div>
-                                <h2 class="panel-title">Movimientos</h2>
-                                <p class="panel-subtitle">Últimas transacciones</p>
-                            </div>
-                            <span class="panel-badge">Hoy</span>
-                        </div>
-                        <div class="panel-body">
-                            <div class="mov-list">
-
-                                <div class="mov-item">
-                                    <div class="mov-icon ingreso">💰</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Pago — Servicio de calibración</div>
-                                        <div class="mov-fecha">Hoy, 09:14 am · Cliente: Automex</div>
-                                    </div>
-                                    <div class="mov-monto pos">+$18,400</div>
-                                </div>
-
-                                <div class="mov-item">
-                                    <div class="mov-icon cotiz">📋</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Cotización #COT-0821 enviada</div>
-                                        <div class="mov-fecha">Hoy, 08:30 am · Pendiente</div>
-                                    </div>
-                                    <div class="mov-monto neu">$7,250</div>
-                                </div>
-
-                                <div class="mov-item">
-                                    <div class="mov-icon ingreso">💰</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Pago — Instalación sensores</div>
-                                        <div class="mov-fecha">Ayer, 05:00 pm · Cliente: BOSH MX</div>
-                                    </div>
-                                    <div class="mov-monto pos">+$32,000</div>
-                                </div>
-
-                                <div class="mov-item">
-                                    <div class="mov-icon egreso">📦</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Compra de insumos — Banner</div>
-                                        <div class="mov-fecha">Ayer, 11:20 am · Proveedor</div>
-                                    </div>
-                                    <div class="mov-monto neg">-$9,800</div>
-                                </div>
-
-                                <div class="mov-item">
-                                    <div class="mov-icon usuario">👤</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Nuevo usuario registrado</div>
-                                        <div class="mov-fecha">Ayer, 10:05 am · Ana Torres</div>
-                                    </div>
-                                    <div class="mov-monto neu">—</div>
-                                </div>
-
-                                <div class="mov-item">
-                                    <div class="mov-icon cotiz">📋</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Cotización #COT-0820 aprobada</div>
-                                        <div class="mov-fecha">Lun 30 Jun · Convertida a venta</div>
-                                    </div>
-                                    <div class="mov-monto pos">+$14,700</div>
-                                </div>
-
-                                <div class="mov-item">
-                                    <div class="mov-icon egreso">📦</div>
-                                    <div class="mov-info">
-                                        <div class="mov-desc">Devolución — Sensor defectuoso</div>
-                                        <div class="mov-fecha">Lun 30 Jun · Nota de crédito</div>
-                                    </div>
-                                    <div class="mov-monto neg">-$3,200</div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>{{-- /.dashboard-row --}}
-
-            </div>{{-- /.admin-content --}}
-        </div>{{-- /.admin-main --}}
-    </div>{{-- /.admin-wrapper --}}
-    <script src="assets/js/script.js"></script>
-
+    </x-admin.layout>
 </x-app-layout>
-
