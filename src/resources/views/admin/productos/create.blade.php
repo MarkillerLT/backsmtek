@@ -681,21 +681,38 @@
                                         @enderror
                                     </div>
 
-                                    {{-- Clasificación --}}
-                                    <div class="form-field">
-                                        <label for="clasificacion">Clasificación</label>
-                                        <input
-                                            type="text"
-                                            id="clasificacion"
-                                            name="clasificacion"
-                                            value="{{ old('clasificacion') }}"
-                                            placeholder="Ej. Sensores industriales"
-                                        />
-                                        @error('clasificacion')
-                                            <span class="field-error">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+{{-- Clasificación --}}
+<div class="form-field">
+    <label for="clasificacion">Clasificación</label>
 
+    <select id="clasificacion" name="clasificacion">
+        <option value="">Seleccione una clasificación</option>
+
+        <option value="turck" {{ old('clasificacion') == 'turck' ? 'selected' : '' }}>
+            Turck
+        </option>
+
+        <option value="banner" {{ old('clasificacion') == 'banner' ? 'selected' : '' }}>
+            Banner
+        </option>
+
+        <option value="puls" {{ old('clasificacion') == 'puls' ? 'selected' : '' }}>
+            PULS
+        </option>
+
+        <option value="kubler" {{ old('clasificacion') == 'kubler' ? 'selected' : '' }}>
+            Kübler
+        </option>
+
+        <option value="otros" {{ old('clasificacion') == 'otros' ? 'selected' : '' }}>
+            Otros
+        </option>
+    </select>
+
+    @error('clasificacion')
+        <span class="field-error">{{ $message }}</span>
+    @enderror
+</div>
                                     {{-- Precio --}}
                                     <div class="form-field">
                                         <label for="precio">Precio <span class="field-req">*</span></label>

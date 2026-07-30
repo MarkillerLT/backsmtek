@@ -185,7 +185,6 @@
             font-weight: 400;
         }
 
-        /* Centro: título de la sección actual */
         .topbar-title {
             font-size: 1.8rem;
             font-weight: 800;
@@ -195,7 +194,6 @@
             flex: 1;
         }
 
-        /* Lado derecho: toggle + logout */
         .topbar-actions {
             display: flex;
             align-items: center;
@@ -225,7 +223,6 @@
             transform: translateY(-1px);
         }
 
-        /* ── Área de contenido con scroll ── */
         .admin-content {
             flex: 1;
             overflow-y: auto;
@@ -236,7 +233,7 @@
         }
 
         /* ══════════════════════════════════════════════════
-           TARJETAS KPI (fila superior)
+           TARJETAS KPI
         ══════════════════════════════════════════════════ */
         .kpi-grid {
             display: grid;
@@ -282,8 +279,6 @@
         body.dark-mode .kpi-icon.amarillo { background-color: rgba(240,165,0,0.15); }
         body.dark-mode .kpi-icon.rojo     { background-color: rgba(226,75,74,0.15); }
 
-        .kpi-info {}
-
         .kpi-valor {
             font-size: 2.6rem;
             font-weight: 800;
@@ -307,14 +302,16 @@
         .kpi-delta.up   { color: var(--contrastes); }
         .kpi-delta.down { color: var(--error); }
 
+        /* ══════════════════════════════════════════════════
+           FILA DE GRÁFICAS (dona + barras, lado a lado)
+        ══════════════════════════════════════════════════ */
         .dashboard-row {
             display: grid;
-            grid-template-columns: 1fr 38rem;
+            grid-template-columns: 1fr 1fr;
             gap: 2.4rem;
-            align-items: start;
+            align-items: stretch;
         }
 
-        /* ── Panel genérico ── */
         .panel {
             background-color: var(--bg-section);
             border-radius: var(--radius);
@@ -322,6 +319,8 @@
             border: 1px solid var(--border-color);
             overflow: hidden;
             transition: background-color var(--transition), box-shadow var(--transition);
+            display: flex;
+            flex-direction: column;
         }
 
         .panel-header {
@@ -361,45 +360,137 @@
 
         .panel-body {
             padding: 2.4rem;
+            flex: 1;
         }
 
-        /* ── Gráfica de ventas de servicios ── */
-        .chart-wrap {
+        /* ── Dona: cotizaciones ── */
+        .chart-doughnut-wrap {
+            display: flex;
+            align-items: center;
+            gap: 2.4rem;
+            flex-wrap: wrap;
+            height: 100%;
+        }
+        .chart-doughnut-canvas {
             position: relative;
-            width: 100%;
-            height: 28rem;
+            width: 18rem;
+            height: 18rem;
+            flex-shrink: 0;
+        }
+        .chart-doughnut-legend {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            flex: 1;
+            min-width: 14rem;
+        }
+        .chart-doughnut-legend .legend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-heading);
+            padding: 1rem 1.4rem;
+            border-radius: var(--radius-sm);
+            background-color: var(--bg-section-alt);
+            transition: background-color var(--transition);
+        }
+        .chart-doughnut-legend .legend-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .chart-doughnut-legend .legend-dot {
+            width: 1.3rem;
+            height: 1.3rem;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .chart-doughnut-legend .legend-value {
+            font-size: 1.5rem;
+            font-weight: 800;
         }
 
-        /* Barras SVG inline — sin librerías externas */
-        .bar-chart {
-            width: 100%;
+        /* ── Barras: productos por clasificación ── */
+        .clasif-panel-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
             height: 100%;
         }
 
-        /* ── Leyenda de la gráfica ── */
-        .chart-legend {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 1.8rem;
+        .clasif-chart-wrap {
+            position: relative;
+            width: 100%;
+            flex: 1;
+            min-height: 18rem;
         }
 
-        .legend-item {
+        .clasif-resumen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+            gap: 1rem;
+            padding-top: 1.6rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .clasif-chip {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            padding: 1.2rem 1.4rem;
+            background-color: var(--bg-section-alt);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            transition: background-color var(--transition), transform var(--transition), box-shadow var(--transition);
+        }
+
+        .clasif-chip:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .clasif-chip-label {
             display: flex;
             align-items: center;
             gap: 0.7rem;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--text-muted);
+            text-transform: capitalize;
         }
 
-        .legend-dot {
-            width: 1.2rem;
-            height: 1.2rem;
+        .clasif-chip-dot {
+            width: 1rem;
+            height: 1rem;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
-        /* ── Lista de movimientos ── */
+        .clasif-chip-valor {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-heading);
+            line-height: 1;
+        }
+
+        .clasif-chip-dot.turck   { background-color: var(--AzulSmtek); }
+        .clasif-chip-dot.banner  { background-color: var(--acentos); }
+        .clasif-chip-dot.kubler  { background-color: var(--contrastes); }
+        .clasif-chip-dot.puls    { background-color: var(--AzulOscuro); }
+        .clasif-chip-dot.otros   { background-color: var(--GrisSmtek); }
+
+        body.dark-mode .clasif-chip {
+            background-color: var(--bg-section);
+            border-color: var(--border-color);
+        }
+
+        body.dark-mode .clasif-chip:hover {
+            background-color: rgba(33, 150, 186, 0.08);
+        }
+
+        /* ── Lista de movimientos (se mantiene por si la reutilizas) ── */
         .mov-list {
             display: flex;
             flex-direction: column;
@@ -440,10 +531,7 @@
         body.dark-mode .mov-icon.cotiz   { background-color: rgba(240,165,0,0.15); }
         body.dark-mode .mov-icon.usuario { background-color: rgba(33,150,186,0.18); }
 
-        .mov-info {
-            flex: 1;
-            min-width: 0;
-        }
+        .mov-info { flex: 1; min-width: 0; }
 
         .mov-desc {
             font-size: 1.4rem;
@@ -460,12 +548,7 @@
             margin-top: 0.2rem;
         }
 
-        .mov-monto {
-            font-size: 1.5rem;
-            font-weight: 800;
-            flex-shrink: 0;
-        }
-
+        .mov-monto { font-size: 1.5rem; font-weight: 800; flex-shrink: 0; }
         .mov-monto.pos { color: var(--contrastes); }
         .mov-monto.neg { color: var(--error); }
         .mov-monto.neu { color: var(--AzulSmtek); }
@@ -483,6 +566,15 @@
             .dashboard-row {
                 grid-template-columns: 1fr;
             }
+            .chart-doughnut-wrap {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .chart-doughnut-canvas {
+                width: 100%;
+                max-width: 22rem;
+                margin: 0 auto;
+            }
         }
 
         @media (max-width: 768px) {
@@ -493,39 +585,24 @@
                 z-index: 200;
                 transition: left var(--transition);
             }
-
-            .admin-sidebar.abierto {
-                left: 0;
-            }
-
-            .admin-topbar {
-                padding: 0 2rem;
-            }
-
-            .admin-content {
-                padding: 2rem;
-            }
-
-            .topbar-title {
-                display: none;
-            }
-
-            .sidebar-toggle-btn {
-                display: flex !important;
-            }
+            .admin-sidebar.abierto { left: 0; }
+            .admin-topbar { padding: 0 2rem; }
+            .admin-content { padding: 2rem; }
+            .topbar-title { display: none; }
+            .sidebar-toggle-btn { display: flex !important; }
+            .clasif-chart-wrap { min-height: 20rem; }
         }
 
         @media (max-width: 480px) {
             .kpi-grid {
                 grid-template-columns: 1fr;
             }
-
-            .topbar-logout span {
-                display: none;
+            .topbar-logout span { display: none; }
+            .clasif-resumen {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        /* Botón hamburguesa en mobile */
         .sidebar-toggle-btn {
             display: none;
             background: none;
@@ -545,7 +622,6 @@
             transition: transform var(--transition), opacity var(--transition);
         }
 
-        /* Overlay sidebar en mobile */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -555,64 +631,261 @@
             backdrop-filter: blur(2px);
         }
 
-        .sidebar-overlay.activo {
-            display: block;
-        }
+        .sidebar-overlay.activo { display: block; }
     </style>
 
     <x-admin.layout
         title="Dashboard"
         :cotizacionesPendientes="$cotizacionesPendientes ?? 0"
     >
-
         {{-- ── KPI Cards ───────────────────────────────────────── --}}
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-icon azul">📈</div>
                 <div class="kpi-info">
-                    <div class="kpi-valor">$284,500</div>
-                    <div class="kpi-label">Ventas del mes</div>
-                    <div class="kpi-delta up">▲ 12.4% vs mes anterior</div>
+                    <div class="kpi-valor">{{ $productos }}</div>
+                    <div class="kpi-label">Productos Registrados</div>
                 </div>
             </div>
-
             <div class="kpi-card">
                 <div class="kpi-icon verde">✅</div>
                 <div class="kpi-info">
-                    <div class="kpi-valor">38</div>
-                    <div class="kpi-label">Servicios completados</div>
-                    <div class="kpi-delta up">▲ 5 más que el mes pasado</div>
+                    <div class="kpi-valor">{{ $postulantes }}</div>
+                    <div class="kpi-label">Postulantes Activos</div>
                 </div>
             </div>
-
             <div class="kpi-card">
                 <div class="kpi-icon amarillo">📋</div>
                 <div class="kpi-info">
-                    <div class="kpi-valor">12</div>
-                    <div class="kpi-label">Cotizaciones pendientes</div>
-                    <div class="kpi-delta down">▼ 3 sin respuesta +7d</div>
+                    <div class="kpi-valor">{{ $cotizacionesRespondidas }}</div>
+                    <div class="kpi-label">Cotizaciones respondidas</div>
                 </div>
             </div>
-
             <div class="kpi-card">
                 <div class="kpi-icon rojo">👥</div>
                 <div class="kpi-info">
                     <div class="kpi-valor">{{ $user }}</div>
                     <div class="kpi-label">Usuarios registrados</div>
-                    <div class="kpi-delta up">▲ 8 nuevos esta semana</div>
                 </div>
             </div>
         </div>
 
-        {{-- Dashboard --}}
+        {{-- Dashboard: dona (cotizaciones) + barras (clasificación) lado a lado --}}
         <div class="dashboard-row">
-
-            {{-- Panel gráfica --}}
             <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3 class="panel-title">Estado de las cotizaciones</h3>
+                        <p class="panel-subtitle">Distribución actual por estatus</p>
+                    </div>
+                    <span class="panel-badge">{{ $pendientes + $enProceso + $respondidas }} total</span>
+                </div>
+                <div class="panel-body">
+                    <div class="chart-doughnut-wrap">
+                        <div class="chart-doughnut-canvas">
+                            <canvas id="cotizacionesChart"></canvas>
+                        </div>
+                        <div class="chart-doughnut-legend" id="cotizacionesLegend"></div>
+                    </div>
+                </div>
             </div>
+
             <div class="panel">
+                <div class="panel-header">
+                    <div>
+                        <h3 class="panel-title">Productos</h3>
+                        <p class="panel-subtitle">Totales registrados por marca</p>
+                    </div>
+                    <span class="panel-badge">{{ $clasifData->sum() }} total</span>
+                </div>
+                <div class="panel-body clasif-panel-body">
+                    <div class="clasif-chart-wrap">
+                        <canvas id="clasificacionChart"></canvas>
+                    </div>
+                    <div class="clasif-resumen">
+                        @foreach ($clasifData as $clave => $valor)
+                            <div class="clasif-chip">
+                                <span class="clasif-chip-label">
+                                    <span class="clasif-chip-dot {{ strtolower($clave) }}"></span>
+                                    {{ $clave }}
+                                </span>
+                                <span class="clasif-chip-valor">{{ $valor }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
-
     </x-admin.layout>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // ── Gráfica de dona: estado de cotizaciones ──
+        (function () {
+            const dataValues = [
+                {{ $pendientes }},
+                {{ $enProceso }},
+                {{ $respondidas }}
+            ];
+            const labels = ['Pendientes', 'En proceso', 'Respondidas'];
+            const colorVars = ['--acentos', '--AzulSmtek', '--contrastes'];
+
+            function buildColors() {
+                const cs = getComputedStyle(document.body);
+                return colorVars.map(v => cs.getPropertyValue(v).trim());
+            }
+
+            function buildLegend(colors) {
+                const legendEl = document.getElementById('cotizacionesLegend');
+                legendEl.innerHTML = labels.map((label, i) => `
+                    <div class="legend-item">
+                        <span class="legend-label">
+                            <span class="legend-dot" style="background-color:${colors[i]}"></span>
+                            ${label}
+                        </span>
+                        <span class="legend-value" style="color:${colors[i]}">${dataValues[i]}</span>
+                    </div>
+                `).join('');
+            }
+
+            const ctx = document.getElementById('cotizacionesChart');
+            let chart;
+
+            function renderChart() {
+                const colors = buildColors();
+                const cs = getComputedStyle(document.body);
+                const textColor = cs.getPropertyValue('--text-muted').trim();
+                const borderColor = cs.getPropertyValue('--bg-section').trim();
+
+                if (chart) chart.destroy();
+
+                chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: dataValues,
+                            backgroundColor: colors,
+                            borderColor: borderColor,
+                            borderWidth: 3,
+                            hoverOffset: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '68%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: cs.getPropertyValue('--bg-section').trim(),
+                                titleColor: cs.getPropertyValue('--text-heading').trim(),
+                                bodyColor: textColor,
+                                borderColor: cs.getPropertyValue('--border-color').trim(),
+                                borderWidth: 1
+                            }
+                        }
+                    }
+                });
+
+                buildLegend(colors);
+            }
+
+            renderChart();
+
+            const observer = new MutationObserver(() => renderChart());
+            observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        })();
+
+        // ── Gráfica de barras: productos por clasificación ──
+        (function () {
+            const clasifLabels = @json($clasifData->keys());
+            const clasifValues = @json($clasifData->values());
+
+            const colorMap = {
+                turck:  '--AzulSmtek',
+                banner: '--acentos',
+                kubler: '--contrastes',
+                Puls:   '--AzulOscuro',
+                otros:  '--GrisSmtek'
+            };
+
+            function buildColors() {
+                const cs = getComputedStyle(document.body);
+                return clasifLabels.map(label => cs.getPropertyValue(colorMap[label] || '--AzulSmtek').trim());
+            }
+
+            const ctx = document.getElementById('clasificacionChart');
+            let clasifChart;
+
+            function renderClasifChart() {
+                const cs = getComputedStyle(document.body);
+                const colors = buildColors();
+                // Usamos --text-heading en ambos ejes: es el mismo tono de alto
+                // contraste que ya usa el resto del dashboard, así se lee bien
+                // tanto en modo claro como oscuro.
+                const labelColor = cs.getPropertyValue('--text-heading').trim();
+                const gridColor = cs.getPropertyValue('--border-color').trim();
+                const sectionBg = cs.getPropertyValue('--bg-section').trim();
+
+                if (clasifChart) clasifChart.destroy();
+
+                clasifChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: clasifLabels,
+                        datasets: [{
+                            label: 'Productos',
+                            data: clasifValues,
+                            backgroundColor: colors,
+                            borderRadius: 6,
+                            barThickness: 22,
+                            maxBarThickness: 28
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: sectionBg,
+                                titleColor: labelColor,
+                                bodyColor: labelColor,
+                                borderColor: gridColor,
+                                borderWidth: 1,
+                                callbacks: {
+                                    label: (ctxItem) => ` ${ctxItem.parsed.x} producto(s)`
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: labelColor,
+                                    precision: 0,
+                                    font: { weight: 600 }
+                                },
+                                grid: { color: gridColor }
+                            },
+                            y: {
+                                ticks: {
+                                    color: labelColor,
+                                    font: { weight: 700 }
+                                },
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            renderClasifChart();
+
+            const observerClasif = new MutationObserver(() => renderClasifChart());
+            observerClasif.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        })();
+    </script>
 </x-app-layout>

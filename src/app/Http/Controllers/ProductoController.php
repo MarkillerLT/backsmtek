@@ -11,6 +11,12 @@ use App\Models\Cotizacion;
 
 class ProductoController extends Controller
 {
+    public function catalogo()
+    {
+        $productos = Producto::orderBy('nombre')->get();
+
+        return view('productos.index', compact('productos'));
+    }
     /**
      * Display a listing of the resource.
      */

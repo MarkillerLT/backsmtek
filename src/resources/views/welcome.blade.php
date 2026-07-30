@@ -118,9 +118,9 @@
 
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
           <a href="#">Inicio</a>
-          <a href="#">Productos</a>
+          <!--<a href="#">Productos</a>-->
           <a href="#">Servicios</a>
-          <a href="#">Contacto</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
           <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
         </nav>
@@ -786,7 +786,7 @@
       </section>
 
       <!-- Contacto Redes o Mapa? no se, revisar-->
-      <section class="contacto-section" id="contacto">
+      <section id ="contacto" class="contacto-section" id="contacto">
         <div class="contenedor">
           <div class="section-header reveal">
             <span class="section-label">Hablemos</span>

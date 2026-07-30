@@ -17,7 +17,13 @@ return new class extends Migration
             $table->integer('stock')->default(0);
             $table->text('descripcion')->nullable();
             $table->decimal('precio', 10, 2);
-            $table->string('clasificacion')->nullable();
+            $table->enum('clasificacion',[
+                'turck',
+                'banner',
+                'puls',
+                'kubler',
+                'otros'
+            ])->default('otros');
 
             // ruta imagen
             $table->string('imagen')->nullable();
