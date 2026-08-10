@@ -118,7 +118,7 @@
 
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
           <a href="#">Inicio</a>
-          <!--<a href="#">Productos</a>-->
+          <a href="{{ route('productos.catalogo')}}">Productos</a>
           <a href="#">Servicios</a>
           <a href="{{ url('/#contacto')}}">Contacto</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>

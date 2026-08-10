@@ -37,7 +37,7 @@
             Dashboard
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.perfil')}}" class="sidebar-link">
             <span class="s-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">user</title><path fill="currentColor" d="M15.71 12.71a6 6 0 1 0-7.42 0a10 10 0 0 0-6.22 8.18a1 1 0 0 0 2 .22a8 8 0 0 1 15.9 0a1 1 0 0 0 1 .89h.11a1 1 0 0 0 .88-1.1a10 10 0 0 0-6.25-8.19M12 12a4 4 0 1 1 4-4a4 4 0 0 1-4 4"/>
                 </svg>
@@ -76,7 +76,8 @@
 
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.postulaciones.index') }}"
+            class="sidebar-link {{ request()->routeIs('admin.postulaciones.*') ? 'activo' : '' }}">
             <span class="s-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">user-search</title><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0-8 0M6 21v-2a4 4 0 0 1 4-4h1.5m3.5 3a3 3 0 1 0 6 0a3 3 0 1 0-6 0m5.2 2.2L22 22"/>
                 </svg>
@@ -84,7 +85,7 @@
             Prospectos
         </a>
 
-        <a href="#" class="sidebar-link">
+        <a href="{{ route('admin.usuarios.index')}}" class="sidebar-link">
             <span class="s-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><title xmlns="">users</title><path fill="currentColor" d="M10 4a4 4 0 1 0 0 8a4 4 0 0 0 0-8M4 8a6 6 0 1 1 12 0A6 6 0 0 1 4 8m12.828-4.243a1 1 0 0 1 1.415 0a6 6 0 0 1 0 8.486a1 1 0 1 1-1.415-1.415a4 4 0 0 0 0-5.656a1 1 0 0 1 0-1.415m.702 13a1 1 0 0 1 1.212-.727c1.328.332 2.169 1.18 2.652 2.148c.468.935.606 1.98.606 2.822a1 1 0 1 1-2 0c0-.657-.112-1.363-.394-1.928c-.267-.533-.677-.934-1.349-1.102a1 1 0 0 1-.727-1.212zM6.5 18C5.24 18 4 19.213 4 21a1 1 0 1 1-2 0c0-2.632 1.893-5 4.5-5h7c2.607 0 4.5 2.368 4.5 5a1 1 0 1 1-2 0c0-1.787-1.24-3-2.5-3z"/>
                 </svg>
