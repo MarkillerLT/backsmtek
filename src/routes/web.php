@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/servicios', function(){
+    return view('servicios');
+})->name('servicios');
+
 Route::get('/cotizacion', [CotizacionController::class, 'create'])
     ->name('cotizacion.create');
 Route::post('/cotizacion', [CotizacionController::class, 'store'])
