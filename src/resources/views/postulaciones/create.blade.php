@@ -61,19 +61,29 @@
     </div>
     </header>
 
-   <div class="nav-bg">
-        <div class="contenedor">
-            <nav id="nav-principal" class="navegacion-principal" style="flex:1">
-                <a href="{{ url('/') }}">Inicio</a>
-                <a href="#">Productos</a>
-                <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
-                <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-                <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+    <div class="nav-bg">
+      <div class="contenedor" style="display: flex; align-items: center">
+        <button
+          id="hamburger"
+          class="hamburger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          type="button"
+        >
+          <span></span><span></span><span></span>
+        </button>
 
-            </nav>
-        </div>
+        <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
+          <a href="{{ url('/')}}">Inicio</a>
+          <a href="{{ route('productos.catalogo')}}">Productos</a>
+          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+        </nav>
+      </div>
     </div>
+
 
     {{-- ╔══════════════════════════════════════════════════════════╗
          ║  HERO                                                   ║

@@ -38,102 +38,61 @@
       }
 
       /* ══════════════════════════════════════════════
-         SECCIÓN: Diseño (Proyectos - Maquinados)
+         FILTROS por categoría
       ══════════════════════════════════════════════ */
-      .diseno-grid {
+      .diseno-filtros {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 3.6rem;
+      }
+
+      .diseno-filtro-btn {
+        padding: 0.9rem 2rem;
+        border-radius: 2.4rem;
+        border: 1.5px solid var(--border-color, #d8e2e8);
+        background-color: var(--bg-section, #fff);
+        color: var(--text-primary, #4e5358);
+        font-size: 1.4rem;
+        font-weight: 600;
+        font-family: "Inter", sans-serif;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        white-space: nowrap;
+      }
+
+      .diseno-filtro-btn:hover {
+        border-color: var(--AzulSmtek, #2196ba);
+        color: var(--AzulSmtek, #2196ba);
+      }
+
+      .diseno-filtro-btn.activo {
+        background-color: var(--AzulSmtek, #2196ba);
+        border-color: var(--AzulSmtek, #2196ba);
+        color: #fff;
+      }
+
+      /* ══════════════════════════════════════════════
+         Grid de tarjetas — mismo estilo .producto-card
+      ══════════════════════════════════════════════ */
+      .productos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
         gap: 2.4rem;
       }
 
-      .diseno-card {
-        display: flex;
-        flex-direction: column;
-        gap: 1.4rem;
-        background-color: var(--bg-section, #fff);
-        border: 1px solid var(--border-color, #d8e2e8);
-        border-radius: 1.2rem;
-        padding: 2.4rem;
-        box-shadow: 0 2px 8px rgba(26, 104, 128, 0.08);
-        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      .producto-card {
+        transition: opacity 0.3s ease, transform 0.3s ease;
       }
 
-      .diseno-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 20px rgba(26, 104, 128, 0.13);
-        border-color: var(--AzulSmtek, #2196ba);
-      }
-
-      .diseno-card-header {
-        display: flex;
-        align-items: center;
-        gap: 1.4rem;
-      }
-
-      .diseno-card-numero {
-        flex-shrink: 0;
-        width: 4.4rem;
-        height: 4.4rem;
-        border-radius: 50%;
-        background-color: var(--AzulClaro, #e8f4f8);
-        color: var(--AzulOscuro, #1a6880);
-        font-size: 1.8rem;
-        font-weight: 800;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      /* Espacio reservado para una etiqueta de categoría opcional
-         (ej. "Diseño", "Fabricación", "Eléctrico") — se puede activar
-         a futuro sin tocar el resto de la tarjeta. */
-      .diseno-card-categoria {
-        font-size: 1.15rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--AzulSmtek, #2196ba);
-      }
-
-      .diseno-card-titulo {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: var(--text-heading, #1a2a38);
-        margin: 0;
-        line-height: 1.35;
-      }
-
-      .diseno-card-desc {
-        font-size: 1.4rem;
-        color: var(--text-primary, #4e5358);
-        line-height: 1.6;
-        margin: 0;
-        flex: 1;
-      }
-
-      /* Espacio reservado para un botón de detalle a futuro.
-         Se deja comentado en el HTML de cada tarjeta; solo hay
-         que descomentar cuando exista la vista de detalle. */
-      .diseno-card-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        font-size: 1.35rem;
-        font-weight: 700;
-        color: var(--AzulSmtek, #2196ba);
-        text-decoration: none;
-        margin-top: 0.4rem;
-        transition: gap 0.2s ease;
-      }
-      .diseno-card-link:hover { gap: 1rem; }
-
-      body.dark-mode .diseno-card-numero {
-        background-color: rgba(33, 150, 186, 0.18);
-        color: var(--AzulSmtek, #2196ba);
+      .producto-card.oculto {
+        display: none;
       }
 
       @media (max-width: 640px) {
-        .diseno-grid { grid-template-columns: 1fr; }
+        .diseno-filtros { gap: 0.7rem; }
+        .diseno-filtro-btn { padding: 0.8rem 1.6rem; font-size: 1.3rem; }
       }
     </style>
   </head>
@@ -219,7 +178,7 @@
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
           <a href="{{ url('/') }}">Inicio</a>
           <a href="{{ route('productos.catalogo') }}">Productos</a>
-          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ route('servicios') }}">Servicios</a>
           <a href="{{ url('/#contacto') }}">Contacto</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
           <a href="{{ route('postulacion.create') }}" style="font-family: bold">Trabaja con nosotros</a>
@@ -254,308 +213,220 @@
             </p>
           </div>
 
-          <div class="diseno-grid">
+          {{-- ── Filtros por categoría ── --}}
+          <div class="diseno-filtros reveal" role="tablist" aria-label="Filtrar servicios por categoría">
+            <button type="button" class="diseno-filtro-btn activo" data-filtro="todos">Todos</button>
+            <button type="button" class="diseno-filtro-btn" data-filtro="diseno">Diseño</button>
+            <button type="button" class="diseno-filtro-btn" data-filtro="ingenieria">Ingeniería</button>
+            <button type="button" class="diseno-filtro-btn" data-filtro="electrico">Eléctrico</button>
+            <button type="button" class="diseno-filtro-btn" data-filtro="fabricacion">Fabricación</button>
+            <button type="button" class="diseno-filtro-btn" data-filtro="ensamble">Ensamble</button>
+            <button type="button" class="diseno-filtro-btn" data-filtro="calidad">Calidad</button>
+          </div>
 
-            {{--
-              Cada tarjeta sigue esta misma estructura. Para agregar,
-              quitar o editar un servicio, solo se replica/edita un
-              bloque .diseno-card — no requiere tocar el CSS ni el grid.
+          {{--
+            Cada tarjeta sigue esta misma estructura. Para agregar,
+            quitar o editar un servicio, solo se replica/edita un
+            bloque .producto-card — no requiere tocar el CSS ni el grid.
 
-              La etiqueta de categoría (.diseno-card-categoria) es opcional:
-              si no se necesita, simplemente se omite esa línea.
+            data-categoria define en qué filtro aparece la tarjeta;
+            debe coincidir con el data-filtro del botón correspondiente.
+          --}}
+          <div class="productos-grid" id="disenoGrid">
 
-              El enlace de detalle (.diseno-card-link) queda comentado;
-              se activa el día que exista una vista de detalle por servicio.
-            --}}
-
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">1</span>
-                <div>
-                  <span class="diseno-card-categoria">Diseño</span>
-                  <h3 class="diseno-card-titulo">Modelado CAD 3D</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="diseno">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Diseño</span>
+                <h3>Modelado CAD 3D</h3>
+                <p>Modelado CAD 3D de piezas y dispositivos.</p>
               </div>
-              <p class="diseno-card-desc">
-                Modelado CAD 3D de piezas y dispositivos.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">2</span>
-                <div>
-                  <span class="diseno-card-categoria">Diseño</span>
-                  <h3 class="diseno-card-titulo">Modelado CAD 2D</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="diseno">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Diseño</span>
+                <h3>Modelado CAD 2D</h3>
+                <p>Modelado CAD 2D de modelos ya definidos.</p>
               </div>
-              <p class="diseno-card-desc">
-                Modelado CAD 2D de modelos ya definidos.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">3</span>
-                <div>
-                  <span class="diseno-card-categoria">Ingeniería</span>
-                  <h3 class="diseno-card-titulo">Optimización de geometrías</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="ingenieria">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Ingeniería</span>
+                <h3>Optimización de geometrías</h3>
+                <p>Optimización de geometrías para mejorar rendimiento.</p>
               </div>
-              <p class="diseno-card-desc">
-                Optimización de geometrías para mejorar rendimiento.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">4</span>
-                <div>
-                  <span class="diseno-card-categoria">Ingeniería</span>
-                  <h3 class="diseno-card-titulo">Conversión de formatos</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="ingenieria">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Ingeniería</span>
+                <h3>Conversión de formatos</h3>
+                <p>Conversión de formatos de piezas.</p>
               </div>
-              <p class="diseno-card-desc">
-                Conversión de formatos de piezas.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">5</span>
-                <div>
-                  <span class="diseno-card-categoria">Ingeniería</span>
-                  <h3 class="diseno-card-titulo">Selección de materiales</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="ingenieria">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Ingeniería</span>
+                <h3>Selección de materiales</h3>
+                <p>Selección de materiales y mejora de piezas.</p>
               </div>
-              <p class="diseno-card-desc">
-                Selección de materiales y mejora de piezas.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">6</span>
-                <div>
-                  <span class="diseno-card-categoria">Ingeniería</span>
-                  <h3 class="diseno-card-titulo">Análisis de elemento finito</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="ingenieria">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Ingeniería</span>
+                <h3>Análisis de elemento finito</h3>
+                <p>Análisis de elemento finito.</p>
               </div>
-              <p class="diseno-card-desc">
-                Análisis de elemento finito.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">7</span>
-                <div>
-                  <span class="diseno-card-categoria">Eléctrico</span>
-                  <h3 class="diseno-card-titulo">Tableros de control</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="electrico">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Eléctrico</span>
+                <h3>Tableros de control</h3>
+                <p>Diseño de tableros de control eléctricos.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño de tableros de control eléctricos.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">8</span>
-                <div>
-                  <span class="diseno-card-categoria">Eléctrico</span>
-                  <h3 class="diseno-card-titulo">Diagramas eléctricos</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="electrico">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Eléctrico</span>
+                <h3>Diagramas eléctricos</h3>
+                <p>Diseño de diagramas eléctricos.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño de diagramas eléctricos.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">9</span>
-                <div>
-                  <span class="diseno-card-categoria">Diseño</span>
-                  <h3 class="diseno-card-titulo">Visualización 3D interactiva</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="diseno">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Diseño</span>
+                <h3>Visualización 3D interactiva</h3>
+                <p>Visualizaciones 3D interactivas, para aprobación de diseños.</p>
               </div>
-              <p class="diseno-card-desc">
-                Visualizaciones 3D interactivas, para aprobación de diseños.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">10</span>
-                <div>
-                  <span class="diseno-card-categoria">Fabricación</span>
-                  <h3 class="diseno-card-titulo">Herramentales para costura</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="fabricacion">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Fabricación</span>
+                <h3>Herramentales para costura</h3>
+                <p>Diseño y fabricación de herramentales, para costura.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de herramentales, para costura.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">11</span>
-                <div>
-                  <span class="diseno-card-categoria">Fabricación</span>
-                  <h3 class="diseno-card-titulo">Fixtures de inspección</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="fabricacion">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Fabricación</span>
+                <h3>Fixtures de inspección</h3>
+                <p>Diseño y fabricación de fixtures de inspección.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de fixtures de inspección.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">12</span>
-                <div>
-                  <span class="diseno-card-categoria">Fabricación</span>
-                  <h3 class="diseno-card-titulo">Estaciones de trabajo</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="fabricacion">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Fabricación</span>
+                <h3>Estaciones de trabajo</h3>
+                <p>Diseño y fabricación de estaciones de trabajo.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de estaciones de trabajo.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">13</span>
-                <div>
-                  <span class="diseno-card-categoria">Fabricación</span>
-                  <h3 class="diseno-card-titulo">Alimentadores de material</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="fabricacion">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Fabricación</span>
+                <h3>Alimentadores de material</h3>
+                <p>Diseño y fabricación de alimentadores de material.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de alimentadores de material.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">14</span>
-                <div>
-                  <span class="diseno-card-categoria">Ensamble</span>
-                  <h3 class="diseno-card-titulo">Ensamble de maquinaria</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="ensamble">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Ensamble</span>
+                <h3>Ensamble de maquinaria</h3>
+                <p>Ensamble de maquinaria industrial y dispositivos de precisión.</p>
               </div>
-              <p class="diseno-card-desc">
-                Ensamble de maquinaria industrial y dispositivos de precisión.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">15</span>
-                <div>
-                  <span class="diseno-card-categoria">Calidad</span>
-                  <h3 class="diseno-card-titulo">Pruebas funcionales</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="calidad">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Calidad</span>
+                <h3>Pruebas funcionales</h3>
+                <p>Pruebas funcionales y validaciones con el cliente.</p>
               </div>
-              <p class="diseno-card-desc">
-                Pruebas funcionales y validaciones con el cliente.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">16</span>
-                <div>
-                  <span class="diseno-card-categoria">Fabricación</span>
-                  <h3 class="diseno-card-titulo">Refacciones personalizadas</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="fabricacion">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Fabricación</span>
+                <h3>Refacciones personalizadas</h3>
+                <p>Diseño y fabricación de refacciones personalizadas.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de refacciones personalizadas.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">17</span>
-                <div>
-                  <span class="diseno-card-categoria">Calidad</span>
-                  <h3 class="diseno-card-titulo">Inspección y diagnóstico</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="calidad">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Calidad</span>
+                <h3>Inspección y diagnóstico</h3>
+                <p>Servicios de inspección y diagnóstico técnico.</p>
               </div>
-              <p class="diseno-card-desc">
-                Servicios de inspección y diagnóstico técnico.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">18</span>
-                <div>
-                  <span class="diseno-card-categoria">Fabricación</span>
-                  <h3 class="diseno-card-titulo">Guardas delimitadoras</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="fabricacion">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Fabricación</span>
+                <h3>Guardas delimitadoras</h3>
+                <p>Diseño y fabricación de guardas, delimitadoras.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de guardas, delimitadoras.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">19</span>
-                <div>
-                  <span class="diseno-card-categoria">Ensamble</span>
-                  <h3 class="diseno-card-titulo">Estaciones de ensamble</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="ensamble">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Ensamble</span>
+                <h3>Estaciones de ensamble</h3>
+                <p>Diseño y fabricación de estaciones de ensamble y subensamble de piezas.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de estaciones de ensamble y subensamble de piezas.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
-            <div class="diseno-card reveal">
-              <div class="diseno-card-header">
-                <span class="diseno-card-numero">20</span>
-                <div>
-                  <span class="diseno-card-categoria">Calidad</span>
-                  <h3 class="diseno-card-titulo">Estaciones de inspección</h3>
-                </div>
+            <div class="producto-card reveal" data-categoria="calidad">
+              <div class="producto-imagen"></div>
+              <div class="producto-body">
+                <span class="producto-badge">Calidad</span>
+                <h3>Estaciones de inspección</h3>
+                <p>Diseño y fabricación de estaciones de inspección de piezas.</p>
               </div>
-              <p class="diseno-card-desc">
-                Diseño y fabricación de estaciones de inspección de piezas.
-              </p>
-              {{-- <a href="#" class="diseno-card-link">Ver detalles →</a> --}}
             </div>
 
           </div>
+
+          {{-- Se muestra solo si el filtro no encuentra ninguna tarjeta --}}
+          <p id="disenoSinResultados" style="display:none; text-align:center; margin-top:3rem; font-size:1.5rem; color: var(--text-muted, #7a8390);">
+            No hay servicios en esta categoría por el momento.
+          </p>
+
         </div>
       </section>
     </main>
 
     <!--Whatsapp-->
-    <a
-
+<a
       href="https://wa.me/524721074459?text=Hola,%20quiero%20información%20sobre%20sus%20productos."
       class="whatsapp-float"
       target="_blank"
@@ -604,5 +475,30 @@
 
     <!-- Script -->
     <script src="assets/js/script.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const botones = document.querySelectorAll('.diseno-filtro-btn');
+        const tarjetas = document.querySelectorAll('#disenoGrid .producto-card');
+        const sinResultados = document.getElementById('disenoSinResultados');
+
+        botones.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            botones.forEach(function (b) { b.classList.remove('activo'); });
+            btn.classList.add('activo');
+
+            const filtro = btn.getAttribute('data-filtro');
+            let visibles = 0;
+
+            tarjetas.forEach(function (card) {
+              const coincide = filtro === 'todos' || card.getAttribute('data-categoria') === filtro;
+              card.classList.toggle('oculto', !coincide);
+              if (coincide) visibles++;
+            });
+
+            sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+          });
+        });
+      });
+    </script>
   </body>
 </html>

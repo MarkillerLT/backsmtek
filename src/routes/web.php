@@ -11,9 +11,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/servicios', function(){
+Route::get('/servicios', function () {
     return view('servicios');
 })->name('servicios');
+
+Route::get('/products', function () {
+    return view('product');
+})->name('product');
+
+Route::get('/tyc', function () {
+    return view('tyc');
+})->name('tyc');
 
 Route::get('/cotizacion', [CotizacionController::class, 'create'])
     ->name('cotizacion.create');
@@ -38,10 +46,8 @@ Route::middleware([
 
     Route::get('/dashboard', [UserController::class, 'index'])
         ->name('dashboard');
-
     Route::get('/perfil', [UserController::class, 'profile'])
         ->name('profile');
-
     Route::patch('/perfil', [UserController::class, 'updateProfile'])
         ->name('profile.update');
 
@@ -61,23 +67,27 @@ Route::middleware([
                     ->parameters(['cotizaciones' => 'cotizacion'])
                     ->only(['index', 'show', 'update']);
 
+                Route::get('cotizaciones/exportar/excel', [CotizacionController::class, 'exportExcel'])
+                    ->name('cotizaciones.export.excel');
+                Route::get('cotizaciones/exportar/pdf', [CotizacionController::class, 'exportPdf'])
+                    ->name('cotizaciones.export.pdf');
+
                 Route::resource('postulaciones', PostulacionController::class)
                     ->only(['index', 'show']);
 
                 Route::patch('postulaciones/{postulacion}/estado', [PostulacionController::class, 'updateEstado'])
-                    ->name('postulaciones.estado'); // 👈 corregido: sin "admin." repetido
+                    ->name('postulaciones.estado');
 
                 Route::get('/usuarios', [AdminController::class, 'usuarios'])
                     ->name('usuarios.index');
-
                 Route::patch('/usuarios/{user}/rol', [AdminController::class, 'cambiarRol'])
                     ->name('usuarios.rol');
 
                 Route::get('/perfil', [AdminController::class, 'perfil'])
                     ->name('perfil');
-
                 Route::patch('/perfil', [AdminController::class, 'actualizarPerfil'])
                     ->name('perfil.update');
-        });
+
+            });
     });
 });

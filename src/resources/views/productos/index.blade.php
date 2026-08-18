@@ -1,25 +1,11 @@
 <x-guest-layout>
-{{--
-|--------------------------------------------------------------------------
-| Vista: productos/index.blade.php — Catálogo público de productos SMTEK
-| Requiere: assets/css/styles.css en layouts/guest.blade.php
-|--------------------------------------------------------------------------
---}}
-
     <style>
-        /* ══════════════════════════════════════════════════════
-           HERO adaptado — sin min-height forzado, deja crecer
-        ══════════════════════════════════════════════════════ */
-        .catalogo-page {
+       .catalogo-page {
             min-height: calc(100vh - 11rem);
             background-image: var(--FondoHero);  /* usa la misma capa que el hero */
             position: relative;
         }
-
-        /* ══════════════════════════════════════════════════════
-           SECCIÓN CATÁLOGO
-        ══════════════════════════════════════════════════════ */
-        .catalogo {
+       .catalogo {
             padding: 6rem 2rem;
             max-width: 130rem;
             margin-inline: auto;
@@ -374,21 +360,30 @@
 
     </header>
 
-    {{-- ╔══════════════════════════════════════════════════════════╗
-         ║  NAVEGACIÓN                                             ║
-         ╚══════════════════════════════════════════════════════════╝ --}}
+    {{--nav bar--}}
     <div class="nav-bg">
-        <div class="contenedor">
-            <nav id="nav-principal" class="navegacion-principal" style="flex:1">
-                <a href="{{ url('/') }}">Inicio</a>
-                <a href="#" class="activo">Productos</a>
-                <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
-                <a href="#" class="cta-nav">Cotizar</a>
-                <a href="#" style="font-weight:bold">Trabaja con nosotros</a>
-            </nav>
-        </div>
+      <div class="contenedor" style="display: flex; align-items: center">
+        <button
+          id="hamburger"
+          class="hamburger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          type="button"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
+          <a href="{{ url('/')}}">Inicio</a>
+          <a href="{{ route('productos.catalogo')}}">Productos</a>
+          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+        </nav>
+      </div>
     </div>
+
 
     {{-- ╔══════════════════════════════════════════════════════════╗
          ║  CATÁLOGO                                               ║

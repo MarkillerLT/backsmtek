@@ -61,18 +61,30 @@
     </div>
     </header>
 
+{{--Nav Bar--}}
     <div class="nav-bg">
-        <div class="contenedor">
-            <nav id="nav-principal" class="navegacion-principal" style="flex:1">
-                <a href="{{ url('/') }}">Inicio</a>
-                <a href="#">Productos</a>
-                <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
-                <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-                <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
-            </nav>
-        </div>
+      <div class="contenedor" style="display: flex; align-items: center">
+        <button
+          id="hamburger"
+          class="hamburger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          type="button"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
+          <a href="{{ url('/')}}">Inicio</a>
+          <a href="{{ route('productos.catalogo')}}">Productos</a>
+          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+        </nav>
+      </div>
     </div>
+
 
     {{-- ╔══════════════════════════════════════════════════════════╗
          ║  HERO — mismo que el sitio                              ║
@@ -161,14 +173,13 @@
                             </div>
 
                             <div class="register-field">
-                                <label for="empresa">Empresa <span class="cotiz-req">*</span></label>
+                                <label for="empresa">Empresa</label>
                                 <input
                                     id="empresa"
                                     type="text"
                                     name="empresa"
                                     value="{{ old('empresa') }}"
                                     placeholder="ACME Industrial S.A."
-                                    required
                                 />
                                 @error('empresa')
                                     <span class="register-error">{{ $message }}</span>
@@ -206,6 +217,28 @@
                                     <span class="register-error">{{ $message }}</span>
                                 @enderror
                             </div>
+                        </div>
+
+                        {{-- Localidad --}}
+                        <div class="register-field">
+                            <label for="localidad">Selecciona tu ciudad más cercana <span class="cotiz-req">*</span></label>
+                            <select id="localidad" name="localidad" required>
+                                <option value="" disabled {{ old('localidad') ? '' : 'selected' }}>
+                                    Selecciona tu ciudad más cercana
+                                </option>
+                                <option value="Queretaro" {{ old('localidad') === 'Queretaro' ? 'selected' : '' }}>
+                                    Querétaro
+                                </option>
+                                <option value="Silao" {{ old('localidad') === 'Silao' ? 'selected' : '' }}>
+                                    Silao
+                                </option>
+                                <option value="Toluca" {{ old('localidad') === 'Toluca' ? 'selected' : '' }}>
+                                    Toluca
+                                </option>
+                            </select>
+                            @error('localidad')
+                                <span class="register-error">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         {{-- Asunto --}}
@@ -257,7 +290,7 @@
         </div>{{-- /.hero-content --}}
     </div>{{-- /.hero --}}
         <!--Whatsapp-->
-<a
+
     href="https://wa.me/524721074459?text=Hola,%20quiero%20información%20sobre%20sus%20productos."
     class="whatsapp-float"
     target="_blank"
@@ -495,7 +528,8 @@
         }
 
         .register-field input,
-        .register-field textarea {
+        .register-field textarea,
+        .register-field select {
             width: 100%;
             padding: 1.2rem 1.6rem;
             font-size: 1.5rem;
@@ -510,14 +544,16 @@
         }
 
         body.dark-mode .register-field input,
-        body.dark-mode .register-field textarea {
+        body.dark-mode .register-field textarea,
+        body.dark-mode .register-field select {
             background-color: #1e2d3e;
             color: var(--text-heading);
             border-color: var(--border-color);
         }
 
         .register-field input:focus,
-        .register-field textarea:focus {
+        .register-field textarea:focus,
+        .register-field select:focus {
             border-color: var(--AzulSmtek);
             box-shadow: 0 0 0 3px rgba(33,150,186,0.18);
         }

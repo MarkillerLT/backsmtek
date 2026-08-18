@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Cotizacion;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\CotizacionesExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CotizacionController extends Controller
 {
     public function index()
     {
         $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')
-        ->count();
+            ->count();
 
         $cotizaciones = Cotizacion::latest()->get();
 
@@ -20,6 +22,7 @@ class CotizacionController extends Controller
             'cotizacionesPendientes'
         ));
     }
+
     public function create()
     {
         return view('cotizaciones.create');
@@ -28,29 +31,32 @@ class CotizacionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre'  => 'required|max:255',
-            'empresa' => 'nullable|max:255',
-            'correo'  => 'required|email|max:255',
-            'telefono'=> 'required|max:10',
-            'asunto'  => 'required|max:255',
-            'mensaje' => 'required',
+            'nombre'    => 'required|max:255',
+            'empresa'   => 'nullable|max:255',
+            'correo'    => 'required|email|max:255',
+            'telefono'  => 'required|max:10',
+            'asunto'    => 'required|max:255',
+            'mensaje'   => 'required',
+            'localidad' => 'required|in:Queretaro,Silao,Toluca',
         ]);
 
         Cotizacion::create([
-            'nombre'   => $request->nombre,
-            'empresa'  => $request->empresa,
-            'correo'   => $request->correo,
-            'telefono' => $request->telefono,
-            'asunto'   => $request->asunto,
-            'mensaje'  => $request->mensaje,
-            'estado'   => 'pendiente',
+            'nombre'    => $request->nombre,
+            'empresa'   => $request->empresa,
+            'correo'    => $request->correo,
+            'telefono'  => $request->telefono,
+            'asunto'    => $request->asunto,
+            'mensaje'   => $request->mensaje,
+            'localidad' => $request->localidad,
+            'estado'    => 'pendiente',
+            // numcontrol queda null: lo captura el vendedor desde el panel admin
         ]);
 
         return redirect()
             ->route('cotizacion.create')
             ->with('success', '¡Tu solicitud de cotización fue enviada correctamente!');
-
     }
+
     public function show(Cotizacion $cotizacion)
     {
         $cotizacionesPendientes = Cotizacion::where('estado', 'pendiente')
@@ -61,21 +67,35 @@ class CotizacionController extends Controller
             'cotizacionesPendientes'
         ));
     }
-     public function update(Request $request, Cotizacion $cotizacion)
+
+    public function update(Request $request, Cotizacion $cotizacion)
     {
         $request->validate([
-            'estado' => [
-                'required',
-                'in:pendiente,en_proceso,respondida,cancelada'
-            ],
+            'estado'     => ['required', 'in:pendiente,en_proceso,respondida'],
+            'numcontrol' => ['nullable', 'max:255'],
         ]);
 
         $cotizacion->update([
-            'estado' => $request->estado,
+            'estado'     => $request->estado,
+            'numcontrol' => $request->numcontrol,
         ]);
 
         return redirect()
             ->route('admin.cotizaciones.show', $cotizacion)
             ->with('success', 'Estado actualizado correctamente.');
-     }
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new CotizacionesExport, 'cotizaciones.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $cotizaciones = Cotizacion::latest()->get();
+
+        $pdf = Pdf::loadView('admin.cotizaciones.pdf', compact('cotizaciones'));
+
+        return $pdf->download('cotizaciones.pdf');
+    }
 }

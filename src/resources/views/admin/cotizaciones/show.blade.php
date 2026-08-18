@@ -4,35 +4,29 @@
     :cotizacionesPendientes="$cotizacionesPendientes">
 
     @php
-        $estadoSlug = match(strtolower($cotizacion->estado)) {
-            'pendiente'          => 'pendiente',
-            'en_proceso',
-            'en proceso'         => 'en_proceso',
-            'respondida'         => 'respondida',
-            'cancelada'          => 'cancelada',
-            default              => 'pendiente',
+        $estadoSlug = match($cotizacion->estado) {
+            'pendiente'  => 'pendiente',
+            'en_proceso' => 'en_proceso',
+            'respondida' => 'respondida',
+            default      => 'pendiente',
         };
 
         $estadoIcon = match($estadoSlug) {
             'pendiente'  => '⏳',
             'en_proceso' => '🔍',
             'respondida' => '✅',
-            'cancelada'  => '❌',
         };
 
         $estadoLabel = match($estadoSlug) {
             'pendiente'  => 'Pendiente',
             'en_proceso' => 'En proceso',
             'respondida' => 'Respondida',
-            'cancelada'  => 'Cancelada',
         };
     @endphp
 
     <style>
         /* ══════════════════════════════════════════════════════
            ESTRUCTURA ADMIN — topbar + sidebar + contenido
-           (mismo CSS que dashboard/productos, por si el layout
-            no lo inyecta globalmente)
         ══════════════════════════════════════════════════════ */
         body { overflow: hidden; }
 
@@ -43,7 +37,6 @@
             background-color: var(--bg-body);
         }
 
-        /* ── Sidebar ── */
         .admin-sidebar {
             width: 26rem;
             flex-shrink: 0;
@@ -152,7 +145,6 @@
             padding-left: 1.6rem;
         }
 
-        /* ── Main ── */
         .admin-main {
             flex: 1;
             display: flex;
@@ -160,7 +152,6 @@
             overflow: hidden;
         }
 
-        /* ── Topbar ── */
         .admin-topbar {
             display: flex;
             align-items: center;
@@ -241,7 +232,6 @@
             transform: translateY(-1px);
         }
 
-        /* ── Área de contenido con scroll ── */
         .admin-content {
             flex: 1;
             overflow-y: auto;
@@ -252,10 +242,8 @@
         }
 
         /* ══════════════════════════════════════════════════════
-           COMPONENTES REUTILIZADOS (panel, form, toolbar…)
+           COMPONENTES REUTILIZADOS
         ══════════════════════════════════════════════════════ */
-
-        /* Toolbar */
         .prod-toolbar {
             display: flex;
             align-items: center;
@@ -288,7 +276,6 @@
 
         .prod-breadcrumb a:hover { color: var(--AzulOscuro); }
 
-        /* Panel */
         .panel {
             background-color: var(--bg-section);
             border-radius: var(--radius);
@@ -312,7 +299,6 @@
         .panel-subtitle { font-size: 1.3rem; color: var(--text-muted); margin: 0.3rem 0 0; }
         .panel-body     { padding: 2.4rem; }
 
-        /* Layout 2 columnas igual que productos/create */
         .create-layout {
             display: grid;
             grid-template-columns: 1fr 32rem;
@@ -320,7 +306,6 @@
             align-items: start;
         }
 
-        /* Form grid */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -373,7 +358,6 @@
             box-shadow: 0 0 0 3px rgba(33,150,186,0.18);
         }
 
-        /* Inputs deshabilitados */
         .form-field input:disabled,
         .form-field textarea:disabled {
             background-color: var(--bg-body);
@@ -388,7 +372,17 @@
             background-color: rgba(255,255,255,0.04);
         }
 
-        /* Botones de acción */
+        .form-field-hint {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .form-field-hint.warn {
+            color: #b87a00;
+            font-weight: 600;
+        }
+
         .form-actions {
             display: flex;
             align-items: center;
@@ -443,8 +437,6 @@
         /* ══════════════════════════════════════════════════════
            ESPECÍFICOS DE ESTA VISTA
         ══════════════════════════════════════════════════════ */
-
-        /* Badge de estado */
         .estado-badge {
             display: inline-flex;
             align-items: center;
@@ -459,14 +451,25 @@
         .estado-badge.pendiente  { background-color: rgba(240,165,0,0.12);  color: #b87a00; }
         .estado-badge.en_proceso { background-color: var(--AzulClaro);       color: var(--AzulOscuro); }
         .estado-badge.respondida { background-color: rgba(29,158,117,0.12);  color: #1a7a5c; }
-        .estado-badge.cancelada  { background-color: rgba(226,75,74,0.1);    color: var(--error); }
 
         body.dark-mode .estado-badge.pendiente  { background-color: rgba(240,165,0,0.18);  color: var(--acentos); }
         body.dark-mode .estado-badge.en_proceso { background-color: rgba(33,150,186,0.18); color: var(--AzulSmtek); }
         body.dark-mode .estado-badge.respondida { background-color: rgba(29,158,117,0.2);  color: #2ecc9a; }
-        body.dark-mode .estado-badge.cancelada  { background-color: rgba(226,75,74,0.18);  color: #ff7070; }
 
-        /* Preview de estado */
+        .localidad-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.3rem;
+            border-radius: 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            white-space: nowrap;
+            background-color: var(--bg-body);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
         .estado-preview {
             display: flex;
             align-items: center;
@@ -484,7 +487,6 @@
             font-weight: 500;
         }
 
-        /* Select con flecha custom */
         .form-field select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
@@ -494,7 +496,6 @@
             cursor: pointer;
         }
 
-        /* Filas de info (timestamps) */
         .info-row {
             display: flex;
             flex-direction: column;
@@ -517,7 +518,6 @@
 
         .info-row span { color: var(--text-heading); font-weight: 500; }
 
-        /* Flash de éxito */
         .flash-alert {
             display: flex;
             align-items: center;
@@ -633,6 +633,7 @@
                         <h2 class="panel-title">Información del cliente</h2>
                         <p class="panel-subtitle">Datos enviados desde el formulario web</p>
                     </div>
+                    <span class="localidad-badge">📍 {{ $cotizacion->localidad }}</span>
                 </div>
                 <div class="panel-body">
                     <div class="form-grid">
@@ -672,14 +673,14 @@
             </div>
         </div>
 
-        {{-- Columna derecha: estado + timestamps --}}
+        {{-- Columna derecha: estado + número de control + timestamps --}}
         <div>
 
             <div class="panel">
                 <div class="panel-header">
                     <div>
-                        <h2 class="panel-title">Estado</h2>
-                        <p class="panel-subtitle">Actualiza el seguimiento de la solicitud</p>
+                        <h2 class="panel-title">Seguimiento</h2>
+                        <p class="panel-subtitle">Estado y número de control interno</p>
                     </div>
                 </div>
                 <div class="panel-body">
@@ -695,18 +696,37 @@
                         @csrf
                         @method('PUT')
 
+                        <div class="form-field" style="margin-bottom:1.8rem;">
+                            <label for="numcontrol">Número de control</label>
+                            <input
+                                type="text"
+                                id="numcontrol"
+                                name="numcontrol"
+                                value="{{ old('numcontrol', $cotizacion->numcontrol) }}"
+                                placeholder="Ej. COT-2026-0001"
+                            >
+                            @error('numcontrol')
+                                <span class="form-field-hint warn">{{ $message }}</span>
+                            @else
+                                @if(!$cotizacion->numcontrol)
+                                    <span class="form-field-hint warn">⚠ Aún sin asignar</span>
+                                @else
+                                    <span class="form-field-hint">Asignado por el equipo comercial</span>
+                                @endif
+                            @enderror
+                        </div>
+
                         <div class="form-field" style="margin-bottom:2rem;">
-                            <label>Estado</label>
+                            <label for="selectEstado">Estado</label>
                             <select name="estado" id="selectEstado">
                                 <option value="pendiente"  @selected($cotizacion->estado === 'pendiente')>⏳ Pendiente</option>
                                 <option value="en_proceso" @selected($cotizacion->estado === 'en_proceso')>🔍 En proceso</option>
                                 <option value="respondida" @selected($cotizacion->estado === 'respondida')>✅ Respondida</option>
-                                <option value="cancelada"  @selected($cotizacion->estado === 'cancelada')>❌ Cancelada</option>
                             </select>
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn-guardar">💾 Guardar estado</button>
+                            <button type="submit" class="btn-guardar">💾 Guardar cambios</button>
                             <a href="{{ route('admin.cotizaciones.index') }}" class="btn-cancelar">Volver</a>
                         </div>
                     </form>
@@ -725,6 +745,14 @@
                     <div class="info-row">
                         <strong>ID</strong>
                         <span>#{{ $cotizacion->id }}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Núm. de control</strong>
+                        <span>{{ $cotizacion->numcontrol ?: 'Sin asignar' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <strong>Ciudad</strong>
+                        <span>{{ $cotizacion->localidad }}</span>
                     </div>
                     <div class="info-row">
                         <strong>Fecha de recepción</strong>
@@ -789,7 +817,6 @@
                 pendiente:  { icon: '⏳', label: 'Pendiente',  cls: 'pendiente'  },
                 en_proceso: { icon: '🔍', label: 'En proceso', cls: 'en_proceso' },
                 respondida: { icon: '✅', label: 'Respondida', cls: 'respondida' },
-                cancelada:  { icon: '❌', label: 'Cancelada',  cls: 'cancelada'  },
             };
 
             const clases = Object.values(config).map(c => c.cls);
