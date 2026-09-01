@@ -158,3 +158,24 @@ if (sidebarToggle && adminSidebar) {
     adminSidebar.classList.toggle("open");
   });
 }
+
+// ── Hero video: pausa en móvil / reduced motion para ahorrar datos ──
+(function () {
+  const heroVideo = document.querySelector(".hero-video");
+  if (!heroVideo) return;
+
+  const mqMobile = window.matchMedia("(max-width: 768px)");
+  const mqReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function manageVideo() {
+    if (mqMobile.matches || mqReduced.matches) {
+      heroVideo.pause();
+    } else {
+      heroVideo.play().catch(function () {});
+    }
+  }
+
+  manageVideo();
+  mqMobile.addEventListener("change", manageVideo);
+  mqReduced.addEventListener("change", manageVideo);
+})();

@@ -318,44 +318,147 @@
             color: var(--text-primary);
             width: 18rem;
         }
-        /* ── Filtro de fecha ── */
-        .prod-fecha {
+        /* ── Filtro de fecha (rango) ── */
+        .fecha-rango-wrap {
+            position: relative;
+        }
+
+        .fecha-rango-btn {
             display: flex;
             align-items: center;
             gap: 0.8rem;
             background-color: var(--blanco);
             border: 1.5px solid var(--border-color);
             border-radius: var(--radius-sm);
-            padding: 0.65rem 1.2rem;
-            transition: border-color var(--transition), box-shadow var(--transition);
-        }
-        body.dark-mode .prod-fecha { background-color: #1e2d3e; }
-        .prod-fecha:focus-within {
-            border-color: var(--AzulSmtek);
-            box-shadow: 0 0 0 3px rgba(33,150,186,0.15);
-        }
-        .prod-fecha input {
-            border: none;
-            outline: none;
-            background: none;
+            padding: 0.7rem 1.4rem;
             font-size: 1.35rem;
             font-family: "Inter", sans-serif;
             color: var(--text-primary);
+            cursor: pointer;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            white-space: nowrap;
         }
-        body.dark-mode .prod-fecha input {
-            color-scheme: dark;
+        body.dark-mode .fecha-rango-btn { background-color: #1e2d3e; }
+        .fecha-rango-btn:hover,
+        .fecha-rango-btn.activo {
+            border-color: var(--AzulSmtek);
         }
-        .btn-limpiar-fecha {
+        .fecha-rango-btn .fecha-rango-icono { font-size: 1.4rem; }
+
+        /* position:fixed para escapar del overflow:hidden del .panel */
+        .fecha-rango-panel {
+            display: none;
+            position: fixed;
+            z-index: 500;
+            width: 30rem;
+            background-color: var(--bg-section);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            padding: 1.8rem;
+        }
+        .fecha-rango-panel.abierto { display: block; }
+
+        .fecha-rango-rapidos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-bottom: 1.6rem;
+            padding-bottom: 1.6rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .fecha-rapido-btn {
+            padding: 0.5rem 1.1rem;
+            border-radius: 2rem;
+            border: 1.5px solid var(--border-color);
             background: none;
-            border: none;
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
-            font-size: 1.3rem;
-            padding: 0;
-            line-height: 1;
-            transition: color var(--transition);
+            font-family: "Inter", sans-serif;
+            transition: all var(--transition);
         }
-        .btn-limpiar-fecha:hover { color: var(--error); }
+        .fecha-rapido-btn:hover {
+            border-color: var(--AzulSmtek);
+            color: var(--AzulSmtek);
+        }
+        .fecha-rapido-btn.activo {
+            background-color: var(--AzulSmtek);
+            border-color: var(--AzulSmtek);
+            color: var(--blanco);
+        }
+
+        .fecha-rango-campos {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .fecha-rango-campo label {
+            display: block;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .fecha-rango-campo input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 1.35rem;
+            font-family: "Inter", sans-serif;
+            color: var(--text-primary);
+            background-color: var(--bg-body);
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            outline: none;
+            transition: border-color var(--transition), box-shadow var(--transition);
+        }
+        body.dark-mode .fecha-rango-campo input { color-scheme: dark; background-color: #16202c; }
+        .fecha-rango-campo input:focus {
+            border-color: var(--AzulSmtek);
+            box-shadow: 0 0 0 3px rgba(33,150,186,0.15);
+        }
+
+        .fecha-rango-acciones {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1.6rem;
+        }
+
+        .fecha-rango-aplicar,
+        .fecha-rango-limpiar {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            border-radius: var(--radius-sm);
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: "Inter", sans-serif;
+            border: 1.5px solid transparent;
+            transition: all var(--transition);
+        }
+
+        .fecha-rango-aplicar {
+            background-color: var(--AzulSmtek);
+            color: var(--blanco);
+        }
+        .fecha-rango-aplicar:hover { background-color: var(--AzulOscuro); }
+
+        .fecha-rango-limpiar {
+            background: none;
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        .fecha-rango-limpiar:hover { border-color: var(--error); color: var(--error); }
+
+        @media (max-width: 480px) {
+            .fecha-rango-panel { width: calc(100vw - 4rem); }
+        }
         /* ── Tabla ── */
         .prod-table-wrap { overflow-x: auto; }
         .prod-table {
@@ -631,14 +734,12 @@
     <x-admin.layout
         title="Cotizaciones"
         :cotizacionesPendientes="$cotizacionesPendientes">
-
         {{-- Toolbar --}}
         <div class="prod-toolbar">
             <div class="prod-toolbar-left">
                 <h1>Cotizaciones</h1>
                 <p>Solicitudes recibidas desde el sitio web</p>
             </div>
-
             <div class="cotiz-filtros-wrap">
                 {{-- Fila 1: filtro por estado --}}
                 <div class="cotiz-filtros-row">
@@ -658,7 +759,6 @@
                 </div>
             </div>
         </div>
-
         {{-- KPIs --}}
         <div class="cotiz-kpis">
             <div class="kpi-mini">
@@ -696,7 +796,6 @@
                 </div>
             </div>
         </div>
-
         {{-- Tabla --}}
         <div class="panel">
             <div class="panel-header">
@@ -707,13 +806,38 @@
                         {{ $cotizaciones->count() == 1 ? 'cotización registrada' : 'cotizaciones registradas' }}
                     </p>
                 </div>
-
                 <div class="panel-header-actions">
-                    <div class="prod-fecha">
-                        <input type="date" id="filtroFecha" aria-label="Filtrar por fecha">
-                        <button type="button" class="btn-limpiar-fecha" id="limpiarFecha" title="Quitar filtro de fecha">✕</button>
-                    </div>
+                    <div class="fecha-rango-wrap">
+                        <button type="button" class="fecha-rango-btn" id="fechaRangoToggle">
+                            <span class="fecha-rango-icono">📅</span>
+                            <span id="fechaRangoLabel">Rango de fechas</span>
+                        </button>
 
+                        <div class="fecha-rango-panel" id="fechaRangoPanel">
+                            <div class="fecha-rango-rapidos">
+                                <button type="button" class="fecha-rapido-btn" data-rapido="hoy">Hoy</button>
+                                <button type="button" class="fecha-rapido-btn" data-rapido="ayer">Ayer</button>
+                                <button type="button" class="fecha-rapido-btn" data-rapido="semana">Esta semana</button>
+                                <button type="button" class="fecha-rapido-btn" data-rapido="mes">Este mes</button>
+                            </div>
+
+                            <div class="fecha-rango-campos">
+                                <div class="fecha-rango-campo">
+                                    <label for="fechaInicio">Inicio</label>
+                                    <input type="date" id="fechaInicio">
+                                </div>
+                                <div class="fecha-rango-campo">
+                                    <label for="fechaFin">Fin</label>
+                                    <input type="date" id="fechaFin">
+                                </div>
+                            </div>
+
+                            <div class="fecha-rango-acciones">
+                                <button type="button" class="fecha-rango-limpiar" id="fechaRangoLimpiar">Limpiar</button>
+                                <button type="button" class="fecha-rango-aplicar" id="fechaRangoAplicar">Aplicar</button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="prod-search">
                         <span>🔍</span>
                         <input
@@ -722,7 +846,6 @@
                             placeholder="Buscar por nombre, empresa, correo o núm. control..."
                             autocomplete="off">
                     </div>
-
                     <a href="{{ route('admin.cotizaciones.export.excel') }}" class="btn-exportar excel">
                         📊 Excel
                     </a>
@@ -785,7 +908,6 @@
                                 </td>
                             </tr>
                         @endforelse
-
                         {{-- Fila que se muestra cuando los filtros no encuentran nada --}}
                         <tr id="filaSinResultados" style="display: none;">
                             <td colspan="9" class="prod-empty">
@@ -799,32 +921,80 @@
             </div>
         </div>
     </x-admin.layout>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const filas = Array.from(document.querySelectorAll('#tablaCotizaciones tbody tr[data-estado]'));
             const filaSinResultados = document.getElementById('filaSinResultados');
             const contador = document.getElementById('contadorResultados');
-
             const botonesEstado = document.querySelectorAll('[data-filtro-estado]');
             const botonesCiudad = document.querySelectorAll('[data-filtro-ciudad]');
             const inputBusqueda = document.getElementById('buscarCotiz');
-            const inputFecha = document.getElementById('filtroFecha');
-            const btnLimpiarFecha = document.getElementById('limpiarFecha');
+
+            const fechaToggle   = document.getElementById('fechaRangoToggle');
+            const fechaPanel    = document.getElementById('fechaRangoPanel');
+            const fechaLabel    = document.getElementById('fechaRangoLabel');
+            const inputInicio   = document.getElementById('fechaInicio');
+            const inputFin      = document.getElementById('fechaFin');
+            const btnesRapidos  = document.querySelectorAll('.fecha-rapido-btn');
+            const btnAplicar    = document.getElementById('fechaRangoAplicar');
+            const btnLimpiar    = document.getElementById('fechaRangoLimpiar');
 
             let estadoActivo = 'todos';
             let ciudadActiva = 'todas';
+            let rangoInicio = '';
+            let rangoFin = '';
+
+            function formatearFecha(d) {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            }
+
+            function formatearLabel(fechaStr) {
+                const [y, m, d] = fechaStr.split('-');
+                return `${d}/${m}/${y}`;
+            }
+
+            function actualizarLabelBoton() {
+                if (rangoInicio && rangoFin) {
+                    fechaLabel.textContent = rangoInicio === rangoFin
+                        ? formatearLabel(rangoInicio)
+                        : `${formatearLabel(rangoInicio)} - ${formatearLabel(rangoFin)}`;
+                    fechaToggle.classList.add('activo');
+                } else {
+                    fechaLabel.textContent = 'Rango de fechas';
+                    fechaToggle.classList.remove('activo');
+                }
+            }
+
+            function posicionarPanel() {
+                const rect = fechaToggle.getBoundingClientRect();
+                const panelWidth = fechaPanel.offsetWidth || 300;
+
+                let left = rect.right - panelWidth;
+                if (left < 8) left = 8;
+                if (left + panelWidth > window.innerWidth - 8) {
+                    left = window.innerWidth - panelWidth - 8;
+                }
+
+                fechaPanel.style.top = (rect.bottom + 8) + 'px';
+                fechaPanel.style.left = left + 'px';
+            }
 
             function aplicarFiltros() {
                 const texto = inputBusqueda.value.trim().toLowerCase();
-                const fecha = inputFecha.value;
                 let visibles = 0;
 
                 filas.forEach(function (fila) {
                     const coincideEstado = estadoActivo === 'todos' || fila.dataset.estado === estadoActivo;
                     const coincideCiudad = ciudadActiva === 'todas' || fila.dataset.localidad === ciudadActiva;
-                    const coincideFecha = !fecha || fila.dataset.fecha === fecha;
                     const coincideTexto = !texto || fila.dataset.busqueda.includes(texto);
+
+                    let coincideFecha = true;
+                    if (rangoInicio && rangoFin) {
+                        coincideFecha = fila.dataset.fecha >= rangoInicio && fila.dataset.fecha <= rangoFin;
+                    }
 
                     const mostrar = coincideEstado && coincideCiudad && coincideFecha && coincideTexto;
                     fila.style.display = mostrar ? '' : 'none';
@@ -838,6 +1008,96 @@
                 }
             }
 
+            // ── Toggle del panel ──
+            fechaToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const abrir = !fechaPanel.classList.contains('abierto');
+                fechaPanel.classList.toggle('abierto');
+                if (abrir) posicionarPanel();
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!fechaPanel.contains(e.target) && e.target !== fechaToggle && !fechaToggle.contains(e.target)) {
+                    fechaPanel.classList.remove('abierto');
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                if (fechaPanel.classList.contains('abierto')) posicionarPanel();
+            });
+            window.addEventListener('scroll', function () {
+                if (fechaPanel.classList.contains('abierto')) posicionarPanel();
+            }, true);
+
+            // ── Accesos rápidos ──
+            btnesRapidos.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    btnesRapidos.forEach(function (b) { b.classList.remove('activo'); });
+                    btn.classList.add('activo');
+
+                    const hoy = new Date();
+                    let inicio = new Date();
+                    let fin = new Date();
+
+                    switch (btn.dataset.rapido) {
+                        case 'hoy':
+                            inicio = hoy; fin = hoy;
+                            break;
+                        case 'ayer':
+                            inicio.setDate(hoy.getDate() - 1);
+                            fin.setDate(hoy.getDate() - 1);
+                            break;
+                        case 'semana':
+                            const diaSemana = hoy.getDay() === 0 ? 6 : hoy.getDay() - 1; // lunes = 0
+                            inicio.setDate(hoy.getDate() - diaSemana);
+                            fin = hoy;
+                            break;
+                        case 'mes':
+                            inicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+                            fin = hoy;
+                            break;
+                    }
+
+                    inputInicio.value = formatearFecha(inicio);
+                    inputFin.value = formatearFecha(fin);
+                });
+            });
+
+            // Si el usuario edita los inputs manualmente, deselecciona los rápidos
+            [inputInicio, inputFin].forEach(function (input) {
+                input.addEventListener('input', function () {
+                    btnesRapidos.forEach(function (b) { b.classList.remove('activo'); });
+                });
+            });
+
+            // ── Aplicar ──
+            btnAplicar.addEventListener('click', function () {
+                rangoInicio = inputInicio.value;
+                rangoFin = inputFin.value;
+
+                if (rangoInicio && rangoFin && rangoInicio > rangoFin) {
+                    [rangoInicio, rangoFin] = [rangoFin, rangoInicio];
+                    inputInicio.value = rangoInicio;
+                    inputFin.value = rangoFin;
+                }
+
+                actualizarLabelBoton();
+                aplicarFiltros();
+                fechaPanel.classList.remove('abierto');
+            });
+
+            // ── Limpiar ──
+            btnLimpiar.addEventListener('click', function () {
+                inputInicio.value = '';
+                inputFin.value = '';
+                rangoInicio = '';
+                rangoFin = '';
+                btnesRapidos.forEach(function (b) { b.classList.remove('activo'); });
+                actualizarLabelBoton();
+                aplicarFiltros();
+            });
+
+            // ── Filtros de estado / ciudad / búsqueda ──
             botonesEstado.forEach(function (btn) {
                 btn.addEventListener('click', function () {
                     botonesEstado.forEach(function (b) { b.classList.remove('activo'); });
@@ -857,12 +1117,6 @@
             });
 
             inputBusqueda.addEventListener('input', aplicarFiltros);
-            inputFecha.addEventListener('change', aplicarFiltros);
-
-            btnLimpiarFecha.addEventListener('click', function () {
-                inputFecha.value = '';
-                aplicarFiltros();
-            });
         });
     </script>
 </x-app-layout>

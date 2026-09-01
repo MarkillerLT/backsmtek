@@ -20,10 +20,13 @@
         <div class="auth-links">
             @if (Route::has('login'))
                 @auth
+                    @if(auth()->user()->rol === 'admin')
+                        <a href="{{ url('/admin') }}">Panel de Administración</a>
+                @else
                     <a href="{{ url('/dashboard') }}">Dashboard</a>
+                @endif
                 @else
                     <a href="{{ route('login') }}">Ingresar</a>
-
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="cta-nav">
                             Registrarse
@@ -32,7 +35,6 @@
                 @endauth
             @endif
         </div>
-
       <button
         id="dark-toggle"
         class="dark-toggle"
@@ -75,12 +77,16 @@
         </button>
 
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
-          <a href="{{ url('/')}}">Inicio</a>
-          <a href="{{ route('productos.catalogo')}}">Productos</a>
+                 <a href="{{ url('/')}}">Inicio</a>
+<!-- descomentar cuando se rellene productos-->
+<!-- <a href="{{ route('productos.catalogo')}}">Catalogo</a>  -->
+<!-- descomentar cuando se rellene productos-->
           <a href="{{ route('servicios')}}">Servicios</a>
           <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
           <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+
         </nav>
       </div>
     </div>
@@ -290,7 +296,7 @@
         </div>{{-- /.hero-content --}}
     </div>{{-- /.hero --}}
         <!--Whatsapp-->
-
+    <a
     href="https://wa.me/524721074459?text=Hola,%20quiero%20información%20sobre%20sus%20productos."
     class="whatsapp-float"
     target="_blank"

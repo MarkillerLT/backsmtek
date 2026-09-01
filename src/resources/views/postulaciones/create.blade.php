@@ -17,13 +17,16 @@
     <div>
 <div class="header-actions">
 
-        <div class="auth-links">
+<div class="auth-links">
             @if (Route::has('login'))
                 @auth
+                    @if(auth()->user()->rol === 'admin')
+                        <a href="{{ url('/admin') }}">Panel de Administración</a>
+                @else
                     <a href="{{ url('/dashboard') }}">Dashboard</a>
+                @endif
                 @else
                     <a href="{{ route('login') }}">Ingresar</a>
-
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="cta-nav">
                             Registrarse
@@ -32,7 +35,6 @@
                 @endauth
             @endif
         </div>
-
       <button
         id="dark-toggle"
         class="dark-toggle"

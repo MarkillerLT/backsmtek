@@ -313,37 +313,76 @@ body.dark-mode .toggle-thumb {
 /* max-width: 80rem; */
 /* margin-inline: auto; */
 /* } */
+/* ===== HERO con video de fondo ===== */
 .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 56rem;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    /* Fallback: se usa si el video no carga, o en móvil donde lo ocultamos */
     background-image: url(/assets/img/her2.png);
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    height: 560px;
-    position: relative;
-    margin-bottom: 2rem;
 }
 
-/* Capa oscura encima de la imagen */
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* Capa oscura/clara encima del video — sigue usando la misma variable
+   que ya cambia sola con el toggle de modo oscuro/claro */
 .hero::before {
     content: "";
     position: absolute;
     inset: 0;
     background: var(--FondoHero);
+    z-index: 1;
 }
 
 .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     height: 100%;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     text-align: center;
     color: white;
+}
+
+/* ── Responsive: en móvil ocultamos el video (ahorra datos y batería)
+   y dejamos la imagen de fondo como respaldo ── */
+@media (max-width: 768px) {
+    .hero {
+        height: 70vh;
+        min-height: 46rem;
+    }
+
+    .hero-video {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        height: 60vh;
+        min-height: 40rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-video {
+        display: none;
+    }
 }
 
 .hero h1 {

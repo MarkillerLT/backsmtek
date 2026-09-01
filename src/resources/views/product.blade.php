@@ -15,324 +15,364 @@
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/normalize.css') }}" />
 
-    <style>
-      .reveal { opacity: 0; transform: translateY(2.4rem); transition: opacity 0.55s ease, transform 0.55s ease; }
-      .reveal.visible { opacity: 1; transform: none; }
-      @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+<style>
+  .reveal { opacity: 0; transform: translateY(2.4rem); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
 
-      /* ══════════════════════════════════════════════
-         CATÁLOGO — Layout general
-      ══════════════════════════════════════════════ */
-      .catalogo-breadcrumb {
-        font-size: 1.3rem;
-        color: var(--text-muted, #7a8390);
-        margin-bottom: 2rem;
-      }
-      .catalogo-breadcrumb a { color: var(--AzulSmtek, #2196ba); text-decoration: none; font-weight: 600; }
-      .catalogo-breadcrumb a:hover { text-decoration: underline; }
-      .catalogo-breadcrumb .actual { color: var(--text-heading, #1a2a38); font-weight: 700; }
+  /* ══════════════════════════════════════════════
+     CATÁLOGO — Layout general
+  ══════════════════════════════════════════════ */
+  .catalogo-breadcrumb {
+    font-size: 1.3rem;
+    color: var(--text-muted, #7a8390);
+    margin-bottom: 2rem;
+  }
+  .catalogo-breadcrumb a { color: var(--AzulSmtek, #2196ba); text-decoration: none; font-weight: 600; }
+  .catalogo-breadcrumb a:hover { text-decoration: underline; }
+  .catalogo-breadcrumb .actual { color: var(--text-heading, #1a2a38); font-weight: 700; }
 
-      .catalogo-shell {
-        display: flex;
-        align-items: flex-start;
-        gap: 2.4rem;
-      }
+  .catalogo-shell {
+    display: flex;
+    align-items: flex-start;
+    gap: 2.4rem;
+  }
 
-      /* ── Sidebar ── */
-      .catalogo-sidebar {
-        width: 30rem;
-        flex-shrink: 0;
-        background-color: var(--bg-section, #fff);
-        border: 1px solid var(--border-color, #d8e2e8);
-        border-radius: 1.2rem;
-        overflow: hidden;
-        position: sticky;
-        top: 2rem;
-      }
+  /* ── Sidebar ── */
+  .catalogo-sidebar {
+    width: 30rem;
+    flex-shrink: 0;
+    background-color: var(--bg-section, #fff);
+    border: 1px solid var(--border-color, #d8e2e8);
+    border-radius: 1.2rem;
+    overflow: hidden;
+    position: sticky;
+    top: 2rem;
+  }
 
-      .cat-group { border-bottom: 1px solid var(--border-color, #d8e2e8); }
-      .cat-group:last-child { border-bottom: none; }
+  .cat-group { border-bottom: 1px solid var(--border-color, #d8e2e8); }
+  .cat-group:last-child { border-bottom: none; }
 
-      .cat-group-btn {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding: 1.5rem 2rem;
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-family: "Inter", sans-serif;
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: var(--text-heading, #1a2a38);
-        text-align: left;
-        transition: background-color 0.2s ease, color 0.2s ease;
-      }
-      .cat-group-btn:hover { background-color: var(--bg-body, #f5f5f5); }
+  .cat-group-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: "Inter", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-heading, #1a2a38);
+    text-align: left;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .cat-group-btn:hover { background-color: var(--bg-body, #f5f5f5); }
 
-      .cat-group.abierto .cat-group-btn {
-        background-color: var(--AzulSmtek, #2196ba);
-        color: #fff;
-      }
+  .cat-group.abierto .cat-group-btn {
+    background-color: var(--AzulSmtek, #2196ba);
+    color: #fff;
+  }
 
-      .cat-group-btn .chevron {
-        flex-shrink: 0;
-        transition: transform 0.25s ease;
-        font-size: 1.2rem;
-      }
-      .cat-group.abierto .cat-group-btn .chevron { transform: rotate(90deg); }
+  .cat-group-btn .chevron {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+    font-size: 1.2rem;
+  }
+  .cat-group.abierto .cat-group-btn .chevron { transform: rotate(90deg); }
 
-      .cat-sublist {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.35s ease;
-        background-color: var(--bg-body, #f5f5f5);
-      }
-      .cat-group.abierto .cat-sublist { max-height: 70rem; }
+  .cat-sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+    background-color: var(--bg-body, #f5f5f5);
+  }
+  .cat-group.abierto .cat-sublist { max-height: 70rem; }
 
-      .cat-sublist li a {
-        display: block;
-        padding: 1.1rem 2rem 1.1rem 3.2rem;
-        font-size: 1.3rem;
-        color: var(--text-primary, #4e5358);
-        text-decoration: none;
-        border-left: 3px solid transparent;
-        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-      }
-      .cat-sublist li a:hover {
-        background-color: var(--AzulClaro, #e8f4f8);
-        color: var(--AzulSmtek, #2196ba);
-      }
-      .cat-sublist li a.activo {
-        background-color: var(--AzulClaro, #e8f4f8);
-        color: var(--AzulSmtek, #2196ba);
-        font-weight: 700;
-        border-left-color: var(--AzulSmtek, #2196ba);
-      }
+  .cat-sublist li a {
+    display: block;
+    padding: 1.1rem 2rem 1.1rem 3.2rem;
+    font-size: 1.3rem;
+    color: var(--text-primary, #4e5358);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .cat-sublist li a:hover {
+    background-color: var(--AzulClaro, #e8f4f8);
+    color: var(--AzulSmtek, #2196ba);
+  }
+  .cat-sublist li a.activo {
+    background-color: var(--AzulClaro, #e8f4f8);
+    color: var(--AzulSmtek, #2196ba);
+    font-weight: 700;
+    border-left-color: var(--AzulSmtek, #2196ba);
+  }
 
-      /* Botón/desplegable — solo móvil */
-      .catalogo-mobile-toggle {
-        display: none;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1.4rem 1.8rem;
-        background-color: var(--AzulSmtek, #2196ba);
-        color: #fff;
-        border: none;
-        border-radius: 1rem;
-        font-family: "Inter", sans-serif;
-        font-size: 1.5rem;
-        font-weight: 700;
-        cursor: pointer;
-        margin-bottom: 1.6rem;
-      }
-      .catalogo-mobile-toggle .chevron { transition: transform 0.25s ease; }
-      .catalogo-mobile-toggle.abierto .chevron { transform: rotate(180deg); }
+  /* Botón/desplegable — solo móvil */
+  .catalogo-mobile-toggle {
+    display: none;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.4rem 1.8rem;
+    background-color: var(--AzulSmtek, #2196ba);
+    color: #fff;
+    border: none;
+    border-radius: 1rem;
+    font-family: "Inter", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-bottom: 1.6rem;
+  }
+  .catalogo-mobile-toggle .chevron { transition: transform 0.25s ease; }
+  .catalogo-mobile-toggle.abierto .chevron { transform: rotate(180deg); }
 
-      /* ── Panel principal ── */
-      .catalogo-main { flex: 1; min-width: 0; }
+  /* ── Panel principal ── */
+  .catalogo-main { flex: 1; min-width: 0; }
 
-      .cat-panel { display: none; }
-      .cat-panel.activo { display: block; }
+  .cat-panel { display: none; }
+  .cat-panel.activo { display: block; }
 
-      .catalogo-titlebar {
-        background-color: var(--AzulSmtek, #2196ba);
-        color: #fff;
-        padding: 2rem 2.6rem;
-        border-radius: 1rem;
-        font-size: 2.2rem;
-        font-weight: 800;
-        margin-bottom: 2.4rem;
-      }
+  .catalogo-titlebar {
+    background-color: var(--AzulSmtek, #2196ba);
+    color: #fff;
+    padding: 2rem 2.6rem;
+    border-radius: 1rem;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 2.4rem;
+  }
 
-      .catalogo-intro {
-        display: flex;
-        gap: 2.4rem;
-        flex-wrap: wrap;
-        margin-bottom: 3rem;
-      }
-      .catalogo-intro-img {
-        width: 16rem;
-        height: 12rem;
-        flex-shrink: 0;
-        border-radius: 1rem;
-        background-color: var(--AzulClaro, #e8f4f8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--AzulOscuro, #1a6880);
-        font-size: 1.2rem;
-        font-weight: 600;
-        overflow: hidden;
-        /* TODO: reemplazar por <img src="..." alt="..." style="width:100%;height:100%;object-fit:cover;"> */
-      }
-      .catalogo-intro p {
-        flex: 1;
-        min-width: 22rem;
-        font-size: 1.45rem;
-        color: var(--text-primary, #4e5358);
-        line-height: 1.65;
-      }
+  .catalogo-intro {
+    display: flex;
+    gap: 2.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
 
-      /* ── Grid de subcategorías (tipo tarjetas Turck) ── */
-      .subcat-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
-        gap: 2rem;
-      }
+  /* ── Imagen de introducción de categoría ── */
+  .catalogo-intro-img {
+    width: 16rem;
+    height: 12rem;
+    flex-shrink: 0;
+    border-radius: 1rem;
+    background-color: var(--AzulClaro, #e8f4f8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--AzulOscuro, #1a6880);
+    font-size: 1.2rem;
+    font-weight: 600;
+    position: relative;
+    overflow: hidden;
+  }
+  .catalogo-intro-img > span {
+    padding: 1rem;
+    display: block;
+  }
+  .catalogo-intro-img img {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
 
-      .subcat-card {
-        display: block;
-        background-color: var(--bg-section, #fff);
-        border: 1px solid var(--border-color, #d8e2e8);
-        border-radius: 1rem;
-        overflow: hidden;
-        text-decoration: none;
-        cursor: pointer;
-        transition: transform 0.22s ease, box-shadow 0.22s ease;
-      }
-      .subcat-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 18px rgba(26, 104, 128, 0.14);
-      }
+  .catalogo-intro p {
+    flex: 1;
+    min-width: 22rem;
+    font-size: 1.45rem;
+    color: var(--text-primary, #4e5358);
+    line-height: 1.65;
+  }
 
-      .subcat-card-img {
-        aspect-ratio: 4 / 3;
-        background-color: var(--bg-body, #f5f5f5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-muted, #7a8390);
-        font-size: 1.2rem;
-        text-align: center;
-        padding: 1rem;
-        /* TODO: reemplazar por <img src="..." alt="..." style="width:100%;height:100%;object-fit:cover;"> */
-      }
+  /* ── Grid de subcategorías (tipo tarjetas Turck) ── */
+  .subcat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+    gap: 2rem;
+  }
 
-      .subcat-card-label {
-        background-color: var(--AzulSmtek, #2196ba);
-        color: #fff;
-        font-weight: 700;
-        font-size: 1.3rem;
-        padding: 1.1rem 1.4rem;
-      }
+  .subcat-card {
+    display: block;
+    background-color: var(--bg-section, #fff);
+    border: 1px solid var(--border-color, #d8e2e8);
+    border-radius: 1rem;
+    overflow: hidden;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+  }
+  .subcat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(26, 104, 128, 0.14);
+  }
 
-      /* ── Panel de detalle (al seleccionar una subcategoría) ── */
-      .subcat-detail {
-        display: none;
-        background-color: var(--bg-section, #fff);
-        border: 1px solid var(--border-color, #d8e2e8);
-        border-radius: 1.2rem;
-        padding: 2.4rem;
-        margin-bottom: 2.8rem;
-        gap: 2.4rem;
-        align-items: flex-start;
-        flex-wrap: wrap;
-      }
-      .subcat-detail.activo { display: flex; }
+  /* ── Imagen de la tarjeta de subcategoría ── */
+  .subcat-card-img {
+    aspect-ratio: 4 / 3;
+    background-color: var(--bg-body, #f5f5f5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted, #7a8390);
+    font-size: 1.2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .subcat-card-img > span {
+    padding: 1rem;
+    display: block;
+  }
+  .subcat-card-img img {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
 
-      .subcat-detail-back {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: var(--AzulSmtek, #2196ba);
-        text-decoration: none;
-        cursor: pointer;
-        background: none;
-        border: none;
-        font-family: "Inter", sans-serif;
-        margin-bottom: 1.6rem;
-        width: 100%;
-      }
+  .subcat-card-label {
+    background-color: var(--AzulSmtek, #2196ba);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.3rem;
+    padding: 1.1rem 1.4rem;
+  }
 
-      .subcat-detail-img {
-        width: 100%;
-        max-width: 24rem;
-        aspect-ratio: 4 / 3;
-        flex-shrink: 0;
-        border-radius: 1rem;
-        background-color: var(--bg-body, #f5f5f5);
-        border: 1px dashed var(--border-color, #d8e2e8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--text-muted, #7a8390);
-        font-size: 1.3rem;
-        text-align: center;
-        padding: 1rem;
-        overflow: hidden;
-        /* TODO: reemplazar por <img src="..." alt="..." style="width:100%;height:100%;object-fit:cover;"> */
-      }
+  /* ── Panel de detalle (al seleccionar una subcategoría) ── */
+  .subcat-detail {
+    display: none;
+    background-color: var(--bg-section, #fff);
+    border: 1px solid var(--border-color, #d8e2e8);
+    border-radius: 1.2rem;
+    padding: 2.4rem;
+    margin-bottom: 2.8rem;
+    gap: 2.4rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .subcat-detail.activo { display: flex; }
 
-      .subcat-detail-info { flex: 1; min-width: 22rem; }
-      .subcat-detail-info h4 {
-        font-size: 1.9rem;
-        font-weight: 800;
-        color: var(--text-heading, #1a2a38);
-        margin: 0 0 1rem;
-      }
-      .subcat-detail-info p {
-        font-size: 1.45rem;
-        color: var(--text-primary, #4e5358);
-        line-height: 1.65;
-        margin: 0 0 1.8rem;
-      }
-      .subcat-cta {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.6rem;
-        padding: 1.1rem 2.2rem;
-        background-color: var(--AzulSmtek, #2196ba);
-        color: #fff;
-        border-radius: 0.8rem;
-        font-size: 1.35rem;
-        font-weight: 700;
-        text-decoration: none;
-        transition: background-color 0.2s ease;
-      }
-      .subcat-cta:hover { background-color: var(--AzulOscuro, #1a6880); }
+  .subcat-detail-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--AzulSmtek, #2196ba);
+    text-decoration: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: "Inter", sans-serif;
+    margin-bottom: 1.6rem;
+    width: 100%;
+  }
 
-      body.dark-mode .catalogo-intro-img,
-      body.dark-mode .subcat-card-img,
-      body.dark-mode .subcat-detail-img {
-        background-color: rgba(33,150,186,0.12);
-      }
-      body.dark-mode .cat-sublist { background-color: #16202c; }
-      body.dark-mode .cat-group-btn:hover { background-color: #16202c; }
+  /* ── Imagen del panel de detalle ── */
+  .subcat-detail-img {
+    width: 100%;
+    max-width: 24rem;
+    aspect-ratio: 4 / 3;
+    flex-shrink: 0;
+    border-radius: 1rem;
+    background-color: var(--bg-body, #f5f5f5);
+    border: 1px dashed var(--border-color, #d8e2e8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted, #7a8390);
+    font-size: 1.3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .subcat-detail-img > span {
+    padding: 1rem;
+    display: block;
+  }
+  .subcat-detail-img img {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block;
+  }
 
-      /* ══════════════════════════════════════════════
-         RESPONSIVE: sidebar → menú desplegable
-      ══════════════════════════════════════════════ */
-      @media (max-width: 900px) {
-        .catalogo-mobile-toggle { display: flex; }
+  .subcat-detail-info { flex: 1; min-width: 22rem; }
+  .subcat-detail-info h4 {
+    font-size: 1.9rem;
+    font-weight: 800;
+    color: var(--text-heading, #1a2a38);
+    margin: 0 0 1rem;
+  }
+  .subcat-detail-info p {
+    font-size: 1.45rem;
+    color: var(--text-primary, #4e5358);
+    line-height: 1.65;
+    margin: 0 0 1.8rem;
+  }
+  .subcat-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.1rem 2.2rem;
+    background-color: var(--AzulSmtek, #2196ba);
+    color: #fff;
+    border-radius: 0.8rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  .subcat-cta:hover { background-color: var(--AzulOscuro, #1a6880); }
 
-        .catalogo-shell { flex-direction: column; }
+  body.dark-mode .catalogo-intro-img,
+  body.dark-mode .subcat-card-img,
+  body.dark-mode .subcat-detail-img {
+    background-color: rgba(33,150,186,0.12);
+  }
+  body.dark-mode .cat-sublist { background-color: #16202c; }
+  body.dark-mode .cat-group-btn:hover { background-color: #16202c; }
 
-        .catalogo-sidebar {
-          display: none;
-          width: 100%;
-          position: static;
-        }
-        .catalogo-sidebar.abierto-mobile {
-          display: block;
-          margin-bottom: 2rem;
-        }
+  /* ══════════════════════════════════════════════
+     RESPONSIVE: sidebar → menú desplegable
+  ══════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .catalogo-mobile-toggle { display: flex; }
 
-        .catalogo-titlebar { font-size: 1.8rem; padding: 1.6rem 2rem; }
-        .catalogo-intro { flex-direction: column; }
-        .catalogo-intro-img { width: 100%; height: 16rem; }
-        .subcat-detail { flex-direction: column; }
-        .subcat-detail-img { max-width: 100%; }
-      }
-    </style>
+    .catalogo-shell { flex-direction: column; }
+
+    .catalogo-sidebar {
+      display: none;
+      width: 100%;
+      position: static;
+    }
+    .catalogo-sidebar.abierto-mobile {
+      display: block;
+      margin-bottom: 2rem;
+    }
+
+    .catalogo-titlebar { font-size: 1.8rem; padding: 1.6rem 2rem; }
+    .catalogo-intro { flex-direction: column; }
+    .catalogo-intro-img { width: 100%; height: 16rem; }
+    .subcat-detail { flex-direction: column; }
+    .subcat-detail-img { max-width: 100%; }
+  }
+</style>
   </head>
   <body>
     <header>
@@ -387,12 +427,16 @@
         </button>
 
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
-          <a href="{{ url('/') }}">Inicio</a>
-          <a href="{{ route('productos.catalogo') }}">Productos</a>
-          <a href="#">Servicios</a>
-          <a href="{{ url('/#contacto') }}">Contacto</a>
+                 <a href="{{ url('/')}}">Inicio</a>
+<!-- descomentar cuando se rellene productos-->
+<!-- <a href="{{ route('productos.catalogo')}}">Catalogo</a>  -->
+<!-- descomentar cuando se rellene productos-->
+          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-          <a href="{{ route('postulacion.create') }}" style="font-family: bold">Trabaja con nosotros</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+
         </nav>
       </div>
     </div>
@@ -533,82 +577,108 @@
             {{-- ══════════════════════════════════════
                  CONTENIDO PRINCIPAL
             ══════════════════════════════════════ --}}
-            <div class="catalogo-main">
-
+<div class="catalogo-main">
               <!-- ═══ SENSORES ═══ -->
               <div class="cat-panel activo" data-panel="sensores">
                 <div class="catalogo-titlebar">Sensores</div>
-
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img"><!-- TODO: imagen general Sensores -->Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/1.png') }}" alt="Sensores industriales">
+                  </div>
                   <p>Los sensores proporcionan información esencial para casi todas las áreas de la automatización industrial, como señales de posición, flujo, temperatura, recorrido y ángulo, entre muchas otras variables de proceso.</p>
                 </div>
-
                 <div class="subcat-detail" data-detail-de="sensores">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"><!-- TODO: imagen de la subcategoría --></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info">
                     <h4></h4>
                     <p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
-
                 <div class="subcat-grid" data-grid-de="sensores">
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="inductivos" data-titulo="Sensores inductivos" data-desc="Detectan objetos metálicos sin contacto físico, ideales para entornos con vibración, polvo o presencia de líquidos.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img">
+                      <img src="{{ asset('assets/img/catalogo/2.png') }}" alt="Sensores inductivos">
+                    </div>
                     <div class="subcat-card-label">Sensores inductivos</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="capacitivos" data-titulo="Sensores capacitivos" data-desc="Detectan materiales metálicos y no metálicos —líquidos, plásticos, madera— a través de cambios en el campo capacitivo.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/3.png') }}" alt="Sensores capacitivos">
+                    </span></div>
                     <div class="subcat-card-label">Sensores capacitivos</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="magneticos" data-titulo="Sensores de campo magnético" data-desc="Identifican la posición de pistones y actuadores mediante la detección de campos magnéticos, sin desgaste mecánico.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/4.png') }}" alt="Sensores de campo magnético">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de campo magnético</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="ultrasonicos" data-titulo="Sensores ultrasónicos" data-desc="Miden distancia y detectan objetos mediante ondas de sonido, sin importar color o transparencia del material.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/5.png') }}" alt="Sensores ultrasónicos">
+                    </span></div>
                     <div class="subcat-card-label">Sensores ultrasónicos</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="radar" data-titulo="Sensores de radar" data-desc="Ofrecen medición de nivel y distancia de alta precisión incluso en condiciones de polvo, vapor o temperaturas extremas.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/6.png') }}" alt="Sensores de radar">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de radar</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="posicion-lineal" data-titulo="Sensores de posición lineal" data-desc="Miden desplazamientos lineales con alta resolución, utilizados en aplicaciones de control de movimiento de precisión.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/7.png') }}" alt="Sensores de posición lineal">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de posición lineal</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="encoders" data-titulo="Encoders" data-desc="Convierten el movimiento mecánico en señales eléctricas para el control preciso de velocidad y posición angular.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/8.png') }}" alt="Encoders">
+                    </span></div>
                     <div class="subcat-card-label">Encoders</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="inclinometros" data-titulo="Inclinómetros" data-desc="Miden ángulos de inclinación con alta exactitud, esenciales en maquinaria móvil y sistemas de nivelación.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/9.png') }}" alt="Inclinómetros">
+                    </span></div>
                     <div class="subcat-card-label">Inclinómetros</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="presion" data-titulo="Sensores de presión" data-desc="Monitorean presión de líquidos y gases en procesos industriales, con salidas analógicas o digitales configurables.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/10.png') }}" alt="Sensores de presión">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de presión</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="temperatura" data-titulo="Sensores de temperatura" data-desc="Supervisan temperatura en tiempo real para proteger equipos críticos y garantizar procesos térmicos estables.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/11.png') }}" alt="Sensores de temperatura">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de temperatura</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="flujo" data-titulo="Sensores de flujo/medidores de flujo" data-desc="Miden el caudal de líquidos y gases en tuberías, permitiendo el control preciso de procesos industriales.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                    <img src="{{ asset('assets/img/catalogo/12.png') }}" alt="Sensores de flujo/medidores de flujo">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de flujo/medidores de flujo</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="nivel" data-titulo="Sensores de nivel" data-desc="Detectan el nivel de líquidos o sólidos en tanques y silos, evitando desbordamientos o desabastecimientos.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                    <img src="{{ asset('assets/img/catalogo/13.png') }}" alt="Sensores de nivel">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de nivel</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="monitoreo" data-titulo="Sensores de monitoreo de estado" data-desc="Recopilan datos de vibración, temperatura y desgaste para estrategias de mantenimiento predictivo.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                    <img src="{{ asset('assets/img/catalogo/14.png') }}" alt="Sensores de monitoreo de estado">
+                    </span></div>
                     <div class="subcat-card-label">Sensores de monitoreo de estado</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="sensores" data-subcat="accesorios" data-titulo="Accesorios" data-desc="Cables, soportes y componentes complementarios para la instalación y protección de sensores industriales.">
-                    <div class="subcat-card-img"><!-- TODO: imagen -->Imagen</div>
+                    <div class="subcat-card-img"><span>
+                    <img src="{{ asset('assets/img/catalogo/15.png') }}" alt="Accesorios de sensores">
+                    </span></div>
                     <div class="subcat-card-label">Accesorios</div>
                   </a>
                 </div>
@@ -618,31 +688,41 @@
               <div class="cat-panel" data-panel="identificacion">
                 <div class="catalogo-titlebar">Sistemas de identificación</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img"><!-- TODO: imagen general -->Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/16.png') }}" alt="Sistemas de identificación">
+                  </div>
                   <p>Soluciones RFID de alta y ultra alta frecuencia para trazabilidad, identificación de piezas y control de procesos.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="identificacion">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="identificacion">
                   <a href="#" class="subcat-card" data-cat="identificacion" data-subcat="lectura" data-titulo="Dispositivos de lectura y escritura HF/UHF" data-desc="Equipos que leen y graban información en tags RFID en tiempo real dentro de la línea de producción.">
-                    <div class="subcat-card-img">Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/17.png') }}" alt="Dispositivos de lectura y escritura HF/UHF">
+                    </span></div>
                     <div class="subcat-card-label">Dispositivos de lectura y escritura HF/UHF</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="identificacion" data-subcat="tags" data-titulo="Tags HF/UHF" data-desc="Etiquetas RFID resistentes a condiciones industriales, para identificar piezas, herramentales y contenedores.">
-                    <div class="subcat-card-img">Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/18.png') }}" alt="Tags HF/UHF">
+                    </span></div>
                     <div class="subcat-card-label">Tags HF/UHF</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="identificacion" data-subcat="interfaces-hf" data-titulo="Interfaces HF/UHF" data-desc="Módulos de comunicación que conectan los dispositivos de lectura RFID con los sistemas de control existentes.">
-                    <div class="subcat-card-img">Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/19.png') }}" alt="Interfaces HF/UHF">
+                    </span></div>
                     <div class="subcat-card-label">Interfaces HF/UHF</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="identificacion" data-subcat="accesorios" data-titulo="Accesorios" data-desc="Antenas, cables y montajes complementarios para sistemas de identificación RFID.">
-                    <div class="subcat-card-img">Imagen</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/20.png') }}" alt="Accesorios de identificación">
+                    </span></div>
                     <div class="subcat-card-label">Accesorios</div>
                   </a>
                 </div>
@@ -652,40 +732,58 @@
               <div class="cat-panel" data-panel="conectividad">
                 <div class="catalogo-titlebar">Conectividad</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img">Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/21.png') }}" alt="Conectividad">
+                  </div>
                   <p>Componentes para la interconexión física de sensores, actuadores y controladores dentro de la red de planta.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="conectividad">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="conectividad">
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="cables" data-titulo="Cables" data-desc="Cables industriales blindados y resistentes, diseñados para soportar condiciones exigentes de planta.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Cables</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/22.png') }}" alt="Cables">
+                    </span></div><div class="subcat-card-label">Cables</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="bridas" data-titulo="Bridas" data-desc="Elementos de sujeción para la organización y fijación segura del cableado industrial.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Bridas</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/23.png') }}" alt="Bridas">
+                    </span></div><div class="subcat-card-label">Bridas</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="distribuidores" data-titulo="Distribuidores de dos vías" data-desc="Permiten la conexión simultánea de múltiples sensores o actuadores a un solo punto de red.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Distribuidores de dos vías</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/24.png') }}" alt="Distribuidores de dos vías">
+                    </span></div><div class="subcat-card-label">Distribuidores de dos vías</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="caja" data-titulo="Caja de conexiones" data-desc="Módulos de distribución que centralizan y protegen las conexiones eléctricas en campo.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Caja de conexiones</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/25.png') }}" alt="Caja de conexiones">
+                    </span></div><div class="subcat-card-label">Caja de conexiones</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="conectores" data-titulo="Conectores armables" data-desc="Conectores configurables en sitio que se adaptan a distintas longitudes y necesidades de instalación.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Conectores armables</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/26.png') }}" alt="Conectores armables">
+                    </span></div><div class="subcat-card-label">Conectores armables</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="rollo" data-titulo="Rollo de cable" data-desc="Presentaciones de cable industrial a granel para instalaciones extensas o personalizadas.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Rollo de cable</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/27.png') }}" alt="Rollo de cable">
+                    </span></div><div class="subcat-card-label">Rollo de cable</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="inductivo" data-titulo="Acoplamiento inductivo" data-desc="Transmisión de datos y energía sin contacto físico, ideal para partes móviles o rotativas.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Acoplamiento inductivo</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/28.png') }}" alt="Acoplamiento inductivo">
+                    </span></div><div class="subcat-card-label">Acoplamiento inductivo</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="conectividad" data-subcat="accesorios" data-titulo="Accesorios" data-desc="Componentes complementarios de conectividad: adaptadores, tapas y prensaestopas.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Accesorios</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/29.png') }}" alt="Accesorios de conectividad">
+                    </span></div><div class="subcat-card-label">Accesorios</div>
                   </a>
                 </div>
               </div>
@@ -694,28 +792,38 @@
               <div class="cat-panel" data-panel="buses">
                 <div class="catalogo-titlebar">Buses de Campo</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img">Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/30.png') }}" alt="Buses de Campo">
+                  </div>
                   <p>Sistemas de entrada/salida distribuida que integran sensores y actuadores a los buses de comunicación industrial.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="buses">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="buses">
                   <a href="#" class="subcat-card" data-cat="buses" data-subcat="eos" data-titulo="Sistemas de E/S" data-desc="Módulos de entrada/salida distribuida que reducen el cableado y facilitan la integración de dispositivos de campo.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Sistemas de E/S</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/31.png') }}" alt="Sistemas de E/S">
+                    </span></div><div class="subcat-card-label">Sistemas de E/S</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="buses" data-subcat="modulo" data-titulo="Módulo de E/S" data-desc="Unidades compactas de entradas y salidas digitales o analógicas para aplicaciones específicas.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Módulo de E/S</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/32.png') }}" alt="Módulo de E/S">
+                    </span></div><div class="subcat-card-label">Módulo de E/S</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="buses" data-subcat="componentes" data-titulo="Componentes para la automatización de procesos" data-desc="Elementos complementarios que facilitan la integración de instrumentación en procesos continuos.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Componentes para automatización</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/33.png') }}" alt="Componentes para automatización">
+                    </span></div><div class="subcat-card-label">Componentes para automatización</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="buses" data-subcat="accesorios" data-titulo="Accesorios" data-desc="Conectores, terminaciones y montajes para sistemas de buses de campo.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Accesorios</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/34.png') }}" alt="Accesorios de buses de campo">
+                    </span></div><div class="subcat-card-label">Accesorios</div>
                   </a>
                 </div>
               </div>
@@ -724,31 +832,43 @@
               <div class="cat-panel" data-panel="interfaces">
                 <div class="catalogo-titlebar">Interfaces</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img">Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/35.png') }}" alt="Interfaces">
+                  </div>
                   <p>Dispositivos de seguridad y acondicionamiento de señal que protegen los sistemas de control industrial.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="interfaces">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="interfaces">
                   <a href="#" class="subcat-card" data-cat="interfaces" data-subcat="barreras-seguridad" data-titulo="Barreras de seguridad" data-desc="Aíslan y limitan la energía eléctrica en zonas clasificadas para prevenir riesgos de ignición.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Barreras de seguridad</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/36.png') }}" alt="Barreras de seguridad">
+                    </span></div><div class="subcat-card-label">Barreras de seguridad</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="interfaces" data-subcat="barreras-zener" data-titulo="Barreras Zener" data-desc="Protegen circuitos en áreas con atmósferas explosivas mediante la limitación pasiva de corriente y voltaje.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Barreras Zener</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/37.png') }}" alt="Barreras Zener">
+                    </span></div><div class="subcat-card-label">Barreras Zener</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="interfaces" data-subcat="acondicionador" data-titulo="Acondicionador de señal" data-desc="Transforman y amplifican señales de campo para su correcta interpretación por el sistema de control.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Acondicionador de señal</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/38.png') }}" alt="Acondicionador de señal">
+                    </span></div><div class="subcat-card-label">Acondicionador de señal</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="interfaces" data-subcat="monitoreo-gabinete" data-titulo="Monitoreo del gabinete de control" data-desc="Supervisan temperatura, humedad y condiciones internas de los gabinetes eléctricos.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Monitoreo del gabinete de control</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/39.png') }}" alt="Monitoreo del gabinete de control">
+                    </span></div><div class="subcat-card-label">Monitoreo del gabinete de control</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="interfaces" data-subcat="accesorios" data-titulo="Accesorios" data-desc="Rieles, borneras y componentes complementarios para gabinetes de control.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Accesorios</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/40.png') }}" alt="Accesorios de interfaces">
+                    </span></div><div class="subcat-card-label">Accesorios</div>
                   </a>
                 </div>
               </div>
@@ -757,31 +877,43 @@
               <div class="cat-panel" data-panel="controles">
                 <div class="catalogo-titlebar">Controles industriales</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img">Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/41.png') }}" alt="Controles industriales">
+                  </div>
                   <p>Dispositivos de control, visualización y conmutación para la operación y supervisión de procesos automatizados.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="controles">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="controles">
                   <a href="#" class="subcat-card" data-cat="controles" data-subcat="hmi" data-titulo="HMI programable" data-desc="Pantallas táctiles programables que permiten la visualización y operación intuitiva de procesos industriales.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">HMI programable</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/42.png') }}" alt="HMI programable">
+                    </span></div><div class="subcat-card-label">HMI programable</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="controles" data-subcat="control" data-titulo="Control" data-desc="Controladores lógicos que ejecutan la lógica de automatización de procesos industriales.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Control</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/43.png') }}" alt="Control">
+                    </span></div><div class="subcat-card-label">Control</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="controles" data-subcat="gateway" data-titulo="Gateway programable" data-desc="Dispositivos que traducen y enrutan la comunicación entre distintos protocolos industriales.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Gateway programable</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/44.png') }}" alt="Gateway programable">
+                    </span></div><div class="subcat-card-label">Gateway programable</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="controles" data-subcat="reles" data-titulo="Relés" data-desc="Dispositivos de conmutación electromecánica o de estado sólido para el control de cargas industriales.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Relés</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/45.png') }}" alt="Relés">
+                    </span></div><div class="subcat-card-label">Relés</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="controles" data-subcat="accesorios" data-titulo="Accesorios" data-desc="Zócalos, cableado y componentes complementarios para controles industriales.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Accesorios</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/46.png') }}" alt="Accesorios de controles industriales">
+                    </span></div><div class="subcat-card-label">Accesorios</div>
                   </a>
                 </div>
               </div>
@@ -790,22 +922,28 @@
               <div class="cat-panel" data-panel="fuentes">
                 <div class="catalogo-titlebar">Fuentes de alimentación</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img">Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/47.png') }}" alt="Fuentes de alimentación">
+                  </div>
                   <p>Fuentes de poder confiables para alimentar equipos de control e instrumentación en planta.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="fuentes">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="fuentes">
                   <a href="#" class="subcat-card" data-cat="fuentes" data-subcat="din" data-titulo="Fuentes de conmutación para riel DIN IP20" data-desc="Convierten la energía de línea en voltaje estable para montaje directo en gabinetes eléctricos.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Conmutadas para riel DIN IP20</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/48.png') }}" alt="Fuentes de conmutación para riel DIN IP20">
+                    </span></div><div class="subcat-card-label">Conmutadas para riel DIN IP20</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="fuentes" data-subcat="campo" data-titulo="Fuentes de alimentación para montaje de campo IP67" data-desc="Fuentes robustas y selladas, diseñadas para instalarse directamente en campo bajo condiciones adversas.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Para montaje de campo IP67</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/49.png') }}" alt="Fuentes para montaje de campo IP67">
+                    </span></div><div class="subcat-card-label">Para montaje de campo IP67</div>
                   </a>
                 </div>
               </div>
@@ -814,33 +952,37 @@
               <div class="cat-panel" data-panel="redes">
                 <div class="catalogo-titlebar">Tecnología de redes industriales</div>
                 <div class="catalogo-intro reveal">
-                  <div class="catalogo-intro-img">Imagen</div>
+                  <div class="catalogo-intro-img">
+                    <img src="{{ asset('assets/img/catalogo/50.png') }}" alt="Tecnología de redes industriales">
+                  </div>
                   <p>Infraestructura de red diseñada para garantizar comunicación estable y de alto desempeño en entornos industriales.</p>
                 </div>
                 <div class="subcat-detail" data-detail-de="redes">
                   <button type="button" class="subcat-detail-back">← Volver al listado</button>
-                  <div class="subcat-detail-img"></div>
+                  <div class="subcat-detail-img"><span>Imagen</span></div>
                   <div class="subcat-detail-info"><h4></h4><p></p>
                     <a href="{{ route('cotizacion.create') }}" class="subcat-cta">Solicitar cotización</a>
                   </div>
                 </div>
                 <div class="subcat-grid" data-grid-de="redes">
                   <a href="#" class="subcat-card" data-cat="redes" data-subcat="switches" data-titulo="Conmutadores de Ethernet" data-desc="Switches industriales que gestionan el tráfico de datos entre dispositivos conectados a la red de planta.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Conmutadores de Ethernet</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/51.png') }}" alt="Conmutadores de Ethernet">
+                    </span></div><div class="subcat-card-label">Conmutadores de Ethernet</div>
                   </a>
                   <a href="#" class="subcat-card" data-cat="redes" data-subcat="acopladores" data-titulo="Acopladores y convertidores" data-desc="Permiten la interconexión entre distintos medios y protocolos de comunicación de red.">
-                    <div class="subcat-card-img">Imagen</div><div class="subcat-card-label">Acopladores y convertidores</div>
+                    <div class="subcat-card-img"><span>
+                      <img src="{{ asset('assets/img/catalogo/52.png') }}" alt="Acopladores y convertidores">
+                    </span></div><div class="subcat-card-label">Acopladores y convertidores</div>
                   </a>
                 </div>
               </div>
-
-            </div>
-          </div>
+            </div>                      </div>
         </div>
       </section>
     </main>
 
-
+<a
       href="https://wa.me/524721074459?text=Hola,%20quiero%20información%20sobre%20sus%20productos."
       class="whatsapp-float"
       target="_blank"
@@ -888,7 +1030,6 @@
         const mobileToggleLabel = document.getElementById('mobileToggleLabel');
         const sidebar = document.getElementById('catalogoSidebar');
 
-        // Nombre visible por categoría, para breadcrumb y botón móvil
         const nombresCat = {
           sensores: 'Sensores',
           identificacion: 'Sistemas de identificación',
@@ -911,18 +1052,27 @@
           breadcrumb.textContent = nombresCat[cat] || cat;
           mobileToggleLabel.textContent = nombresCat[cat] || cat;
 
-          // Ocultar cualquier detalle abierto y limpiar activos de sidebar al cambiar de categoría
           document.querySelectorAll('.subcat-detail').forEach(function (d) { d.classList.remove('activo'); });
           sidebarLinks.forEach(function (l) { l.classList.remove('activo'); });
         }
 
-        function mostrarDetalle(cat, subcat, titulo, desc) {
+        function mostrarDetalle(cat, subcat, titulo, desc, imgSrc) {
           mostrarCategoria(cat);
 
           const detalle = document.querySelector('.subcat-detail[data-detail-de="' + cat + '"]');
           if (detalle) {
             detalle.querySelector('h4').textContent = titulo;
             detalle.querySelector('p').textContent = desc;
+
+            const imgContainer = detalle.querySelector('.subcat-detail-img');
+            if (imgContainer) {
+              if (imgSrc) {
+                imgContainer.innerHTML = '<img src="' + imgSrc + '" alt="' + titulo + '">';
+              } else {
+                imgContainer.innerHTML = '<span>Sin imagen disponible</span>';
+              }
+            }
+
             detalle.classList.add('activo');
             detalle.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
@@ -932,21 +1082,23 @@
             l.classList.toggle('activo', match);
           });
 
-          // En móvil, cerrar el desplegable tras seleccionar
           if (window.innerWidth <= 900) {
             sidebar.classList.remove('abierto-mobile');
             mobileToggle.classList.remove('abierto');
           }
         }
 
-        // Clic en encabezado de categoría (sidebar)
+        function obtenerImagenDeTarjeta(card) {
+          const img = card.querySelector('.subcat-card-img img');
+          return img ? img.getAttribute('src') : null;
+        }
+
         document.querySelectorAll('.cat-group-btn').forEach(function (btn) {
           btn.addEventListener('click', function () {
             const cat = btn.getAttribute('data-cat');
             const group = btn.closest('.cat-group');
             const yaAbierto = group.classList.contains('abierto');
 
-            // Alterna acordeón; si se abre, también cambia el panel principal
             catGroups.forEach(function (g) { g.classList.remove('abierto'); });
             if (!yaAbierto) {
               group.classList.add('abierto');
@@ -955,7 +1107,6 @@
           });
         });
 
-        // Clic en subcategoría del sidebar
         sidebarLinks.forEach(function (link) {
           link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -963,12 +1114,17 @@
             const subcat = link.getAttribute('data-subcat');
             const card = document.querySelector('.subcat-card[data-cat="' + cat + '"][data-subcat="' + subcat + '"]');
             if (card) {
-              mostrarDetalle(cat, subcat, card.getAttribute('data-titulo'), card.getAttribute('data-desc'));
+              mostrarDetalle(
+                cat,
+                subcat,
+                card.getAttribute('data-titulo'),
+                card.getAttribute('data-desc'),
+                obtenerImagenDeTarjeta(card)
+              );
             }
           });
         });
 
-        // Clic en una tarjeta del grid
         document.querySelectorAll('.subcat-card').forEach(function (card) {
           card.addEventListener('click', function (e) {
             e.preventDefault();
@@ -976,12 +1132,12 @@
               card.getAttribute('data-cat'),
               card.getAttribute('data-subcat'),
               card.getAttribute('data-titulo'),
-              card.getAttribute('data-desc')
+              card.getAttribute('data-desc'),
+              obtenerImagenDeTarjeta(card)
             );
           });
         });
 
-        // Botón "Volver al listado" dentro del detalle
         document.querySelectorAll('.subcat-detail-back').forEach(function (btn) {
           btn.addEventListener('click', function () {
             btn.closest('.subcat-detail').classList.remove('activo');
@@ -989,7 +1145,6 @@
           });
         });
 
-        // Toggle del menú desplegable en móvil
         mobileToggle.addEventListener('click', function () {
           sidebar.classList.toggle('abierto-mobile');
           mobileToggle.classList.toggle('abierto');

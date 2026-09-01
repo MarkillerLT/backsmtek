@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SMTEK Smart Technologies</title>
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,7 +11,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
-
     <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
         <link rel="stylesheet" href="{{asset('assets/css/normalize.css')}}" />
@@ -38,7 +36,7 @@
     .video-wrap {
   position: relative;
   width: 100%;
-  max-width: 90rem;
+  max-width: 100%;
   margin: 4rem auto 0;
   aspect-ratio: 16 / 9;
   border-radius: 1.2rem;
@@ -46,7 +44,6 @@
   box-shadow: 0 4px 20px rgba(26, 104, 128, 0.13);
   border: 1px solid var(--border-color, #d8e2e8);
 }
-
 .video-wrap iframe {
   position: absolute;
   inset: 0;
@@ -54,7 +51,6 @@
   height: 100%;
   border: 0;
 }
-
 @media (max-width: 768px) {
   .video-wrap {
     border-radius: 0.8rem;
@@ -67,7 +63,6 @@
   margin: 1.6rem 0 2.4rem;
   border-bottom: 1px solid var(--border-color, #d8e2e8);
 }
-
 .sucursal-tab {
   background: none;
   border: none;
@@ -81,22 +76,18 @@
   font-family: "Inter", sans-serif;
   transition: color 0.25s ease, border-color 0.25s ease;
 }
-
 .sucursal-tab:hover {
   color: var(--AzulSmtek, #2196ba);
 }
-
 .sucursal-tab.activo {
   color: var(--AzulSmtek, #2196ba);
   border-bottom-color: var(--AzulSmtek, #2196ba);
 }
-
 .sucursal-panel {
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
 }
-
 .sucursal-panel[hidden] {
   display: none;
 }
@@ -111,37 +102,31 @@
   box-shadow: 0 4px 20px rgba(26, 104, 128, 0.13);
   border: 1px solid var(--border-color, #d8e2e8);
 }
-
 .mapa-panel {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
-
 .mapa-panel[hidden] {
   display: none;
 }
-
 .mapa-panel iframe {
   display: block;
   width: 100%;
   height: 100%;
 }
-
 @media (max-width: 960px) {
   .mapa-wrap {
     min-height: 28rem;
   }
 }
-
 /* ── Misión y Visión ── */
 .mision-vision-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2.4rem;
 }
-
 .mv-card {
   background-color: var(--bg-section, #fff);
   border: 1px solid var(--border-color, #d8e2e8);
@@ -150,30 +135,41 @@
   box-shadow: 0 2px 8px rgba(26, 104, 128, 0.08);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .mv-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 20px rgba(26, 104, 128, 0.13);
 }
-
 .mv-card h3 {
   font-size: 1.9rem;
   font-weight: 800;
   color: var(--text-heading, #1a2a38);
   margin: 0 0 1.2rem;
 }
-
 .mv-card p {
   font-size: 1.5rem;
   color: var(--text-primary, #4e5358);
   line-height: 1.7;
   margin: 0;
 }
-
+.mv-card-full {
+  grid-column: 1 / -1;
+  margin-top: 2.4rem;
+}
 @media (max-width: 768px) {
   .mision-vision-grid {
     grid-template-columns: 1fr;
   }
+}
+/* ── Corrección: centrar última fila incompleta en servicios ── */
+.servicios-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+}
+.servicio-card {
+    flex: 1 1 25rem;
+    max-width: 32rem;
 }
     </style>
   </head>
@@ -194,7 +190,6 @@
         </div>
       </div>
 <div class="header-actions">
-
         <div class="auth-links">
             @if (Route::has('login'))
                 @auth
@@ -205,7 +200,6 @@
                 @endif
                 @else
                     <a href="{{ route('login') }}">Ingresar</a>
-
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}" class="cta-nav">
                             Registrarse
@@ -214,7 +208,6 @@
                 @endauth
             @endif
         </div>
-
       <button
         id="dark-toggle"
         class="dark-toggle"
@@ -242,7 +235,6 @@
       </button>
     </div>
     </header>
-
     <!-- Nav Bar -->
     <div class="nav-bg">
       <div class="contenedor" style="display: flex; align-items: center">
@@ -255,10 +247,12 @@
         >
           <span></span><span></span><span></span>
         </button>
-
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
           <a href="{{ url('/')}}">Inicio</a>
-          <a href="{{ route('productos.catalogo')}}">Catalogo</a>
+<!-- descomentar cuando se rellene productos-->
+<!-- <a href="{{ route('productos.catalogo')}}">Catalogo</a>  -->
+<!-- descomentar cuando se rellene productos-->
+
           <a href="{{ route('servicios')}}">Servicios</a>
           <a href="{{ url('/#contacto')}}">Contacto</a>
           <a href="{{ url('/products')}}">Productos</a>
@@ -267,9 +261,18 @@
         </nav>
       </div>
     </div>
-
     <!-- hero -->
     <section class="hero" id="inicio">
+      <video
+        class="hero-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="{{ asset('assets/img/her.jpg') }}"
+      >
+        <source src="{{ asset('videoh/torno.mp4') }}" type="video/mp4">
+      </video>
       <div class="hero-content">
         <h1>Transformamos Procesos <span>Industriales </span><br />con Soluciones de Industria 4.0</h1>
         <p>
@@ -283,9 +286,7 @@
         </div>
       </div>
     </section>
-
     <main>
-
       <!-- seccion que hacemos -->
       <section id="servicios">
         <div class="contenedor">
@@ -296,7 +297,6 @@
             Soluciones diseñadas para la industria 4.0
             </p>
           </div>
-
           <div class="servicios-grid">
             <div class="servicio-card reveal">
               <span class="servicio-icono"
@@ -425,13 +425,11 @@
               <p>
             Visualización de KPIs, OEE, producción y calidad mediante paneles personalizados.
 Dashboard en nube, para consulta y toma de decisiones en remoto.
-
               </p>
             </div>
           </div>
         </div>
       </section>
-
       <!-- Aliados seccion -->
       <section class="aliados-section" id="aliados">
         <div class="contenedor">
@@ -443,7 +441,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               las mejores soluciones tecnológicas disponibles en el mercado.
             </p>
           </div>
-
           <div class="aliados-grid">
             <div class="aliado-card reveal">
               <div class="aliado-logo-placeholder">
@@ -499,7 +496,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
         </div>
       </section>
-
       <!-- Contadores section -->
       <section class="contador-section" id="resultados">
         <div class="contenedor">
@@ -511,7 +507,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               que entregamos.
             </p>
           </div>
-
           <div class="contador-grid">
             <div class="contador-item reveal">
               <span
@@ -556,7 +551,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
         </div>
       </section>
-
       <!-- Productos Destacados sec -->
       <section id="productos">
         <div class="contenedor">
@@ -567,7 +561,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             Aplicaciones reales.
             </p>
           </div>
-
           <div class="productos-grid">
             <div class="producto-card reveal">
               <div class="producto-imagen"></div>
@@ -582,7 +575,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="producto-card reveal">
               <div class="producto-imagen"></div>
               <div class="producto-body">
@@ -596,7 +588,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="producto-card reveal">
               <div class="producto-imagen"></div>
               <div class="producto-body">
@@ -613,7 +604,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
         </div>
       </section>
-
       <!-- Propuestas de valor -->
       <section class="valor-section" id="valor">
         <div class="contenedor">
@@ -624,7 +614,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             La información correcta en el momento adecuado permite tomar mejores decisiones.
             </p>
           </div>
-
           <div class="valor-grid">
             <div class="valor-item reveal">
               <div class="valor-icono-wrap">
@@ -652,7 +641,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="valor-item reveal">
               <div class="valor-icono-wrap">
                 <svg
@@ -677,7 +665,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="valor-item reveal">
               <div class="valor-icono-wrap">
                 <svg
@@ -707,7 +694,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="valor-item reveal">
               <div class="valor-icono-wrap">
                 <svg
@@ -732,7 +718,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="valor-item reveal">
               <div class="valor-icono-wrap">
                 <svg
@@ -757,7 +742,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </p>
               </div>
             </div>
-
             <div class="valor-item reveal">
               <div class="valor-icono-wrap">
                 <svg
@@ -789,7 +773,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
         </div>
       </section>
-
       <!-- clientes prin sec -->
       <section id="clientes">
         <div class="contenedor">
@@ -801,7 +784,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               tecnológica día a día.
             </p>
           </div>
-
           <div class="clientes-grid">
             <div class="cliente-card reveal">
               <p class="quote">
@@ -820,7 +802,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </div>
               </div>
             </div>
-
             <div class="cliente-card reveal">
               <p class="quote">
                 "Desde que implementamos las soluciones cloud de SMTEK, nuestra
@@ -835,7 +816,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </div>
               </div>
             </div>
-
             <div class="cliente-card reveal">
               <p class="quote">
                 "El proyecto de ciberseguridad superó nuestras expectativas.
@@ -856,7 +836,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
         </div>
       </section>
-
       <!-- seccion somos -->
       <section id="quienes-somos">
         <div class="contenedor">
@@ -867,7 +846,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             Somos el socio tecnológico que impulsa la evolución digital de la industria.
             </p>
           </div>
-
           <div class="quienes-grid">
             <div class="quienes-texto reveal">
                 <p>
@@ -880,7 +858,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 Nuestro enfoque combina ingeniería industrial, automatización, tecnologías de Industria 4.0 y experiencia en integración de sistemas para desarrollar soluciones que generan resultados medibles.
               </p>
             </div>
-
             <div class="quienes-stats">
               <div class="stat-card reveal">
                 <span
@@ -935,7 +912,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
         </div>
       </section>
-
       <!-- Misión y Visión -->
       <section id="mision-vision">
         <div class="contenedor">
@@ -943,7 +919,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             <span class="section-label">Nuestra brújula</span>
             <h2>Misión y Visión</h2>
           </div>
-
           <div class="mision-vision-grid">
             <div class="mv-card reveal">
               <h3>Misión</h3>
@@ -958,9 +933,22 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               </p>
             </div>
           </div>
+
+          <!-- Política de calidad: ancho completo debajo de Misión/Visión -->
+          <div class="mv-card mv-card-full reveal">
+            <h3>Política de Calidad</h3>
+            <p>
+              SMTEK es una empresa que ofrece soluciones con tecnologías inteligentes a través de la comercialización y distribución de componentes industriales de marcas líderes en el mercado de la automatización, control, neumática y procesos; la fabricación de maquinados de precisión bajo especificaciones técnicas de nuestros clientes; y la implementación de proyectos de diseño, integración y puesta en marcha de sistemas de automatización, control e ingeniería personalizados.
+            </p>
+            <p style="margin-top: 1.4rem;">
+              SMTEK se compromete a satisfacer las necesidades del cliente brindando productos y servicios que cumplan los estándares de calidad bajo la formación constante a nuestros colaboradores en metodologías de mejora continua de procesos, estipulado en el sistema de gestión de la calidad.
+            </p>
+            <p style="margin-top: 1.4rem;">
+              SMTEK se distingue en el mercado por minimizar tiempos de entrega y maximizar la eficiencia operativa de sus procesos para la satisfacción de sus clientes, además de mantenerse a la vanguardia en tecnología industrial.
+            </p>
+          </div>
         </div>
       </section>
-
       <!-- Contacto Redes o Mapa? no se, revisar-->
     <section id="contacto" class="contacto-section">
   <div class="contenedor">
@@ -969,15 +957,12 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
       <h2>Encuéntranos</h2>
       <p>
     Agenda una reunión con nuestros especialistas y descubre cómo podemos ayudarte a mejorar la productividad, trazabilidad y eficiencia de tus procesos.
-
       </p>
     </div>
-
     <div class="contacto-grid">
       <!-- Info de contacto con pestañas por sucursal -->
       <div class="contacto-info reveal">
         <h3>Nuestras sucursales</h3>
-
         <!-- Pestañas -->
         <div class="sucursal-tabs" role="tablist" aria-label="Sucursales SMTEK">
           <button
@@ -1008,7 +993,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             Toluca
           </button>
         </div>
-
         <!-- Panel: Querétaro -->
         <div class="sucursal-panel activo" data-panel="qro" role="tabpanel">
           <div class="contacto-item">
@@ -1028,7 +1012,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
              </span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1041,7 +1024,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span class="valor">(442) 730-2331</span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1054,7 +1036,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span class="valor">info@smtek.com.mx</span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1068,7 +1049,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
           </div>
         </div>
-
         <!-- Panel: Silao -->
         <div class="sucursal-panel" data-panel="silao" role="tabpanel" hidden>
           <div class="contacto-item">
@@ -1088,7 +1068,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               </span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1101,7 +1080,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span class="valor">(472) 117-0302</span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1114,7 +1092,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span class="valor">info@smtek.com.mx</span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1128,7 +1105,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
           </div>
         </div>
-
         <!-- Panel: Toluca -->
         <div class="sucursal-panel" data-panel="toluca" role="tabpanel" hidden>
           <div class="contacto-item">
@@ -1148,7 +1124,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               </span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1161,7 +1136,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span class="valor">(472) 117-0302</span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1174,7 +1148,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span class="valor">info@smtek.com.mx</span>
             </div>
           </div>
-
           <div class="contacto-item">
             <div class="contacto-icono">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -1188,7 +1161,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
           </div>
         </div>
-
         <!-- Redes sociales: compartidas para las 3 sucursales -->
         <div class="redes-sociales">
           <a href="#" class="red-social" aria-label="LinkedIn">
@@ -1220,26 +1192,20 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
 <!-- Mapa por sucursal -->
 <div class="reveal">
   <div class="mapa-wrap">
-
     <div class="mapa-panel activo" data-mapa="qro">
       <!-- TODO: reemplazar src con el embed real de Google Maps para Querétaro -->
         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14942.9232549984!2d-100.267967!3d20.558192!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d343755c367801%3A0x6e8716af7395ffc!2sEuropark%20II!5e0!3m2!1ses-419!2smx!4v1786517957855!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
-
-
     <div class="mapa-panel" data-mapa="silao" hidden>
       <!-- TODO: reemplazar src con el embed real de Google Maps para Silao -->
         <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3725.9950482749778!2d-101.437034!3d20.952714!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x842b9b86deb92ff9%3A0x1a81454ad82e1250!2sEl%20Dorado%207%2C%2036122%20Silao%20de%20la%20Victoria%2C%20Gto.!5e0!3m2!1ses-419!2smx!4v1786518030255!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
-
     <div class="mapa-panel" data-mapa="toluca" hidden>
       <!-- TODO: reemplazar src con el embed real de Google Maps para Toluca -->
       <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15061.03851806467!2d-99.595417!3d19.314537!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85cd8a78adecc251%3A0x2867a79c44f364f9!2sCondominio%20Anzures!5e0!3m2!1ses-419!2smx!4v1786518135670!5m2!1ses-419!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
     </div>
-
   </div>
 </div>
-
 </section>
     </main>
     <!--Whatsapp-->
@@ -1251,7 +1217,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
     aria-label="Comunícate con ventas por WhatsApp"
 >
     <span class="whatsapp-text">Comunícate con ventas</span>
-
     <!-- SVG -->
     <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 48 48">
         <path fill="#fff" d="M4.868,43.303l2.694-9.835C5.9,30.59,5.026,27.324,5.027,23.979C5.032,13.514,13.548,5,24.014,5c5.079,0.002,9.845,1.979,13.43,5.566c3.584,3.588,5.558,8.356,5.556,13.428c-0.004,10.465-8.522,18.98-18.986,18.98c-0.001,0,0,0,0,0h-0.008c-3.177-0.001-6.3-0.798-9.073-2.311L4.868,43.303z"/>
@@ -1261,8 +1226,6 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
         <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z"/>
     </svg>
 </a>
-
-
     <!-- Footer -->
     <footer>
       <div class="contenedor footer-inner">
@@ -1283,16 +1246,13 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
         >
           SMTEK
          </div>
-
         <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
-
         <div style="display: flex; gap: 2rem">
           <a href="#">Aviso de privacidad</a>
           <a href="#">Términos de uso</a>
         </div>
       </div>
     </footer>
-
     <!-- Script -->
     <script src="assets/js/script.js"></script>
     <script>
@@ -1301,24 +1261,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const tabs = document.querySelectorAll('.sucursal-tab');
   const contactoPanels = document.querySelectorAll('.sucursal-panel');
   const mapaPanels = document.querySelectorAll('.mapa-panel');
-
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       const target = tab.getAttribute('data-sucursal');
-
       tabs.forEach(function (t) {
         t.classList.remove('activo');
         t.setAttribute('aria-selected', 'false');
       });
       tab.classList.add('activo');
       tab.setAttribute('aria-selected', 'true');
-
       contactoPanels.forEach(function (panel) {
         const match = panel.getAttribute('data-panel') === target;
         panel.hidden = !match;
         panel.classList.toggle('activo', match);
       });
-
       mapaPanels.forEach(function (panel) {
         const match = panel.getAttribute('data-mapa') === target;
         panel.hidden = !match;
