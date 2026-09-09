@@ -50,6 +50,8 @@ Route::middleware([
         ->name('profile');
     Route::patch('/perfil', [UserController::class, 'updateProfile'])
         ->name('profile.update');
+    Route::get('/mis-cotizaciones', [CotizacionController::class, 'misCotizaciones'])
+        ->name('cotizaciones.mias');
 
     Route::middleware('auth.admin')->group(function () {
 

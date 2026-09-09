@@ -3,8 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Diseño (Proyectos - Maquinados) | SMTEK Smart Technologies</title>
-
+    <title>Servicios | SMTEK Smart Technologies</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,11 +11,9 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
-
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/normalize.css') }}" />
-
     <!-- animacion principal -->
     <style>
       .reveal {
@@ -38,7 +35,46 @@
       }
 
       /* ══════════════════════════════════════════════
-         FILTROS por categoría
+         PESTAÑAS de sección (Novedades / General / Especializados)
+      ══════════════════════════════════════════════ */
+      .categoria-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+        margin-bottom: 3.6rem;
+        border-bottom: 1px solid var(--border-color, #d8e2e8);
+        padding-bottom: 0;
+      }
+      .categoria-tab {
+        background: none;
+        border: none;
+        border-bottom: 3px solid transparent;
+        padding: 1rem 1.8rem 1.4rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-muted, #7a8390);
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        transition: color 0.25s ease, border-color 0.25s ease;
+        white-space: nowrap;
+      }
+      .categoria-tab:hover {
+        color: var(--AzulSmtek, #2196ba);
+      }
+      .categoria-tab.activo {
+        color: var(--AzulSmtek, #2196ba);
+        border-bottom-color: var(--AzulSmtek, #2196ba);
+      }
+      .categoria-panel {
+        display: none;
+      }
+      .categoria-panel.activo {
+        display: block;
+      }
+
+      /* ══════════════════════════════════════════════
+         FILTROS por categoría (solo pestaña General)
       ══════════════════════════════════════════════ */
       .diseno-filtros {
         display: flex;
@@ -47,7 +83,6 @@
         gap: 1rem;
         margin-bottom: 3.6rem;
       }
-
       .diseno-filtro-btn {
         padding: 0.9rem 2rem;
         border-radius: 2.4rem;
@@ -61,12 +96,10 @@
         transition: all 0.25s ease;
         white-space: nowrap;
       }
-
       .diseno-filtro-btn:hover {
         border-color: var(--AzulSmtek, #2196ba);
         color: var(--AzulSmtek, #2196ba);
       }
-
       .diseno-filtro-btn.activo {
         background-color: var(--AzulSmtek, #2196ba);
         border-color: var(--AzulSmtek, #2196ba);
@@ -81,11 +114,9 @@
         grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
         gap: 2.4rem;
       }
-
       .producto-card {
         transition: opacity 0.3s ease, transform 0.3s ease;
       }
-
       .producto-card.oculto {
         display: none;
       }
@@ -93,6 +124,7 @@
       @media (max-width: 640px) {
         .diseno-filtros { gap: 0.7rem; }
         .diseno-filtro-btn { padding: 0.8rem 1.6rem; font-size: 1.3rem; }
+        .categoria-tab { padding: 1rem 1.2rem 1.2rem; font-size: 1.35rem; }
       }
     </style>
   </head>
@@ -112,7 +144,6 @@
           SMTEK
         </div>
       </div>
-
       <div class="header-actions">
         <div class="auth-links">
           @if (Route::has('login'))
@@ -124,7 +155,6 @@
               @endif
             @else
               <a href="{{ route('login') }}">Ingresar</a>
-
               @if (Route::has('register'))
                 <a href="{{ route('register') }}" class="cta-nav">
                   Registrarse
@@ -133,7 +163,6 @@
             @endauth
           @endif
         </div>
-
         <button
           id="dark-toggle"
           class="dark-toggle"
@@ -161,7 +190,6 @@
         </button>
       </div>
     </header>
-
     <!-- Nav Bar -->
     <div class="nav-bg">
       <div class="contenedor" style="display: flex; align-items: center">
@@ -174,7 +202,6 @@
         >
           <span></span><span></span><span></span>
         </button>
-
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
                  <a href="{{ url('/')}}">Inicio</a>
 <!-- descomentar cuando se rellene productos-->
@@ -185,18 +212,17 @@
           <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
           <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
-
         </nav>
       </div>
     </div>
-
     <!-- Hero -->
-    <section class="hero" id="diseno">
+    <section class="hero" id="servicios">
       <div class="hero-content">
-        <h1>Diseño <span>de Proyectos</span><br />y Maquinados</h1>
+        <h1>Nuestros <span>Servicios</span><br />Especializados</h1>
         <p>
-          Del concepto a la pieza final: modelado, optimización y fabricación
-          de soluciones mecánicas y eléctricas a la medida de tu operación.
+          Del concepto a la pieza final: diseño, automatización, ingeniería y
+          fabricación de soluciones mecánicas, eléctricas e industriales a la
+          medida de tu operación.
         </p>
         <div class="hero-btns">
           <a href="{{ route('cotizacion.create') }}" class="btn-primary">Solicitar cotización</a>
@@ -204,233 +230,354 @@
         </div>
       </div>
     </section>
-
     <main>
       <section id="servicios-diseno">
         <div class="contenedor">
           <div class="section-header reveal">
             <span class="section-label">Portafolio de servicios</span>
-            <h2>Diseño (Proyectos - Maquinados)</h2>
+            <h2>Lo que hacemos por tu operación</h2>
             <p>
               Un vistazo completo a las capacidades de diseño, ingeniería y
               fabricación que ponemos al servicio de cada proyecto.
             </p>
           </div>
 
-          {{-- ── Filtros por categoría ── --}}
-          <div class="diseno-filtros reveal" role="tablist" aria-label="Filtrar servicios por categoría">
-            <button type="button" class="diseno-filtro-btn activo" data-filtro="todos">Todos</button>
-            <button type="button" class="diseno-filtro-btn" data-filtro="diseno">Diseño</button>
-            <button type="button" class="diseno-filtro-btn" data-filtro="ingenieria">Ingeniería</button>
-            <button type="button" class="diseno-filtro-btn" data-filtro="electrico">Eléctrico</button>
-            <button type="button" class="diseno-filtro-btn" data-filtro="fabricacion">Fabricación</button>
-            <button type="button" class="diseno-filtro-btn" data-filtro="ensamble">Ensamble</button>
-            <button type="button" class="diseno-filtro-btn" data-filtro="calidad">Calidad</button>
+          {{-- ── Pestañas de sección ── --}}
+          <div class="categoria-tabs" role="tablist" aria-label="Secciones de servicios">
+            <button type="button" class="categoria-tab" role="tab" aria-selected="false" data-categoria-tab="novedades">
+              Novedades
+            </button>
+            <button type="button" class="categoria-tab activo" role="tab" aria-selected="true" data-categoria-tab="general">
+              General
+            </button>
+            <button type="button" class="categoria-tab" role="tab" aria-selected="false" data-categoria-tab="especializados">
+              Servicios especializados
+            </button>
           </div>
 
-          {{--
-            Cada tarjeta sigue esta misma estructura. Para agregar,
-            quitar o editar un servicio, solo se replica/edita un
-            bloque .producto-card — no requiere tocar el CSS ni el grid.
+          {{-- ══════════════════════════════════════
+               PESTAÑA: NOVEDADES
+          ══════════════════════════════════════ --}}
+          <div class="categoria-panel" data-categoria-panel="novedades" role="tabpanel">
+            <div class="productos-grid">
 
-            data-categoria define en qué filtro aparece la tarjeta;
-            debe coincidir con el data-filtro del botón correspondiente.
-          --}}
-          <div class="productos-grid" id="disenoGrid">
-
-            <div class="producto-card reveal" data-categoria="diseno">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Diseño</span>
-                <h3>Modelado CAD 3D</h3>
-                <p>Modelado CAD 3D de piezas y dispositivos.</p>
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Trazabilidad</span>
+                  <h3>RFID y Control de Activos</h3>
+                  <p>Monitoreo de herramientas y equipo activo en tiempo real, para reducir pérdidas y mejorar el control de inventario.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="producto-card reveal" data-categoria="diseno">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Diseño</span>
-                <h3>Modelado CAD 2D</h3>
-                <p>Modelado CAD 2D de modelos ya definidos.</p>
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Automatización</span>
+                  <h3>Automatización de Procesos Manuales</h3>
+                  <p>Prevención de errores y accidentes en línea, reduciendo pérdidas monetarias derivadas de fallas en producción.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="producto-card reveal" data-categoria="ingenieria">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Ingeniería</span>
-                <h3>Optimización de geometrías</h3>
-                <p>Optimización de geometrías para mejorar rendimiento.</p>
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Monitoreo</span>
+                  <h3>SCADA y Monitoreo Remoto</h3>
+                  <p>Adquisición de datos, dashboards de producción y alertas tempranas en tiempo real, para una mejor toma de decisiones incluso en turnos nocturnos.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="producto-card reveal" data-categoria="ingenieria">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Ingeniería</span>
-                <h3>Conversión de formatos</h3>
-                <p>Conversión de formatos de piezas.</p>
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Modernización</span>
+                  <h3>Retrofit y Modernización</h3>
+                  <p>Actualización de la infraestructura interna de maquinaria existente, alargando su vida útil y evitando la obsolescencia tecnológica.</p>
+                </div>
               </div>
-            </div>
 
-            <div class="producto-card reveal" data-categoria="ingenieria">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Ingeniería</span>
-                <h3>Selección de materiales</h3>
-                <p>Selección de materiales y mejora de piezas.</p>
-              </div>
             </div>
-
-            <div class="producto-card reveal" data-categoria="ingenieria">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Ingeniería</span>
-                <h3>Análisis de elemento finito</h3>
-                <p>Análisis de elemento finito.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="electrico">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Eléctrico</span>
-                <h3>Tableros de control</h3>
-                <p>Diseño de tableros de control eléctricos.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="electrico">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Eléctrico</span>
-                <h3>Diagramas eléctricos</h3>
-                <p>Diseño de diagramas eléctricos.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="diseno">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Diseño</span>
-                <h3>Visualización 3D interactiva</h3>
-                <p>Visualizaciones 3D interactivas, para aprobación de diseños.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="fabricacion">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Fabricación</span>
-                <h3>Herramentales para costura</h3>
-                <p>Diseño y fabricación de herramentales, para costura.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="fabricacion">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Fabricación</span>
-                <h3>Fixtures de inspección</h3>
-                <p>Diseño y fabricación de fixtures de inspección.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="fabricacion">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Fabricación</span>
-                <h3>Estaciones de trabajo</h3>
-                <p>Diseño y fabricación de estaciones de trabajo.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="fabricacion">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Fabricación</span>
-                <h3>Alimentadores de material</h3>
-                <p>Diseño y fabricación de alimentadores de material.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="ensamble">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Ensamble</span>
-                <h3>Ensamble de maquinaria</h3>
-                <p>Ensamble de maquinaria industrial y dispositivos de precisión.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="calidad">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Calidad</span>
-                <h3>Pruebas funcionales</h3>
-                <p>Pruebas funcionales y validaciones con el cliente.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="fabricacion">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Fabricación</span>
-                <h3>Refacciones personalizadas</h3>
-                <p>Diseño y fabricación de refacciones personalizadas.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="calidad">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Calidad</span>
-                <h3>Inspección y diagnóstico</h3>
-                <p>Servicios de inspección y diagnóstico técnico.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="fabricacion">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Fabricación</span>
-                <h3>Guardas delimitadoras</h3>
-                <p>Diseño y fabricación de guardas, delimitadoras.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="ensamble">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Ensamble</span>
-                <h3>Estaciones de ensamble</h3>
-                <p>Diseño y fabricación de estaciones de ensamble y subensamble de piezas.</p>
-              </div>
-            </div>
-
-            <div class="producto-card reveal" data-categoria="calidad">
-              <div class="producto-imagen"></div>
-              <div class="producto-body">
-                <span class="producto-badge">Calidad</span>
-                <h3>Estaciones de inspección</h3>
-                <p>Diseño y fabricación de estaciones de inspección de piezas.</p>
-              </div>
-            </div>
-
           </div>
 
-          {{-- Se muestra solo si el filtro no encuentra ninguna tarjeta --}}
-          <p id="disenoSinResultados" style="display:none; text-align:center; margin-top:3rem; font-size:1.5rem; color: var(--text-muted, #7a8390);">
-            No hay servicios en esta categoría por el momento.
-          </p>
+          {{-- ══════════════════════════════════════
+               PESTAÑA: GENERAL (con filtros por categoría)
+          ══════════════════════════════════════ --}}
+          <div class="categoria-panel activo" data-categoria-panel="general" role="tabpanel">
+
+            {{-- ── Filtros por categoría ── --}}
+            <div class="diseno-filtros reveal" role="tablist" aria-label="Filtrar servicios por categoría">
+              <button type="button" class="diseno-filtro-btn activo" data-filtro="todos">Todos</button>
+              <button type="button" class="diseno-filtro-btn" data-filtro="diseno">Diseño</button>
+              <button type="button" class="diseno-filtro-btn" data-filtro="ingenieria">Ingeniería</button>
+              <button type="button" class="diseno-filtro-btn" data-filtro="electrico">Eléctrico</button>
+              <button type="button" class="diseno-filtro-btn" data-filtro="fabricacion">Fabricación</button>
+              <button type="button" class="diseno-filtro-btn" data-filtro="ensamble">Ensamble</button>
+              <button type="button" class="diseno-filtro-btn" data-filtro="calidad">Calidad</button>
+            </div>
+
+            {{--
+              Cada tarjeta sigue esta misma estructura. Para agregar,
+              quitar o editar un servicio, solo se replica/edita un
+              bloque .producto-card — no requiere tocar el CSS ni el grid.
+              data-categoria define en qué filtro aparece la tarjeta;
+              debe coincidir con el data-filtro del botón correspondiente.
+            --}}
+            <div class="productos-grid" id="disenoGrid">
+              <div class="producto-card reveal" data-categoria="diseno">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Diseño</span>
+                  <h3>Modelado CAD 3D</h3>
+                  <p>Modelado CAD 3D de piezas y dispositivos.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="diseno">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Diseño</span>
+                  <h3>Modelado CAD 2D</h3>
+                  <p>Modelado CAD 2D de modelos ya definidos.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="ingenieria">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ingeniería</span>
+                  <h3>Optimización de geometrías</h3>
+                  <p>Optimización de geometrías para mejorar rendimiento.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="ingenieria">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ingeniería</span>
+                  <h3>Conversión de formatos</h3>
+                  <p>Conversión de formatos de piezas.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="ingenieria">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ingeniería</span>
+                  <h3>Selección de materiales</h3>
+                  <p>Selección de materiales y mejora de piezas.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="ingenieria">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ingeniería</span>
+                  <h3>Análisis de elemento finito</h3>
+                  <p>Análisis de elemento finito.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="electrico">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Eléctrico</span>
+                  <h3>Tableros de control</h3>
+                  <p>Diseño de tableros de control eléctricos.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="electrico">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Eléctrico</span>
+                  <h3>Diagramas eléctricos</h3>
+                  <p>Diseño de diagramas eléctricos.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="diseno">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Diseño</span>
+                  <h3>Visualización 3D interactiva</h3>
+                  <p>Visualizaciones 3D interactivas, para aprobación de diseños.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="fabricacion">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Fabricación</span>
+                  <h3>Herramentales para costura</h3>
+                  <p>Diseño y fabricación de herramentales, para costura.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="fabricacion">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Fabricación</span>
+                  <h3>Fixtures de inspección</h3>
+                  <p>Diseño y fabricación de fixtures de inspección.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="fabricacion">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Fabricación</span>
+                  <h3>Estaciones de trabajo</h3>
+                  <p>Diseño y fabricación de estaciones de trabajo.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="fabricacion">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Fabricación</span>
+                  <h3>Alimentadores de material</h3>
+                  <p>Diseño y fabricación de alimentadores de material.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="ensamble">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ensamble</span>
+                  <h3>Ensamble de maquinaria</h3>
+                  <p>Ensamble de maquinaria industrial y dispositivos de precisión.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="calidad">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Calidad</span>
+                  <h3>Pruebas funcionales</h3>
+                  <p>Pruebas funcionales y validaciones con el cliente.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="fabricacion">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Fabricación</span>
+                  <h3>Refacciones personalizadas</h3>
+                  <p>Diseño y fabricación de refacciones personalizadas.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="calidad">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Calidad</span>
+                  <h3>Inspección y diagnóstico</h3>
+                  <p>Servicios de inspección y diagnóstico técnico.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="fabricacion">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Fabricación</span>
+                  <h3>Guardas delimitadoras</h3>
+                  <p>Diseño y fabricación de guardas, delimitadoras.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="ensamble">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ensamble</span>
+                  <h3>Estaciones de ensamble</h3>
+                  <p>Diseño y fabricación de estaciones de ensamble y subensamble de piezas.</p>
+                </div>
+              </div>
+              <div class="producto-card reveal" data-categoria="calidad">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Calidad</span>
+                  <h3>Estaciones de inspección</h3>
+                  <p>Diseño y fabricación de estaciones de inspección de piezas.</p>
+                </div>
+              </div>
+            </div>
+
+            {{-- Se muestra solo si el filtro no encuentra ninguna tarjeta --}}
+            <p id="disenoSinResultados" style="display:none; text-align:center; margin-top:3rem; font-size:1.5rem; color: var(--text-muted, #7a8390);">
+              No hay servicios en esta categoría por el momento.
+            </p>
+          </div>
+
+          {{-- ══════════════════════════════════════
+               PESTAÑA: SERVICIOS ESPECIALIZADOS
+          ══════════════════════════════════════ --}}
+          <div class="categoria-panel" data-categoria-panel="especializados" role="tabpanel">
+            <div class="productos-grid">
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Obra Civil</span>
+                  <h3>Obra civil e instalaciones</h3>
+                  <p>Construcción de instalaciones, diques, estanques, cárcamos, explanadas y demás infraestructura industrial.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Energía Solar</span>
+                  <h3>Instalación de sistemas solares</h3>
+                  <p>Instalación y mantenimiento, así como medición y análisis para la reducción de costos energéticos.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Eléctrico</span>
+                  <h3>Tableros y Subestaciones Eléctricas</h3>
+                  <p>Instalación y mantenimiento de tableros eléctricos de potencia, arrancadores a tensión reducida, líneas eléctricas y subestaciones de media y baja tensión, incluyendo su análisis.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Estructuras</span>
+                  <h3>Soldadura, Paileria y Estructuras</h3>
+                  <p>Diseño, instalación y mantenimiento de estructuras de acero, tuberías, racks, tanques, silos y transportadores, así como soldadura para las industrias alimenticia, automotriz, metal-mecánica y química.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Enfriamiento</span>
+                  <h3>Servicio de Condensadores</h3>
+                  <p>Instalación, mantenimiento y limpieza de condensadores, torres de enfriamiento, chillers e intercambiadores de calor.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ingeniería</span>
+                  <h3>Bombas, Motores y Transmisiones</h3>
+                  <p>Instalación y mantenimiento de bombas centrífugas y de desplazamiento positivo, sistemas de vacío, transmisiones, reductores, bombas hidráulicas y motores de corriente alterna y directa.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Ingeniería</span>
+                  <h3>Maquinados y Nuevos Proyectos</h3>
+                  <p>Diseño y reparación de maquinados especiales de metal y plástico; diseño y proyectos de nuevas instalaciones mecánicas y de ensamblaje.</p>
+                </div>
+              </div>
+
+              <div class="producto-card reveal">
+                <div class="producto-imagen"></div>
+                <div class="producto-body">
+                  <span class="producto-badge">Mantenimiento Predictivo</span>
+                  <h3>Sistemas de Transmisión de Movimiento</h3>
+                  <p>Mantenimiento predictivo, preventivo y correctivo; análisis de aceites y vibraciones, termografías, y reparación/embobinado de motores eléctricos de CA con análisis de falla.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
 
         </div>
       </section>
     </main>
-
     <!--Whatsapp-->
-<a
+    <a
       href="https://wa.me/524721074459?text=Hola,%20quiero%20información%20sobre%20sus%20productos."
       class="whatsapp-float"
       target="_blank"
@@ -446,7 +593,6 @@
         <path fill="#fff" fill-rule="evenodd" clip-rule="evenodd" d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z"/>
       </svg>
     </a>
-
     <!-- Footer -->
     <footer>
       <div class="contenedor footer-inner">
@@ -467,20 +613,41 @@
         >
           SMTEK
         </div>
-
         <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
-
         <div style="display: flex; gap: 2rem">
           <a href="#">Aviso de privacidad</a>
           <a href="#">Términos de uso</a>
         </div>
       </div>
     </footer>
-
     <!-- Script -->
     <script src="assets/js/script.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
+
+        // ── Pestañas de sección: Novedades / General / Especializados ──
+        const tabs = document.querySelectorAll('.categoria-tab');
+        const panels = document.querySelectorAll('.categoria-panel');
+
+        tabs.forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            const target = tab.getAttribute('data-categoria-tab');
+
+            tabs.forEach(function (t) {
+              t.classList.remove('activo');
+              t.setAttribute('aria-selected', 'false');
+            });
+            tab.classList.add('activo');
+            tab.setAttribute('aria-selected', 'true');
+
+            panels.forEach(function (panel) {
+              const match = panel.getAttribute('data-categoria-panel') === target;
+              panel.classList.toggle('activo', match);
+            });
+          });
+        });
+
+        // ── Filtros por categoría (solo pestaña General) ──
         const botones = document.querySelectorAll('.diseno-filtro-btn');
         const tarjetas = document.querySelectorAll('#disenoGrid .producto-card');
         const sinResultados = document.getElementById('disenoSinResultados');

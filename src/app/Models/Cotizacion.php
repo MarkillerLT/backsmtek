@@ -9,6 +9,7 @@ class Cotizacion extends Model
     protected $table = 'cotizaciones';
 
     protected $fillable = [
+        'user_id',
         'nombre',
         'empresa',
         'correo',
@@ -16,5 +17,7 @@ class Cotizacion extends Model
         'asunto',
         'mensaje',
         'estado',
+        'localidad',
+        'numcontrol',
     ];
 }

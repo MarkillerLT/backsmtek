@@ -41,6 +41,7 @@ class CotizacionController extends Controller
         ]);
 
         Cotizacion::create([
+            'user_id'   => auth()->id(),
             'nombre'    => $request->nombre,
             'empresa'   => $request->empresa,
             'correo'    => $request->correo,
@@ -51,6 +52,11 @@ class CotizacionController extends Controller
             'estado'    => 'pendiente',
             // numcontrol queda null: lo captura el vendedor desde el panel admin
         ]);
+        if (auth()->check()) {
+        return redirect()
+            ->route('cotizaciones.mias')
+            ->with('success', '¡Tu solicitud de cotización fue enviada correctamente!');
+    }
 
         return redirect()
             ->route('cotizacion.create')
@@ -98,4 +104,12 @@ class CotizacionController extends Controller
 
         return $pdf->download('cotizaciones.pdf');
     }
+    public function misCotizaciones()
+{
+    $cotizaciones = Cotizacion::where('user_id', auth()->id())
+        ->latest()
+        ->get();
+
+    return view('user.cotizaciones.index', compact('cotizaciones'));
+}
 }
