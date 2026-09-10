@@ -201,6 +201,19 @@ body.dark-mode .servicio-imagen {
   display: flex;
   flex-direction: column;
 }
+    /* ── Fix: imágenes reales dentro de .producto-imagen (Casos de éxito) ── */
+    .producto-imagen {
+      position: relative;
+      overflow: hidden;
+    }
+    .producto-imagen img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
     </style>
   </head>
   <body>
@@ -572,19 +585,29 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span
                 class="contador-numero"
                 data-counter
-                data-target="340"
+                data-target="12019"
                 data-suffix="+"
                 >0+</span
               >
-              <span class="contador-label">Proyectos completados</span>
+              <span class="contador-label">Soluciones sumistradas</span>
             </div>
             <div class="contador-item reveal">
               <span
                 class="contador-numero"
                 data-counter
-                data-target="120"
+                data-target="221"
                 data-suffix="+"
                 >0+</span
+              >
+              <span class="contador-label">Proyectos integrados</span>
+            </div>
+            <div class="contador-item reveal">
+              <span
+                class="contador-numero"
+                data-counter
+                data-target="224"
+                data-suffix="+"
+                >0%</span
               >
               <span class="contador-label">Clientes activos</span>
             </div>
@@ -592,17 +615,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <span
                 class="contador-numero"
                 data-counter
-                data-target="99"
-                data-suffix="%"
-                >0%</span
-              >
-              <span class="contador-label">Uptime garantizado</span>
-            </div>
-            <div class="contador-item reveal">
-              <span
-                class="contador-numero"
-                data-counter
-                data-target="12"
+                data-target="10"
                 data-suffix=" años"
                 >0</span
               >
@@ -623,7 +636,9 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           </div>
           <div class="productos-grid">
             <div class="producto-card reveal">
-              <div class="producto-imagen"></div>
+              <div class="producto-imagen">
+                <img src="{{asset('assets/img/Casosexito/01_Monitoreo_de_Proceso_en_Tiempo_Real.png')}}" alt="Caso1">
+            </div>
               <div class="producto-body">
                 <span class="producto-badge">Información dispersa.</span>
                 <h3>Sistema de Monitoreo de Proceso en Tiempo Real</h3>
@@ -636,7 +651,9 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               </div>
             </div>
             <div class="producto-card reveal">
-              <div class="producto-imagen"></div>
+              <div class="producto-imagen">
+                <img src="{{asset('assets/img/Casosexito/02_Trazabilidad_para_Linea_de_Ensamble.png')}}" alt="Casos">
+            </div>
               <div class="producto-body">
                 <span class="producto-badge">Falta de seguimiento.</span>
                 <h3>Sistema de Trazabilidad para Línea de Ensamble</h3>
@@ -649,7 +666,9 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               </div>
             </div>
             <div class="producto-card reveal">
-              <div class="producto-imagen"></div>
+              <div class="producto-imagen">
+                <img src="{{asset('assets/img/Casosexito/03_Integracion_de_Equipos_Industria_4_0.png')}}" alt="Casos">
+            </div>
               <div class="producto-body">
                 <span class="producto-badge">Equipos aislados</span>
                 <h3>Integración de Equipos para Industria 4.0</h3>
