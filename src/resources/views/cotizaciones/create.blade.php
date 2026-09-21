@@ -671,6 +671,9 @@
                 padding: 3rem 1.6rem;
             }
         }
+        .hero.cotiz-hero {
+  background-image: url({{ asset('assets/img/heros/cotizar.jpg') }});
+}
     </style>
 
     <script src="assets/js/script.js"></script>

@@ -63,6 +63,7 @@
     </div>
     </header>
 
+    <!-- Nav Bar -->
     <div class="nav-bg">
       <div class="contenedor" style="display: flex; align-items: center">
         <button
@@ -74,18 +75,20 @@
         >
           <span></span><span></span><span></span>
         </button>
-
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
           <a href="{{ url('/')}}">Inicio</a>
-          <a href="{{ route('productos.catalogo')}}">Productos</a>
+<!-- descomentar cuando se rellene productos-->
+<!-- <a href="{{ route('productos.catalogo')}}">Catalogo</a>  -->
+<!-- descomentar cuando se rellene productos-->
+
           <a href="{{ route('servicios')}}">Servicios</a>
           <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
           <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
         </nav>
       </div>
     </div>
-
 
     {{-- ╔══════════════════════════════════════════════════════════╗
          ║  HERO                                                   ║
@@ -729,6 +732,9 @@
             .register-row  { grid-template-columns: 1fr; }
 
             .postul-hero .hero-content { padding: 3rem 1.6rem; }
+        }
+                .hero.postul-hero {
+          background-image: url({{ asset('assets/img/heros/tcnos.jpg') }});
         }
     </style>
 

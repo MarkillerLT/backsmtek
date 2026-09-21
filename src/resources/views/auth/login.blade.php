@@ -66,16 +66,29 @@
          ║  NAVEGACIÓN PRINCIPAL                                   ║
          ╚══════════════════════════════════════════════════════════╝ --}}
     <div class="nav-bg">
-        <div class="contenedor">
-            <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
-                <a href="{{ url('/') }}">Inicio</a>
-                <a href="#">Productos</a>
-                <a href="#">Servicios</a>
-                <a href="#">Contacto</a>
-                <a href="#" class="cta-nav">Cotizar</a>
-                <a href="#" style="font-weight: bold">Trabaja con nosotros</a>
-            </nav>
-        </div>
+      <div class="contenedor" style="display: flex; align-items: center">
+        <button
+          id="hamburger"
+          class="hamburger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          type="button"
+        >
+          <span></span><span></span><span></span>
+        </button>
+        <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
+          <a href="{{ url('/')}}">Inicio</a>
+<!-- descomentar cuando se rellene productos-->
+<!-- <a href="{{ route('productos.catalogo')}}">Catalogo</a>  -->
+<!-- descomentar cuando se rellene productos-->
+
+          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/products')}}">Productos</a>
+          <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+        </nav>
+      </div>
     </div>
 
     {{-- ╔══════════════════════════════════════════════════════════╗
@@ -165,7 +178,32 @@
 
         </div>{{-- /.hero-content --}}
     </div>{{-- /.hero --}}
-
+<footer>
+      <div class="contenedor footer-inner">
+        <img
+          src="assets/img/1b.svg"
+          alt="SMTEK Logo"
+          class="footer-logo"
+          onerror="
+            this.style.display = 'none';
+            document.getElementById('footer-logo-fallback').style.display =
+              'flex';
+          "
+        />
+        <div
+          id="footer-logo-fallback"
+          class="footer-logo-placeholder"
+          style="display: none"
+        >
+          SMTEK
+         </div>
+        <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
+        <div style="display: flex; gap: 2rem">
+          <a href="#">Aviso de privacidad</a>
+          <a href="#">Términos de uso</a>
+        </div>
+      </div>
+    </footer>
 
     {{-- ╔══════════════════════════════════════════════════════════╗
          ║  ESTILOS ESPECÍFICOS DE ESTA VISTA                     ║

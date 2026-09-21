@@ -142,6 +142,9 @@
         .privacidad-item-btn { padding: 1.5rem 1.8rem; }
         .privacidad-item-nombre { font-size: 1.35rem; }
       }
+    body.dark-mode .privacidad-item.abierto .privacidad-item-btn {
+  background-color: rgba(33, 150, 186, 0.18);
+}
     </style>
   </head>
   <body>
@@ -219,15 +222,17 @@
         >
           <span></span><span></span><span></span>
         </button>
-
         <nav id="nav-principal" class="navegacion-principal" style="flex: 1">
-          <a href="{{ url('/') }}">Inicio</a>
-          <a href="{{ route('productos.catalogo') }}">Catalogo</a>
-          <a href="{{ route('servicios') }}">Servicios</a>
-          <a href="{{ url('/#contacto') }}">Contacto</a>
-          <a href="{{ url('/products') }}">Productos</a>
+          <a href="{{ url('/')}}">Inicio</a>
+<!-- descomentar cuando se rellene productos-->
+<!-- <a href="{{ route('productos.catalogo')}}">Catalogo</a>  -->
+<!-- descomentar cuando se rellene productos-->
+
+          <a href="{{ route('servicios')}}">Servicios</a>
+          <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-          <a href="{{ route('postulacion.create') }}" style="font-family: bold">Trabaja con nosotros</a>
+          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
         </nav>
       </div>
     </div>
@@ -558,7 +563,7 @@
         <div id="footer-logo-fallback" class="footer-logo-placeholder" style="display: none">SMTEK</div>
         <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
         <div style="display: flex; gap: 2rem">
-          <a href="{{ url('/aviso-de-privacidad') }}">Aviso de privacidad</a>
+          <a href="{{ url('/avisoprivacidad') }}">Aviso de privacidad</a>
           <a href="#">Términos de uso</a>
         </div>
       </div>

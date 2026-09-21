@@ -23,6 +23,10 @@ Route::get('/tyc', function () {
     return view('tyc');
 })->name('tyc');
 
+Route::get('/avisoprivacidad', function () {
+    return view('avisopriv');
+})->name('avisopriv');
+
 Route::get('/cotizacion', [CotizacionController::class, 'create'])
     ->name('cotizacion.create');
 Route::post('/cotizacion', [CotizacionController::class, 'store'])

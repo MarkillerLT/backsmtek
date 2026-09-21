@@ -16,6 +16,9 @@
         <link rel="stylesheet" href="{{asset('assets/css/normalize.css')}}" />
     <!-- animacion principal -->
     <style>
+    #inicio.hero {
+  background-image: url({{ asset('assets/img/heros/welcome.jpg') }});
+}
       .reveal {
         opacity: 0;
         transform: translateY(2.4rem);
@@ -176,23 +179,19 @@
     padding: 0;
     overflow: hidden;
 }
+/* ── Imágenes de "¿Qué hacemos?" (alcance): tamaño original, sin recortar ── */
 .servicio-imagen {
   width: 100%;
-  height: 18rem;
+  height: auto;
   flex-shrink: 0;
-  background: linear-gradient(135deg, var(--AzulClaro, #e8f4f8), #b8d8e8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-body.dark-mode .servicio-imagen {
-  background: linear-gradient(135deg, #1a3848, #1e4a60);
+  background: none;
+  display: block;
+  overflow: visible;
 }
 .servicio-imagen img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   display: block;
 }
 .servicio-body {
@@ -201,18 +200,39 @@ body.dark-mode .servicio-imagen {
   display: flex;
   flex-direction: column;
 }
-    /* ── Fix: imágenes reales dentro de .producto-imagen (Casos de éxito) ── */
+    /* ── Casos de éxito: tamaño original, sin recortar (mismas dimensiones ya) ── */
     .producto-imagen {
-      position: relative;
-      overflow: hidden;
+      width: 100%;
+      height: auto;
+      position: static;
+      overflow: visible;
+      background: none;
     }
     .producto-imagen img {
-      position: absolute;
-      inset: 0;
+      position: static;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
+      object-fit: contain;
       display: block;
+    }
+    /* ── Aliados comerciales: contenedor consistente, logos de distintos formatos ── */
+    .aliado-logo-placeholder {
+      width: 100%;
+      height: 8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0.8rem;
+      background: none;
+    }
+    .aliado-logo-placeholder img,
+    .aliado-logo-placeholder svg {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
     }
     </style>
   </head>
@@ -314,7 +334,7 @@ body.dark-mode .servicio-imagen {
         playsinline
         poster="{{ asset('assets/img/her.jpg') }}"
       >
-        <source src="{{ asset('videoh/torno.mp4') }}" type="video/mp4">
+        <source src="{{ asset('videoh/smtekhero2.mp4') }}" type="video/mp4">
       </video>
       <div class="hero-content">
         <h1>Transformamos Procesos <span>Industriales </span><br />con Soluciones de Industria 4.0</h1>
@@ -343,7 +363,7 @@ body.dark-mode .servicio-imagen {
           <div class="servicios-grid">
             <div class="servicio-card reveal">
               <div class="servicio-imagen">
-                <img src="{{ asset('assets/img/servicios/1.png') }}" alt="Automatización industrial">
+                <img src="{{ asset('assets/img/alcance/01_Automatizacion_Industrial_Opcion_2_Mas_Limpia.png') }}" alt="Automatización industrial">
               </div>
               <div class="servicio-body">
                 <span class="servicio-icono"
@@ -369,7 +389,7 @@ body.dark-mode .servicio-imagen {
             </div>
             <div class="servicio-card reveal">
               <div class="servicio-imagen">
-                <img src="{{ asset('assets/img/servicios/2.png') }}" alt="Industria 4.0 e IIoT">
+                <img src="{{ asset('assets/img/alcance/02_Industria_4_0_e_IIoT_Opcion_2_Mas_Limpia.png') }}" alt="Industria 4.0 e IIoT">
               </div>
               <div class="servicio-body">
                 <span class="servicio-icono"
@@ -393,7 +413,7 @@ body.dark-mode .servicio-imagen {
             </div>
             <div class="servicio-card reveal">
               <div class="servicio-imagen">
-                <img src="{{ asset('assets/img/servicios/3.png') }}" alt="Trazabilidad de Producción">
+                <img src="{{ asset('assets/img/alcance/03_Trazabilidad_de_Produccion_Opcion_2_Mas_Limpia.png') }}" alt="Trazabilidad de Producción">
               </div>
               <div class="servicio-body">
                 <span class="servicio-icono"
@@ -417,7 +437,7 @@ body.dark-mode .servicio-imagen {
             </div>
             <div class="servicio-card reveal">
               <div class="servicio-imagen">
-                <img src="{{ asset('assets/img/servicios/4.png') }}" alt="Sistemas MES">
+                <img src="{{ asset('assets/img/alcance/04_Sistemas_MES_Opcion_2_Mas_Limpia.png') }}" alt="Sistemas MES">
               </div>
               <div class="servicio-body">
                 <span class="servicio-icono"
@@ -441,7 +461,7 @@ body.dark-mode .servicio-imagen {
             </div>
             <div class="servicio-card reveal">
               <div class="servicio-imagen">
-                <img src="{{ asset('assets/img/servicios/5.png') }}" alt="Visión Artificial">
+                <img src="{{ asset('assets/img/alcance/05_Vision_Artificial_Opcion_2_Mas_Limpia.png') }}" alt="Visión Artificial">
               </div>
               <div class="servicio-body">
                 <span class="servicio-icono"
@@ -465,7 +485,7 @@ body.dark-mode .servicio-imagen {
             </div>
             <div class="servicio-card reveal">
               <div class="servicio-imagen">
-                <img src="{{ asset('assets/img/servicios/6.png') }}" alt="Dashboards y Análisis">
+                <img src="{{ asset('assets/img/alcance/06_Dashboards_y_Analisis_Opcion_2_Mas_Limpia.png') }}" alt="Dashboards y Análisis">
               </div>
               <div class="servicio-body">
                 <span class="servicio-icono"
@@ -637,7 +657,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
           <div class="productos-grid">
             <div class="producto-card reveal">
               <div class="producto-imagen">
-                <img src="{{asset('assets/img/Casosexito/01_Monitoreo_de_Proceso_en_Tiempo_Real.png')}}" alt="Caso1">
+                <img src="{{asset('assets/img/Casoexito/01_Monitoreo_de_Proceso_en_Tiempo_Real.png')}}" alt="Caso1">
             </div>
               <div class="producto-body">
                 <span class="producto-badge">Información dispersa.</span>
@@ -652,7 +672,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
             <div class="producto-card reveal">
               <div class="producto-imagen">
-                <img src="{{asset('assets/img/Casosexito/02_Trazabilidad_para_Linea_de_Ensamble.png')}}" alt="Casos">
+                <img src="{{asset('assets/img/Casoexito/02_Trazabilidad_para_Linea_de_Ensamble.png')}}" alt="Casos">
             </div>
               <div class="producto-body">
                 <span class="producto-badge">Falta de seguimiento.</span>
@@ -667,7 +687,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
             <div class="producto-card reveal">
               <div class="producto-imagen">
-                <img src="{{asset('assets/img/Casosexito/03_Integracion_de_Equipos_Industria_4_0.png')}}" alt="Casos">
+                <img src="{{asset('assets/img/Casoexito/03_Integracion_de_Equipos_Industria_4_0.png')}}" alt="Casos">
             </div>
               <div class="producto-body">
                 <span class="producto-badge">Equipos aislados</span>
@@ -981,7 +1001,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
         <div class="video-wrap reveal">
             <iframe
-              src="https://www.youtube.com/embed/7U_zJbwyYbQ"
+              src="https://www.youtube.com/embed/MEeovXbqjEU"
               title="SMTEK Smart Technologies"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin"
@@ -1242,25 +1262,19 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
         </div>
         <!-- Redes sociales: compartidas para las 3 sucursales -->
         <div class="redes-sociales">
-          <a href="#" class="red-social" aria-label="LinkedIn">
+          <a href="https://linkedin.com/company/smtek-mexico" class="red-social" aria-label="LinkedIn">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
               <title xmlns="">linkedin</title>
               <path fill="currentColor" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z" />
             </svg>
           </a>
-          <a href="#" class="red-social" aria-label="Twitter / X">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-              <title xmlns="">x-solid</title>
-              <path fill="currentColor" d="M13.795 10.533L20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22zm-2.38 2.95L9.97 11.464L4.36 3.627h2.31l4.528 6.317l1.443 2.02l6.018 8.409h-2.31z" />
-            </svg>
-          </a>
-          <a href="#" class="red-social" aria-label="Facebook">
+   <a href="https://www.facebook.com/share/198xDpYat4/" class="red-social" aria-label="Facebook">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
               <title xmlns="">outline-facebook</title>
               <path fill="currentColor" d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95" />
             </svg>
           </a>
-          <a href="#" class="red-social" aria-label="Instagram">
+          <a href="https://www.instagram.com/smtek_mexico?stkn=Y2RkdHlnbnJla2E5" class="red-social" aria-label="Instagram">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
               <title xmlns="">instagram</title>
               <path fill="currentColor" d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4zm9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3" />
@@ -1327,8 +1341,8 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
          </div>
         <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
         <div style="display: flex; gap: 2rem">
-          <a href="#">Aviso de privacidad</a>
-          <a href="#">Términos de uso</a>
+          <a href="{{ url('/avisoprivacidad')}}">Aviso de privacidad</a>
+          <a href="{{ url('/tyc')}}">Términos de uso</a>
         </div>
       </div>
     </footer>

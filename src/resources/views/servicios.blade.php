@@ -122,18 +122,23 @@
       }
 
       /* ══════════════════════════════════════════════
-         GENERAL: imágenes reales, tamaño completo (no crop)
+         Imágenes reales, tamaño completo (no crop).
          El contenedor se adapta a la imagen, no al revés.
-         Scoped a #disenoGrid para no afectar Novedades/Especializados,
-         que siguen usando el placeholder vacío con degradado.
+         Aplica a las 3 pestañas: General, Novedades, Especializados.
+         Las tarjetas sin <img> (solo con el div vacío) siguen
+         mostrando el degradado de placeholder normal.
       ══════════════════════════════════════════════ */
-      #disenoGrid .producto-imagen {
+      #disenoGrid .producto-imagen,
+      #novedadesGrid .producto-imagen,
+      #especializadosGrid .producto-imagen {
         height: auto;
         position: static;
         overflow: visible;
         background: none;
       }
-      #disenoGrid .producto-imagen img {
+      #disenoGrid .producto-imagen img,
+      #novedadesGrid .producto-imagen img,
+      #especializadosGrid .producto-imagen img {
         position: static;
         width: 100%;
         height: auto;
@@ -146,6 +151,9 @@
         .diseno-filtro-btn { padding: 0.8rem 1.6rem; font-size: 1.3rem; }
         .categoria-tab { padding: 1rem 1.2rem 1.2rem; font-size: 1.35rem; }
       }
+    #servicios.hero {
+  background-image: url({{ asset('assets/img/heros/servicios.jpg') }});
+}
     </style>
   </head>
   <body>
@@ -279,10 +287,12 @@
                PESTAÑA: NOVEDADES
           ══════════════════════════════════════ --}}
           <div class="categoria-panel" data-categoria-panel="novedades" role="tabpanel">
-            <div class="productos-grid">
+            <div class="productos-grid" id="novedadesGrid">
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/Novedades/01_RFID_y_Control_de_Activos.png') }}" alt="RFID y Control de Activos">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Trazabilidad</span>
                   <h3>RFID y Control de Activos</h3>
@@ -291,7 +301,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/Novedades/02_Automatizacion_de_Procesos_Manuales.png') }}" alt="Automatización de Procesos Manuales">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Automatización</span>
                   <h3>Automatización de Procesos Manuales</h3>
@@ -300,7 +312,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/Novedades/03_SCADA_y_Monitoreo_Remoto.png') }}" alt="SCADA y Monitoreo Remoto">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Monitoreo</span>
                   <h3>SCADA y Monitoreo Remoto</h3>
@@ -309,7 +323,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/Novedades/04_Retrofit_y_Modernizacion.png') }}" alt="Retrofit y Modernización">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Modernización</span>
                   <h3>Retrofit y Modernización</h3>
@@ -345,9 +361,7 @@
             --}}
             <div class="productos-grid" id="disenoGrid">
               <div class="producto-card reveal" data-categoria="diseno">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/01_Modelado_CAD_3D.png') }}" alt="Modelado CAD 3D">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Diseño</span>
                   <h3>Modelado CAD 3D</h3>
@@ -355,9 +369,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="diseno">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/02_Modelado_CAD_2D.png') }}" alt="Modelado CAD 2D">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Diseño</span>
                   <h3>Modelado CAD 2D</h3>
@@ -365,9 +377,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="ingenieria">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/03_Optimizacion_de_geometrias.png') }}" alt="Optimización de geometrías">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Ingeniería</span>
                   <h3>Optimización de geometrías</h3>
@@ -375,9 +385,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="ingenieria">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/04_Conversion_de_formatos.png') }}" alt="Conversión de formatos">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Ingeniería</span>
                   <h3>Conversión de formatos</h3>
@@ -385,9 +393,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="ingenieria">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/05_Seleccion_de_materiales.png') }}" alt="Selección de materiales">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Ingeniería</span>
                   <h3>Selección de materiales</h3>
@@ -395,9 +401,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="ingenieria">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/06_Analisis_de_elemento_finito.png') }}" alt="Análisis de elemento finito">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Ingeniería</span>
                   <h3>Análisis de elemento finito</h3>
@@ -406,7 +410,7 @@
               </div>
               <div class="producto-card reveal" data-categoria="electrico">
                 <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/01_Tableros_de_control.png') }}" alt="Tableros de control">
+                  <img src="{{ asset('assets/img/Portafolio/01_Tablero_de_control.png') }}" alt="Tableros de control">
                 </div>
                 <div class="producto-body">
                   <span class="producto-badge">Eléctrico</span>
@@ -426,7 +430,7 @@
               </div>
               <div class="producto-card reveal" data-categoria="diseno">
                 <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/03_Visualizacion_3D_Interactiva.png') }}" alt="Visualización 3D interactiva">
+                  <img src="{{ asset('assets/img/Portafolio/03_Visualizacion_3D_interactiva.png') }}" alt="Visualización 3D interactiva">
                 </div>
                 <div class="producto-body">
                   <span class="producto-badge">Diseño</span>
@@ -436,7 +440,7 @@
               </div>
               <div class="producto-card reveal" data-categoria="fabricacion">
                 <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/04_Herramientales_para_costura.png') }}" alt="Herramentales para costura">
+                  <img src="{{ asset('assets/img/Portafolio/04_Herramentales_para_costura.png') }}" alt="Herramentales para costura">
                 </div>
                 <div class="producto-body">
                   <span class="producto-badge">Fabricación</span>
@@ -465,9 +469,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="fabricacion">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/07_Alimentadores_de_material.png') }}" alt="Alimentadores de material">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Fabricación</span>
                   <h3>Alimentadores de material</h3>
@@ -475,9 +477,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="ensamble">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/08_Ensamble_de_maquinaria.png') }}" alt="Ensamble de maquinaria">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Ensamble</span>
                   <h3>Ensamble de maquinaria</h3>
@@ -485,9 +485,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="calidad">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/09_Pruebas_funcionales.png') }}" alt="Pruebas funcionales">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Calidad</span>
                   <h3>Pruebas funcionales</h3>
@@ -495,9 +493,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="fabricacion">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/01_Refacciones_personalizadas.png') }}" alt="Refacciones personalizadas">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Fabricación</span>
                   <h3>Refacciones personalizadas</h3>
@@ -505,9 +501,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="calidad">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/02_Inspeccion_y_diagnostico.png') }}" alt="Inspección y diagnóstico">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Calidad</span>
                   <h3>Inspección y diagnóstico</h3>
@@ -515,9 +509,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="fabricacion">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/03_Guardas_delimitadoras.png') }}" alt="Guardas delimitadoras">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Fabricación</span>
                   <h3>Guardas delimitadoras</h3>
@@ -525,9 +517,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="ensamble">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/04_Estaciones_de_ensamble.png') }}" alt="Estaciones de ensamble">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Ensamble</span>
                   <h3>Estaciones de ensamble</h3>
@@ -535,9 +525,7 @@
                 </div>
               </div>
               <div class="producto-card reveal" data-categoria="calidad">
-                <div class="producto-imagen">
-                  <img src="{{ asset('assets/img/Portafolio/05_Estaciones_de_inspeccion.png') }}" alt="Estaciones de inspección">
-                </div>
+                <div class="producto-imagen"></div>
                 <div class="producto-body">
                   <span class="producto-badge">Calidad</span>
                   <h3>Estaciones de inspección</h3>
@@ -556,10 +544,12 @@
                PESTAÑA: SERVICIOS ESPECIALIZADOS
           ══════════════════════════════════════ --}}
           <div class="categoria-panel" data-categoria-panel="especializados" role="tabpanel">
-            <div class="productos-grid">
+            <div class="productos-grid" id="especializadosGrid">
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('OBRA CIVIL E INSTALACIONES.png')) }}" alt="Obra civil e instalaciones">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Obra Civil</span>
                   <h3>Obra civil e instalaciones</h3>
@@ -568,7 +558,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('INSTALACION DE SISTEMAS SOLARES.png')) }}" alt="Instalación de sistemas solares">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Energía Solar</span>
                   <h3>Instalación de sistemas solares</h3>
@@ -577,7 +569,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('BALANCE SHEET OVERVIEW.png')) }}" alt="Tableros y Subestaciones Eléctricas">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Eléctrico</span>
                   <h3>Tableros y Subestaciones Eléctricas</h3>
@@ -586,7 +580,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('SOLDADURA, PAILERIA Y ESTRUCTURAS.png')) }}" alt="Soldadura, Paileria y Estructuras">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Estructuras</span>
                   <h3>Soldadura, Paileria y Estructuras</h3>
@@ -595,7 +591,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('SERVICIOS DE CONDENSADORES.png')) }}" alt="Servicio de Condensadores">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Enfriamiento</span>
                   <h3>Servicio de Condensadores</h3>
@@ -604,7 +602,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('INGENIERÍA Y MANTENIMIENTO INDUSTRIAL.png')) }}" alt="Bombas, Motores y Transmisiones">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Ingeniería</span>
                   <h3>Bombas, Motores y Transmisiones</h3>
@@ -622,7 +622,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('SISTEMAS DE TRANSMISION DE MOVIMIENTO.png')) }}" alt="Sistemas de Transmisión de Movimiento">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Mantenimiento Predictivo</span>
                   <h3>Sistemas de Transmisión de Movimiento</h3>
@@ -637,7 +639,7 @@
       </section>
     </main>
     <!--Whatsapp-->
-
+<a
       href="https://wa.me/524721074459?text=Hola,%20quiero%20información%20sobre%20sus%20productos."
       class="whatsapp-float"
       target="_blank"
