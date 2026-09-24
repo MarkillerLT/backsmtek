@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function profile()
     {
-        return view('profile.index');
+        return view('user.perfil');
     }
 
     public function updateProfile(Request $request)
