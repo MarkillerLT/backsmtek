@@ -1,47 +1,101 @@
+# Estructura esperada:
+#   smtek/
+#   ├── docker-compose.yml
+#   ├── docker/php/{Dockerfile,entrypoint.sh}
+#   └── src/            <- proyecto Laravel
+
 services:
+  # ---------- Laravel (PHP 8.2 ZTS) ----------
   app:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: laravel-app
-    working_dir: /var/www
-    volumes:
-      - ./src:/var/www
-
-  nginx:
-    image: nginx:alpine
-    container_name: laravel-nginx
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    container_name: smtek_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    # El entrypoint corre composer install, key:generate, storage:link y migrate
+    command: php artisan serve --host=0.0.0.0 --port=8000
     ports:
-      - "8000:80"
-    volumes:
-      - ./src:/var/www
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
-
-  mariadb:
-    image: mariadb:11
-    container_name: laravel-db
+      - "${APP_PORT:-8000}:8000"
     environment:
-      MYSQL_DATABASE: tienda
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: secret
-      MYSQL_ROOT_PASSWORD: root
-    ports:
-      - "3306:3306"
+      # Estas variables tienen prioridad sobre src/.env
+      DB_CONNECTION: mariadb
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-laravel}
+      DB_USERNAME: ${DB_USERNAME:-laravel}
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
     volumes:
-      - dbdata:/var/lib/mysql
+      - ./src:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - smtek
 
+  # ---------- Node / Vite (npm install + npm run dev) ----------
+  node:
+    image: node:22-alpine
+    container_name: smtek_node
+    restart: unless-stopped
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "${VITE_PORT:-5173}:5173"
+    volumes:
+      - ./src:/app
+    networks:
+      - smtek
+
+  # ---------- Base de datos ----------
+  db:
+    image: mariadb:13
+    container_name: smtek_db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:-laravel}
+      MARIADB_USER: ${DB_USERNAME:-laravel}
+      MARIADB_PASSWORD: ${DB_PASSWORD:-secret}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+      MARIADB_AUTO_UPGRADE: "1"
+    ports:
+      - "${DB_FORWARD_PORT:-3306}:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - smtek
+
+  # ---------- phpMyAdmin ----------
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: laravel-pma
-    ports:
-      - "8081:80"
+    image: phpmyadmin:5
+    container_name: smtek_phpmyadmin
+    restart: unless-stopped
     environment:
-      PMA_HOST: mariadb
+      PMA_HOST: db
       PMA_PORT: 3306
+      UPLOAD_LIMIT: 128M
+    ports:
+      - "${PMA_PORT:-8080}:80"
     depends_on:
-      - mariadb
+      db:
+        condition: service_healthy
+    networks:
+      - smtek
 
 volumes:
-  dbdata:
+  db_data:
+
+networks:
+  smtek:
+    driver: bridge
