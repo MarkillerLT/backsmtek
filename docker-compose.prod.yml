@@ -1,0 +1,104 @@
+# Producción. Úsalo con el script bin/prod (carga .env.prod):
+#   bin/prod up -d --build
+#
+# Estructura:
+#   smtek/
+#   ├── docker-compose.yml        (desarrollo)
+#   ├── docker-compose.prod.yml   (este archivo)
+#   ├── .env.prod                 (secretos, NO va a git)
+#   ├── bin/prod
+#   ├── docker/prod/{Dockerfile,Caddyfile,php.ini,entrypoint.sh}
+#   └── src/
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: docker/prod/Dockerfile
+  image: smtek-app:latest
+  restart: unless-stopped
+  env_file: .env.production
+  volumes:
+    - app_storage:/app/storage
+  depends_on:
+    db:
+      condition: service_healthy
+  networks:
+    - smtek
+
+services:
+  # ---------- Web: FrankenPHP + HTTPS automático ----------
+  app:
+    <<: *app
+    container_name: smtek_app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"   # HTTP/3
+    volumes:
+      - app_storage:/app/storage
+      - caddy_data:/data/caddy       # certificados TLS (no borrar)
+      - caddy_config:/config/caddy
+
+  # ---------- Colas (jobs, correos en cola, etc.) ----------
+  queue:
+    <<: *app
+    container_name: smtek_queue
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    environment:
+      RUN_MIGRATIONS: "false"
+
+  # ---------- Tareas programadas (schedule) ----------
+  scheduler:
+    <<: *app
+    container_name: smtek_scheduler
+    command: php artisan schedule:work
+    environment:
+      RUN_MIGRATIONS: "false"
+
+  # ---------- Base de datos (sin puerto expuesto) ----------
+  db:
+    image: mariadb:13
+    container_name: smtek_db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE:?Falta DB_DATABASE en .env.prod}
+      MARIADB_USER: ${DB_USERNAME:?Falta DB_USERNAME en .env.prod}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env.prod}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Falta DB_ROOT_PASSWORD en .env.prod}
+      MARIADB_AUTO_UPGRADE: "1"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - smtek
+
+  # ---------- phpMyAdmin: apagado por defecto, solo en localhost ----------
+  # Encender:  bin/prod --profile admin up -d phpmyadmin
+  # Acceder:   ssh -L 8080:127.0.0.1:8080 usuario@servidor  ->  http://localhost:8080
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: smtek_phpmyadmin
+    profiles: ["admin"]
+    restart: "no"
+    environment:
+      PMA_HOST: db
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - db
+    networks:
+      - smtek
+
+volumes:
+  db_data:
+  app_storage:
+  caddy_data:
+  caddy_config:
+
+networks:
+  smtek:

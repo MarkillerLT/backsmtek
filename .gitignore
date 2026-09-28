@@ -4,6 +4,7 @@ docker-compose.override.yml
 
 # Laravel (extra seguridad)
 .env
+.env.production
 /vendor
 /node_modules
 

@@ -1,0 +1,9 @@
+#!/bin/sh
+cd "$(dirname "$0")/.." || exit 1
+
+if [ ! -f .env.production ]; then
+    echo "File '.env.production' not found" >&2
+    exit 1
+fi
+
+exec docker compose --env-file .env.production -f docker-compose.prod.yml "$@"
