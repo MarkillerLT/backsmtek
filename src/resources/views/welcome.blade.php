@@ -873,7 +873,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
         </div>
       </section>
       <!-- clientes prin sec -->
-      <section id="clientes">
+     <!-- <section id="clientes">
         <div class="contenedor">
           <div class="section-header reveal">
             <span class="section-label">Lo que dicen de nosotros</span>
@@ -934,7 +934,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
       <!-- seccion somos -->
       <section id="quienes-somos">
         <div class="contenedor">

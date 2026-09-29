@@ -344,8 +344,8 @@
         <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
 
         <div style="display: flex; gap: 2rem">
-          <a href="#">Aviso de privacidad</a>
-          <a href="#">Términos de uso</a>
+          <a href="{{ url('/avisoprivacidad')}}">Aviso de privacidad</a>
+          <a href="{{ url('/tyc')}}">Términos de uso</a>
         </div>
       </div>
     </footer>

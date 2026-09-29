@@ -193,23 +193,28 @@
                     </div>
 
                     {{-- Términos (Jetstream) --}}
-                    @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                        <div class="register-terms">
-                            <input type="checkbox" id="terms" name="terms" required />
-                            <label for="terms">
-                                Acepto los
-                                <a href="{{ route('terms.show') }}" target="_blank">Términos de servicio</a>
-                                y la
-                                <a href="{{ route('policy.show') }}" target="_blank">Política de privacidad</a>.
-                            </label>
-                        </div>
-                        @error('terms')
-                            <span class="register-error" style="margin-top:-1rem;display:block;margin-bottom:1rem;">
-                                {{ $message }}
-                            </span>
-                        @enderror
-                    @endif
-
+                    {{-- Términos y Aviso de Privacidad — obligatorio --}}
+<div class="register-terms">
+    <input
+        type="checkbox"
+        id="terms"
+        name="terms"
+        value="1"
+        required
+        @if (old('terms')) checked @endif
+    />
+    <label for="terms">
+        Acepto los
+        <a href="{{ url('/tyc') }}" target="_blank" rel="noopener noreferrer">Términos de uso</a>
+        y he leído el
+        <a href="{{ url('/avisoprivacidad') }}" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a>.
+    </label>
+</div>
+@error('terms')
+    <span class="register-error" style="margin-top:-1rem;display:block;margin-bottom:1rem;">
+        {{ $message }}
+    </span>
+@enderror
                     {{-- Botón submit --}}
                     <button type="submit" class="btn-primary register-submit">
                         Crear cuenta
@@ -247,8 +252,8 @@
          </div>
         <p>© 2025 SMTEK Smart Technologies. Todos los derechos reservados.</p>
         <div style="display: flex; gap: 2rem">
-          <a href="#">Aviso de privacidad</a>
-          <a href="#">Términos de uso</a>
+          <a href="{{ url('/avisoprivacidad')}}">Aviso de privacidad</a>
+          <a href="{{ url('/tyc')}}">Términos de uso</a>
         </div>
       </div>
     </footer>
