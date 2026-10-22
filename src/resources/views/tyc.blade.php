@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aviso de Privacidad | SMTEK Smart Technologies</title>
+    <title>TyC | SMTEK Smart Technologies</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -149,21 +149,26 @@
   </head>
   <body>
     <header>
-      <div class="logo">
-        <img
-          id="logo-img"
-          src="assets/img/1.svg"
-          alt="SMTEK Logo"
-          onerror="
-            this.style.display = 'none';
-            document.getElementById('logo-fallback').style.display = 'flex';
-          "
-        />
-        <div id="logo-fallback" class="logo-placeholder" style="display: none">
-          SMTEK
-        </div>
-      </div>
-
+<div class="logo">
+  <a href="{{ url('/') }}" class="logo-link">
+    <img
+      id="logo-img"
+      src="{{ asset('assets/img/1.svg') }}"
+      alt="SMTEK Logo"
+      onerror="
+        this.style.display = 'none';
+        document.getElementById('logo-fallback').style.display = 'flex';
+      "
+    />
+    <div
+      id="logo-fallback"
+      class="logo-placeholder"
+      style="display: none"
+    >
+      SMTEK
+    </div>
+  </a>
+</div>
       <div class="header-actions">
         <div class="auth-links">
           @if (Route::has('login'))
@@ -242,7 +247,7 @@
         <div class="contenedor">
           <div class="section-header reveal">
             <span class="section-label">Legal</span>
-            <h2>Aviso de Privacidad</h2>
+            <h2>Términos y Condiciones</h2>
           </div>
 
           <div class="privacidad-intro reveal">

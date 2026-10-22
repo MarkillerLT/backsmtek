@@ -238,20 +238,26 @@
   </head>
   <body>
     <header>
-      <div class="logo">
-        <img
-          id="logo-img"
-          src="assets/img/1.svg"
-          alt="SMTEK Logo"
-          onerror="
-            this.style.display = 'none';
-            document.getElementById('logo-fallback').style.display = 'flex';
-          "
-        />
-        <div id="logo-fallback" class="logo-placeholder" style="display: none">
-          SMTEK
-        </div>
-      </div>
+<div class="logo">
+  <a href="{{ url('/') }}" class="logo-link">
+    <img
+      id="logo-img"
+      src="{{ asset('assets/img/1.svg') }}"
+      alt="SMTEK Logo"
+      onerror="
+        this.style.display = 'none';
+        document.getElementById('logo-fallback').style.display = 'flex';
+      "
+    />
+    <div
+      id="logo-fallback"
+      class="logo-placeholder"
+      style="display: none"
+    >
+      SMTEK
+    </div>
+  </a>
+</div>
 <div class="header-actions">
         <div class="auth-links">
             @if (Route::has('login'))
@@ -344,8 +350,7 @@
         y optimizar la toma de decisiones, máximos resultados.
        </p>
         <div class="hero-btns">
-          <a href="{{ route('cotizacion.create')}}" class="btn-primary">Ver Servicios</a>
-          <a href="{{ route('productos.catalogo')}}" class="btn-outline">Ver productos</a>
+          <a href="{{ route('servicios')}}" class="btn-primary">Ver Servicios</a>
         </div>
       </div>
     </section>

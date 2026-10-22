@@ -157,20 +157,26 @@
   </head>
   <body>
     <header>
-      <div class="logo">
-        <img
-          id="logo-img"
-          src="{{ asset('assets/img/1.svg') }}"
-          alt="SMTEK Logo"
-          onerror="
-            this.style.display = 'none';
-            document.getElementById('logo-fallback').style.display = 'flex';
-          "
-        />
-        <div id="logo-fallback" class="logo-placeholder" style="display: none">
-          SMTEK
-        </div>
-      </div>
+<div class="logo">
+  <a href="{{ url('/') }}" class="logo-link">
+    <img
+      id="logo-img"
+      src="{{ asset('assets/img/1.svg') }}"
+      alt="SMTEK Logo"
+      onerror="
+        this.style.display = 'none';
+        document.getElementById('logo-fallback').style.display = 'flex';
+      "
+    />
+    <div
+      id="logo-fallback"
+      class="logo-placeholder"
+      style="display: none"
+    >
+      SMTEK
+    </div>
+  </a>
+</div>
       <div class="header-actions">
         <div class="auth-links">
           @if (Route::has('login'))
@@ -641,7 +647,9 @@
               </div>
 
               <div class="producto-card reveal">
-                <div class="producto-imagen"></div>
+                <div class="producto-imagen">
+                  <img src="{{ asset('assets/img/Portafolio/especializados/' . rawurlencode('maquinados.jpeg')) }}" alt="Bombas, Motores y Transmisiones" loading="lazy">
+                </div>
                 <div class="producto-body">
                   <span class="producto-badge">Ingeniería</span>
                   <h3>Maquinados y Nuevos Proyectos</h3>
