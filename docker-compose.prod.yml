@@ -1,15 +1,3 @@
-# Producción. Úsalo con el script bin/prod (carga .env.prod):
-#   bin/prod up -d --build
-#
-# Estructura:
-#   smtek/
-#   ├── docker-compose.yml        (desarrollo)
-#   ├── docker-compose.prod.yml   (este archivo)
-#   ├── .env.prod                 (secretos, NO va a git)
-#   ├── bin/prod
-#   ├── docker/prod/{Dockerfile,Caddyfile,php.ini,entrypoint.sh}
-#   └── src/
-
 x-app: &app
   build:
     context: .
@@ -26,20 +14,18 @@ x-app: &app
     - smtek
 
 services:
-  # ---------- Web: FrankenPHP + HTTPS automático ----------
   app:
     <<: *app
     container_name: smtek_app
     ports:
       - "80:80"
       - "443:443"
-      - "443:443/udp"   # HTTP/3
+      - "443:443/udp"
     volumes:
       - app_storage:/app/storage
-      - caddy_data:/data/caddy       # certificados TLS (no borrar)
+      - caddy_data:/data/caddy
       - caddy_config:/config/caddy
 
-  # ---------- Colas (jobs, correos en cola, etc.) ----------
   queue:
     <<: *app
     container_name: smtek_queue
@@ -47,7 +33,6 @@ services:
     environment:
       RUN_MIGRATIONS: "false"
 
-  # ---------- Tareas programadas (schedule) ----------
   scheduler:
     <<: *app
     container_name: smtek_scheduler
@@ -55,16 +40,15 @@ services:
     environment:
       RUN_MIGRATIONS: "false"
 
-  # ---------- Base de datos (sin puerto expuesto) ----------
   db:
     image: mariadb:13
     container_name: smtek_db
     restart: unless-stopped
     environment:
-      MARIADB_DATABASE: ${DB_DATABASE:?Falta DB_DATABASE en .env.prod}
-      MARIADB_USER: ${DB_USERNAME:?Falta DB_USERNAME en .env.prod}
-      MARIADB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD en .env.prod}
-      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Falta DB_ROOT_PASSWORD en .env.prod}
+      MARIADB_DATABASE: ${DB_DATABASE:?DB_DATABASE is missing in .env.production}
+      MARIADB_USER: ${DB_USERNAME:?DB_USERNAME is missing in .env.production}
+      MARIADB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is missing in .env.production}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?DB_ROOT_PASSWORD is missing in .env.production}
       MARIADB_AUTO_UPGRADE: "1"
     volumes:
       - db_data:/var/lib/mysql
@@ -77,9 +61,6 @@ services:
     networks:
       - smtek
 
-  # ---------- phpMyAdmin: apagado por defecto, solo en localhost ----------
-  # Encender:  bin/prod --profile admin up -d phpmyadmin
-  # Acceder:   ssh -L 8080:127.0.0.1:8080 usuario@servidor  ->  http://localhost:8080
   phpmyadmin:
     image: phpmyadmin:5
     container_name: smtek_phpmyadmin
