@@ -17,7 +17,7 @@ RUN composer install \
         --no-dev --no-interaction --prefer-dist \
         --no-scripts --no-autoloader --no-progress
 
-FROM node:22-alpine AS assets
+FROM node:lts-alpine AS assets
 
 WORKDIR /app
 COPY src/package.json src/package-lock.json ./

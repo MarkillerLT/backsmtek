@@ -41,7 +41,7 @@ services:
       RUN_MIGRATIONS: "false"
 
   db:
-    image: mariadb:13
+    image: mariadb:lts
     container_name: smtek_db
     restart: unless-stopped
     environment:

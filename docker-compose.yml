@@ -30,7 +30,7 @@ services:
       - smtek
 
   node:
-    image: node:22-alpine
+    image: node:lts-alpine
     container_name: smtek_node
     restart: unless-stopped
     user: "${UID:-1000}:${GID:-1000}"
@@ -44,7 +44,7 @@ services:
       - smtek
 
   db:
-    image: mariadb:13
+    image: mariadb:lts
     container_name: smtek_db
     restart: unless-stopped
     environment:
