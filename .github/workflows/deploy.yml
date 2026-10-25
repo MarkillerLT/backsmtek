@@ -118,7 +118,8 @@ jobs:
           docker tag "$IMAGE" smtek-app:latest
 
           bin/prod up -d --no-build --wait db
-          bin/prod run --rm app php artisan migrate --force
+          # The script arrives on stdin; without </dev/null, compose run would swallow the rest of it
+          bin/prod run --rm -T app php artisan migrate --force </dev/null
           bin/prod up -d --no-build --wait --wait-timeout 180
 
           # Keep a week of images available for rollbacks
