@@ -38,7 +38,7 @@
     gap: 2.4rem;
   }
 
-  /* ── Sidebar ── */
+  /* ── Sidebar (escritorio) ── */
   .catalogo-sidebar {
     width: 30rem;
     flex-shrink: 0;
@@ -115,25 +115,29 @@
     border-left-color: var(--AzulSmtek, #2196ba);
   }
 
-  /* Botón/desplegable — solo móvil */
-  .catalogo-mobile-toggle {
-    display: none;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.4rem 1.8rem;
-    background-color: var(--AzulSmtek, #2196ba);
-    color: #fff;
-    border: none;
-    border-radius: 1rem;
+  /* ── Barra de categorías tipo "chips" (solo móvil) ── */
+  .catalogo-chips { display: none; }
+
+  .cat-chip {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    padding: 0.9rem 1.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-color, #d8e2e8);
+    background-color: var(--bg-section, #fff);
+    color: var(--text-heading, #1a2a38);
     font-family: "Inter", sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.35rem;
+    font-weight: 600;
+    white-space: nowrap;
     cursor: pointer;
-    margin-bottom: 1.6rem;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
-  .catalogo-mobile-toggle .chevron { transition: transform 0.25s ease; }
-  .catalogo-mobile-toggle.abierto .chevron { transform: rotate(180deg); }
+  .cat-chip.activo {
+    background-color: var(--AzulSmtek, #2196ba);
+    border-color: var(--AzulSmtek, #2196ba);
+    color: #fff;
+  }
 
   /* ── Panel principal ── */
   .catalogo-main { flex: 1; min-width: 0; }
@@ -158,7 +162,6 @@
     margin-bottom: 3rem;
   }
 
-  /* ── Imagen de introducción de categoría ── */
   .catalogo-intro-img {
     width: 16rem;
     height: 12rem;
@@ -174,10 +177,7 @@
     position: relative;
     overflow: hidden;
   }
-  .catalogo-intro-img > span {
-    padding: 1rem;
-    display: block;
-  }
+  .catalogo-intro-img > span { padding: 1rem; display: block; }
   .catalogo-intro-img img {
     position: absolute;
     inset: 0;
@@ -193,9 +193,24 @@
     font-size: 1.45rem;
     color: var(--text-primary, #4e5358);
     line-height: 1.65;
+    margin: 0;
   }
 
-  /* ── Grid de subcategorías (tipo tarjetas Turck) ── */
+  /* Intro de la vista inicial (sin encabezado azul) */
+  .catalogo-bienvenida { margin-bottom: 2.4rem; }
+  .catalogo-bienvenida h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-heading, #1a2a38);
+    margin: 0 0 0.6rem;
+  }
+  .catalogo-bienvenida p {
+    font-size: 1.45rem;
+    color: var(--text-primary, #4e5358);
+    margin: 0;
+  }
+
+  /* ── Grid de tarjetas ── */
   .subcat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
@@ -217,7 +232,6 @@
     box-shadow: 0 6px 18px rgba(26, 104, 128, 0.14);
   }
 
-  /* ── Imagen de la tarjeta de subcategoría ── */
   .subcat-card-img {
     aspect-ratio: 4 / 3;
     background-color: var(--bg-body, #f5f5f5);
@@ -230,10 +244,7 @@
     position: relative;
     overflow: hidden;
   }
-  .subcat-card-img > span {
-    padding: 1rem;
-    display: block;
-  }
+  .subcat-card-img > span { padding: 1rem; display: block; }
   .subcat-card-img img {
     position: absolute;
     inset: 0;
@@ -251,7 +262,7 @@
     padding: 1.1rem 1.4rem;
   }
 
-  /* ── Panel de detalle (al seleccionar una subcategoría) ── */
+  /* ── Panel de detalle ── */
   .subcat-detail {
     display: none;
     background-color: var(--bg-section, #fff);
@@ -281,7 +292,6 @@
     width: 100%;
   }
 
-  /* ── Imagen del panel de detalle ── */
   .subcat-detail-img {
     width: 100%;
     max-width: 24rem;
@@ -299,10 +309,7 @@
     position: relative;
     overflow: hidden;
   }
-  .subcat-detail-img > span {
-    padding: 1rem;
-    display: block;
-  }
+  .subcat-detail-img > span { padding: 1rem; display: block; }
   .subcat-detail-img img {
     position: absolute;
     inset: 0;
@@ -349,28 +356,49 @@
   body.dark-mode .cat-group-btn:hover { background-color: #16202c; }
 
   /* ══════════════════════════════════════════════
-     RESPONSIVE: sidebar → menú desplegable
+     RESPONSIVE: sidebar → barra de chips deslizable
   ══════════════════════════════════════════════ */
   @media (max-width: 900px) {
-    .catalogo-mobile-toggle { display: flex; }
+    .catalogo-shell { flex-direction: column; gap: 0; }
+    .catalogo-sidebar { display: none; }
 
-    .catalogo-shell { flex-direction: column; }
+    .catalogo-chips {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      scroll-snap-type: x proximity;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background-color: var(--bg-body, #f5f5f5);
+      padding: 1rem 0;
+      margin-bottom: 1.6rem;
+      scrollbar-width: none;
+      /* Desvanecido a la derecha: indica que hay más chips */
+      -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
+              mask-image: linear-gradient(to right, #000 85%, transparent);
+    }
+    .catalogo-chips::-webkit-scrollbar { display: none; }
+    .catalogo-chips.al-final {
+      -webkit-mask-image: none;
+              mask-image: none;
+    }
 
-    .catalogo-sidebar {
-      display: none;
-      width: 100%;
-      position: static;
-    }
-    .catalogo-sidebar.abierto-mobile {
-      display: block;
-      margin-bottom: 2rem;
-    }
+    .catalogo-main,
+    .subcat-detail { scroll-margin-top: 7rem; }
 
     .catalogo-titlebar { font-size: 1.8rem; padding: 1.6rem 2rem; }
     .catalogo-intro { flex-direction: column; }
     .catalogo-intro-img { width: 100%; height: 16rem; }
     .subcat-detail { flex-direction: column; }
     .subcat-detail-img { max-width: 100%; }
+  }
+
+  /* Teléfonos: tarjetas en 2 columnas para ver más de un vistazo */
+  @media (max-width: 600px) {
+    .subcat-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .subcat-card-label { font-size: 1.2rem; padding: 0.9rem 1rem; }
+    .catalogo-bienvenida h2 { font-size: 2rem; }
   }
 </style>
   </head>
@@ -453,30 +481,39 @@
         <div class="contenedor">
 
           <div class="catalogo-breadcrumb reveal">
-            <a href="{{ route('productos.catalogo') }}">Catálogo</a>
-            <span> / </span>
-            <span class="actual" id="breadcrumbActual">Sensores</span>
+            <a href="{{ route('productos.catalogo') }}" id="breadcrumbInicio">Catálogo</a>
+            <span id="breadcrumbSep" hidden> / </span>
+            <span class="actual" id="breadcrumbActual"></span>
           </div>
-
-          <!-- Toggle — solo visible en móvil -->
-          <button type="button" class="catalogo-mobile-toggle" id="mobileToggle">
-            <span id="mobileToggleLabel">Categorías</span>
-            <span class="chevron">▾</span>
-          </button>
 
           <div class="catalogo-shell">
 
             {{-- ══════════════════════════════════════
-                 SIDEBAR
+                 CHIPS DE CATEGORÍAS (solo móvil)
+            ══════════════════════════════════════ --}}
+            <nav class="catalogo-chips" id="catalogoChips" aria-label="Categorías">
+              <button type="button" class="cat-chip activo" data-cat="inicio" aria-pressed="true">Todas</button>
+              <button type="button" class="cat-chip" data-cat="sensores" aria-pressed="false">Sensores</button>
+              <button type="button" class="cat-chip" data-cat="identificacion" aria-pressed="false">Identificación</button>
+              <button type="button" class="cat-chip" data-cat="conectividad" aria-pressed="false">Conectividad</button>
+              <button type="button" class="cat-chip" data-cat="buses" aria-pressed="false">Buses de Campo</button>
+              <button type="button" class="cat-chip" data-cat="interfaces" aria-pressed="false">Interfaces</button>
+              <button type="button" class="cat-chip" data-cat="controles" aria-pressed="false">Controles</button>
+              <button type="button" class="cat-chip" data-cat="fuentes" aria-pressed="false">Fuentes</button>
+              <button type="button" class="cat-chip" data-cat="redes" aria-pressed="false">Redes industriales</button>
+            </nav>
+
+            {{-- ══════════════════════════════════════
+                 SIDEBAR (escritorio)
             ══════════════════════════════════════ --}}
             <aside class="catalogo-sidebar" id="catalogoSidebar">
 
-              <div class="cat-group abierto" data-cat-group="sensores">
+              <div class="cat-group" data-cat-group="sensores">
                 <button type="button" class="cat-group-btn" data-cat="sensores">
                   Sensores <span class="chevron">›</span>
                 </button>
                 <ul class="cat-sublist">
-                  <li><a href="#" data-cat="sensores" data-subcat="inductivos" class="activo">Sensores inductivos</a></li>
+                  <li><a href="#" data-cat="sensores" data-subcat="inductivos">Sensores inductivos</a></li>
                   <li><a href="#" data-cat="sensores" data-subcat="capacitivos">Sensores capacitivos</a></li>
                   <li><a href="#" data-cat="sensores" data-subcat="magneticos">Sensores de campo magnético</a></li>
                   <li><a href="#" data-cat="sensores" data-subcat="ultrasonicos">Sensores ultrasónicos</a></li>
@@ -584,9 +621,52 @@
             {{-- ══════════════════════════════════════
                  CONTENIDO PRINCIPAL
             ══════════════════════════════════════ --}}
-<div class="catalogo-main">
+            <div class="catalogo-main" id="catalogoMain">
+
+              <!-- ═══ INICIO (ninguna categoría seleccionada) ═══ -->
+              <div class="cat-panel activo" data-panel="inicio">
+                <div class="catalogo-bienvenida reveal">
+                  <h2>Catálogo de productos</h2>
+                  <p>Elige una categoría para ver sus productos.</p>
+                </div>
+                <div class="subcat-grid">
+                  <a href="#" class="subcat-card" data-ir-cat="sensores">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/1.png') }}" alt="Sensores"></div>
+                    <div class="subcat-card-label">Sensores</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="identificacion">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/16.png') }}" alt="Sistemas de identificación"></div>
+                    <div class="subcat-card-label">Sistemas de identificación</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="conectividad">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/21.png') }}" alt="Conectividad"></div>
+                    <div class="subcat-card-label">Conectividad</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="buses">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/30.png') }}" alt="Buses de Campo"></div>
+                    <div class="subcat-card-label">Buses de Campo</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="interfaces">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/35.png') }}" alt="Interfaces"></div>
+                    <div class="subcat-card-label">Interfaces</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="controles">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/41.png') }}" alt="Controles industriales"></div>
+                    <div class="subcat-card-label">Controles industriales</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="fuentes">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/47.png') }}" alt="Fuentes de alimentación"></div>
+                    <div class="subcat-card-label">Fuentes de alimentación</div>
+                  </a>
+                  <a href="#" class="subcat-card" data-ir-cat="redes">
+                    <div class="subcat-card-img"><img src="{{ asset('assets/img/catalogo/50.png') }}" alt="Tecnología de redes industriales"></div>
+                    <div class="subcat-card-label">Tecnología de redes industriales</div>
+                  </a>
+                </div>
+              </div>
+
               <!-- ═══ SENSORES ═══ -->
-              <div class="cat-panel activo" data-panel="sensores">
+              <div class="cat-panel" data-panel="sensores">
                 <div class="catalogo-titlebar">Sensores</div>
                 <div class="catalogo-intro reveal">
                   <div class="catalogo-intro-img">
@@ -984,7 +1064,8 @@
                   </a>
                 </div>
               </div>
-            </div>                      </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -1029,13 +1110,15 @@
     <script src="assets/js/script.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-        const catGroups   = document.querySelectorAll('.cat-group');
-        const catPanels   = document.querySelectorAll('.cat-panel');
-        const sidebarLinks = document.querySelectorAll('.cat-sublist a');
-        const breadcrumb  = document.getElementById('breadcrumbActual');
-        const mobileToggle = document.getElementById('mobileToggle');
-        const mobileToggleLabel = document.getElementById('mobileToggleLabel');
-        const sidebar = document.getElementById('catalogoSidebar');
+        const catGroups     = document.querySelectorAll('.cat-group');
+        const catPanels     = document.querySelectorAll('.cat-panel');
+        const sidebarLinks  = document.querySelectorAll('.cat-sublist a');
+        const breadcrumb    = document.getElementById('breadcrumbActual');
+        const breadcrumbSep = document.getElementById('breadcrumbSep');
+        const breadcrumbInicio = document.getElementById('breadcrumbInicio');
+        const chipsBar      = document.getElementById('catalogoChips');
+        const chips         = document.querySelectorAll('.cat-chip');
+        const main          = document.getElementById('catalogoMain');
 
         const nombresCat = {
           sensores: 'Sensores',
@@ -1047,7 +1130,46 @@
           fuentes: 'Fuentes de alimentación',
           redes: 'Tecnología de redes industriales',
         };
-        mobileToggleLabel.textContent = nombresCat.sensores;
+
+        function esMovil() { return window.innerWidth <= 900; }
+
+        // Marca el chip activo y lo centra dentro de la barra (sin mover la página)
+        function marcarChip(cat) {
+          chips.forEach(function (c) {
+            const on = c.getAttribute('data-cat') === cat;
+            c.classList.toggle('activo', on);
+            c.setAttribute('aria-pressed', on ? 'true' : 'false');
+            if (on && esMovil()) {
+              chipsBar.scrollTo({
+                left: c.offsetLeft - chipsBar.clientWidth / 2 + c.offsetWidth / 2,
+                behavior: 'smooth'
+              });
+            }
+          });
+        }
+
+        // Si el usuario ya bajó, regresa al inicio del contenido
+        function subirAlContenido() {
+          if (main.getBoundingClientRect().top < 0) {
+            main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+
+        function limpiarDetalle() {
+          document.querySelectorAll('.subcat-detail').forEach(function (d) { d.classList.remove('activo'); });
+          sidebarLinks.forEach(function (l) { l.classList.remove('activo'); });
+        }
+
+        function mostrarInicio() {
+          catPanels.forEach(function (p) {
+            p.classList.toggle('activo', p.getAttribute('data-panel') === 'inicio');
+          });
+          catGroups.forEach(function (g) { g.classList.remove('abierto'); });
+          breadcrumbSep.hidden = true;
+          breadcrumb.textContent = '';
+          limpiarDetalle();
+          marcarChip('inicio');
+        }
 
         function mostrarCategoria(cat) {
           catPanels.forEach(function (p) {
@@ -1056,11 +1178,10 @@
           catGroups.forEach(function (g) {
             g.classList.toggle('abierto', g.getAttribute('data-cat-group') === cat);
           });
+          breadcrumbSep.hidden = false;
           breadcrumb.textContent = nombresCat[cat] || cat;
-          mobileToggleLabel.textContent = nombresCat[cat] || cat;
-
-          document.querySelectorAll('.subcat-detail').forEach(function (d) { d.classList.remove('activo'); });
-          sidebarLinks.forEach(function (l) { l.classList.remove('activo'); });
+          limpiarDetalle();
+          marcarChip(cat);
         }
 
         function mostrarDetalle(cat, subcat, titulo, desc, imgSrc) {
@@ -1088,11 +1209,6 @@
             const match = l.getAttribute('data-cat') === cat && l.getAttribute('data-subcat') === subcat;
             l.classList.toggle('activo', match);
           });
-
-          if (window.innerWidth <= 900) {
-            sidebar.classList.remove('abierto-mobile');
-            mobileToggle.classList.remove('abierto');
-          }
         }
 
         function obtenerImagenDeTarjeta(card) {
@@ -1100,20 +1216,19 @@
           return img ? img.getAttribute('src') : null;
         }
 
+        // Sidebar (escritorio): abrir / cerrar categoría
         document.querySelectorAll('.cat-group-btn').forEach(function (btn) {
           btn.addEventListener('click', function () {
-            const cat = btn.getAttribute('data-cat');
-            const group = btn.closest('.cat-group');
-            const yaAbierto = group.classList.contains('abierto');
-
-            catGroups.forEach(function (g) { g.classList.remove('abierto'); });
-            if (!yaAbierto) {
-              group.classList.add('abierto');
-              mostrarCategoria(cat);
+            const yaAbierto = btn.closest('.cat-group').classList.contains('abierto');
+            if (yaAbierto) {
+              mostrarInicio();
+            } else {
+              mostrarCategoria(btn.getAttribute('data-cat'));
             }
           });
         });
 
+        // Sidebar (escritorio): subcategorías
         sidebarLinks.forEach(function (link) {
           link.addEventListener('click', function (e) {
             e.preventDefault();
@@ -1121,18 +1236,37 @@
             const subcat = link.getAttribute('data-subcat');
             const card = document.querySelector('.subcat-card[data-cat="' + cat + '"][data-subcat="' + subcat + '"]');
             if (card) {
-              mostrarDetalle(
-                cat,
-                subcat,
-                card.getAttribute('data-titulo'),
-                card.getAttribute('data-desc'),
-                obtenerImagenDeTarjeta(card)
-              );
+              mostrarDetalle(cat, subcat, card.getAttribute('data-titulo'), card.getAttribute('data-desc'), obtenerImagenDeTarjeta(card));
             }
           });
         });
 
-        document.querySelectorAll('.subcat-card').forEach(function (card) {
+        // Chips (móvil)
+        chips.forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            const cat = chip.getAttribute('data-cat');
+            if (cat === 'inicio') { mostrarInicio(); } else { mostrarCategoria(cat); }
+            subirAlContenido();
+          });
+        });
+
+        // Quita el desvanecido cuando ya se llegó al final de los chips
+        chipsBar.addEventListener('scroll', function () {
+          const alFinal = chipsBar.scrollLeft + chipsBar.clientWidth >= chipsBar.scrollWidth - 4;
+          chipsBar.classList.toggle('al-final', alFinal);
+        });
+
+        // Tarjetas de la vista inicial → abren categoría
+        document.querySelectorAll('.subcat-card[data-ir-cat]').forEach(function (card) {
+          card.addEventListener('click', function (e) {
+            e.preventDefault();
+            mostrarCategoria(card.getAttribute('data-ir-cat'));
+            subirAlContenido();
+          });
+        });
+
+        // Tarjetas de subcategoría → abren detalle
+        document.querySelectorAll('.subcat-card[data-subcat]').forEach(function (card) {
           card.addEventListener('click', function (e) {
             e.preventDefault();
             mostrarDetalle(
@@ -1152,9 +1286,11 @@
           });
         });
 
-        mobileToggle.addEventListener('click', function () {
-          sidebar.classList.toggle('abierto-mobile');
-          mobileToggle.classList.toggle('abierto');
+        // "Catálogo" en el breadcrumb regresa a la vista inicial sin recargar
+        breadcrumbInicio.addEventListener('click', function (e) {
+          e.preventDefault();
+          mostrarInicio();
+          subirAlContenido();
         });
       });
     </script>

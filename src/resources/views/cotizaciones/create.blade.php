@@ -129,7 +129,6 @@
                             <span class="cf-icon">⚡</span>
                             <div>
                                 <strong>Respuesta rápida</strong>
-                                <span>Cotización en menos de 24 h</span>
                             </div>
                         </li>
                         <li>

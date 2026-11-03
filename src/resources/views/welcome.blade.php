@@ -324,6 +324,7 @@
 
           <a href="{{ route('servicios')}}">Servicios</a>
           <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/#quienes-somos') }}">Nosotros</a>
           <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
           <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
@@ -739,9 +740,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <div>
                 <h3>Enfoque en resultados</h3>
                 <p>
-                  Cada proyecto arranca con métricas de éxito claramente
-                  definidas. Medimos el impacto real en tu operación y ajustamos
-                  la solución hasta alcanzar los objetivos acordados.
+                Cada proyecto parte de entender tus objetivos operativos para proponer soluciones orientadas a mejorar la productividad y la toma de decisiones.
                 </p>
               </div>
             </div>
@@ -761,11 +760,9 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </svg>
               </div>
               <div>
-                <h3>Acompañamiento continuo</h3>
+                <h3>Asesoría especializada</h3>
                 <p>
-                  No desaparecemos al entregar el proyecto. Nuestro equipo de
-                  Customer Success te acompaña durante toda la vida útil de la
-                  solución, con revisiones periódicas y mejoras proactivas.
+                Te brindamos acompañamiento personalizado para resolver dudas, elegir la solución adecuada y aprovechar mejor tu tecnología.
                 </p>
               </div>
             </div>
@@ -790,11 +787,9 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </svg>
               </div>
               <div>
-                <h3>Implementación ágil</h3>
+                <h3>Implementación eficiente</h3>
                 <p>
-                  Metodologías ágiles con sprints de dos semanas que nos
-                  permiten entregar valor de forma incremental. Tus equipos ven
-                  resultados en semanas, no en meses.
+                Planeamos cada proyecto con orden y comunicación clara, avanzando por etapas y adaptándonos a las necesidades de tu operación.
                 </p>
               </div>
             </div>
@@ -814,11 +809,9 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
                 </svg>
               </div>
               <div>
-                <h3>Seguridad garantizada</h3>
+                <h3>Seguridad desde el diseño</h3>
                 <p>
-                  Todas nuestras soluciones son diseñadas con un enfoque de
-                  seguridad desde el primer día. Cumplimos con estándares
-                  internacionales y normativas locales vigentes.
+                Consideramos buenas prácticas de seguridad en el diseño de nuestras soluciones, de acuerdo con las necesidades de cada proyecto.
                 </p>
               </div>
             </div>
@@ -840,9 +833,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <div>
                 <h3>Soluciones a la medida</h3>
                 <p>
-                  No creemos en el modelo "talla única". Escuchamos tus
-                  necesidades específicas y construimos o configuramos cada
-                  solución para encajar perfectamente en tu contexto.
+                Escuchamos tus necesidades y configuramos cada solución para adaptarse a tu proceso y a tu contexto.
                 </p>
               </div>
             </div>
@@ -868,9 +859,7 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
               <div>
                 <h3>Innovación constante</h3>
                 <p>
-                  Estamos en permanente capacitación con las últimas
-                  tecnologías. Tú te beneficias de ese conocimiento actualizado
-                  sin necesidad de invertir en formación interna.
+                Nuestro equipo se mantiene en capacitación continua en tecnologías industriales para ofrecerte alternativas vigentes.
                 </p>
               </div>
             </div>
@@ -1267,19 +1256,19 @@ Dashboard en nube, para consulta y toma de decisiones en remoto.
         </div>
         <!-- Redes sociales: compartidas para las 3 sucursales -->
         <div class="redes-sociales">
-          <a href="https://linkedin.com/company/smtek-mexico" class="red-social" aria-label="LinkedIn">
+          <a href="https://linkedin.com/company/smtek-mexico" class="red-social" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
               <title xmlns="">linkedin</title>
               <path fill="currentColor" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z" />
             </svg>
           </a>
-   <a href="https://www.facebook.com/share/198xDpYat4/" class="red-social" aria-label="Facebook">
+   <a href="https://www.facebook.com/share/198xDpYat4/" class="red-social" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
               <title xmlns="">outline-facebook</title>
               <path fill="currentColor" d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95" />
             </svg>
           </a>
-          <a href="https://www.instagram.com/smtek_mexico?stkn=Y2RkdHlnbnJla2E5" class="red-social" aria-label="Instagram">
+          <a href="https://www.instagram.com/smtek_mexico?stkn=Y2RkdHlnbnJla2E5" class="red-social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
               <title xmlns="">instagram</title>
               <path fill="currentColor" d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4zm9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8A1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5a5 5 0 0 1-5 5a5 5 0 0 1-5-5a5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3a3 3 0 0 0 3 3a3 3 0 0 0 3-3a3 3 0 0 0-3-3" />
