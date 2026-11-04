@@ -254,7 +254,8 @@ body.dark-mode .toggle-thumb {
     background-color: var(--bg-nav);
     box-shadow: var(--shadow-sm);
     transition: background-color var(--transition);
-    position: relative;
+    position: sticky;
+    top: 9rem;
     z-index: 99;
 }
 

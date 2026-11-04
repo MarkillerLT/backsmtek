@@ -358,49 +358,108 @@
   /* ══════════════════════════════════════════════
      RESPONSIVE: sidebar → barra de chips deslizable
   ══════════════════════════════════════════════ */
-  @media (max-width: 900px) {
-    .catalogo-shell { flex-direction: column; gap: 0; }
-    .catalogo-sidebar { display: none; }
+/* ══════════════════════════════════════════════
+   RESPONSIVE: sidebar → etiquetas de categorías
+══════════════════════════════════════════════ */
 
-    .catalogo-chips {
-      display: flex;
-      gap: 0.8rem;
-      overflow-x: auto;
-      scroll-snap-type: x proximity;
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      background-color: var(--bg-body, #f5f5f5);
-      padding: 1rem 0;
-      margin-bottom: 1.6rem;
-      scrollbar-width: none;
-      /* Desvanecido a la derecha: indica que hay más chips */
-      -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
-              mask-image: linear-gradient(to right, #000 85%, transparent);
+@media (max-width: 900px) {
+    .catalogo-shell {
+        flex-direction: column;
+        gap: 0;
     }
-    .catalogo-chips::-webkit-scrollbar { display: none; }
-    .catalogo-chips.al-final {
-      -webkit-mask-image: none;
-              mask-image: none;
+
+    .catalogo-sidebar {
+        display: none;
+    }
+
+    /* Barra de categorías tipo etiquetas */
+    .catalogo-chips {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.8rem;
+
+        position: sticky;
+        top: 0;
+        z-index: 5;
+
+        padding: 1rem 0;
+        margin-bottom: 1.6rem;
+    }
+
+    /* Etiquetas individuales */
+    .cat-chip {
+        flex: 0 1 auto;
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+    }
+
+    /* Categoría seleccionada */
+    .cat-chip.activo {
+        background-color: var(--AzulSmtek, #2196ba);
+        border-color: var(--AzulSmtek, #2196ba);
+        color: #fff;
     }
 
     .catalogo-main,
-    .subcat-detail { scroll-margin-top: 7rem; }
+    .subcat-detail {
+        scroll-margin-top: 7rem;
+    }
 
-    .catalogo-titlebar { font-size: 1.8rem; padding: 1.6rem 2rem; }
-    .catalogo-intro { flex-direction: column; }
-    .catalogo-intro-img { width: 100%; height: 16rem; }
-    .subcat-detail { flex-direction: column; }
-    .subcat-detail-img { max-width: 100%; }
-  }
+    .catalogo-titlebar {
+        font-size: 1.8rem;
+        padding: 1.6rem 2rem;
+    }
 
-  /* Teléfonos: tarjetas en 2 columnas para ver más de un vistazo */
-  @media (max-width: 600px) {
-    .subcat-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
-    .subcat-card-label { font-size: 1.2rem; padding: 0.9rem 1rem; }
-    .catalogo-bienvenida h2 { font-size: 2rem; }
-  }
-</style>
+    .catalogo-intro {
+        flex-direction: column;
+    }
+
+    .catalogo-intro-img {
+        width: 100%;
+        height: 16rem;
+    }
+
+    .subcat-detail {
+        flex-direction: column;
+    }
+
+    .subcat-detail-img {
+        max-width: 100%;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   TELÉFONOS: tarjetas en 2 columnas
+══════════════════════════════════════════════ */
+
+@media (max-width: 600px) {
+    .subcat-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.2rem;
+    }
+
+    .subcat-card-label {
+        font-size: 1.2rem;
+        padding: 0.9rem 1rem;
+    }
+
+    .catalogo-bienvenida h2 {
+        font-size: 2rem;
+    }
+
+    /* Ajustes de las etiquetas en pantallas pequeñas */
+    .catalogo-chips {
+        gap: 0.6rem;
+        padding: 0.8rem 0;
+    }
+
+    .cat-chip {
+        padding: 0.8rem 1.2rem;
+        font-size: 1.2rem;
+    }
+}</style>
   </head>
   <body>
     <header>
@@ -468,9 +527,10 @@
 <!-- descomentar cuando se rellene productos-->
           <a href="{{ route('servicios')}}">Servicios</a>
           <a href="{{ url('/#contacto')}}">Contacto</a>
+          <a href="{{ url('/#quienes-somos') }}">Nosotros</a>
           <a href="{{ url('/products')}}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-          <a href="{{ route('postulacion.create')}}" style="font-family: bold">Trabaja con nosotros</a>
+          <a href="{{ route('postulacion.create')}}" style="font-weight: 600">Trabaja con nosotros</a>
 
         </nav>
       </div>

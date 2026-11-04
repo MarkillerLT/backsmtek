@@ -241,9 +241,10 @@
           {{-- <a href="{{ route('productos.catalogo') }}">Catalogo</a> --}}
           <a href="{{ route('servicios') }}">Servicios</a>
           <a href="{{ url('/#contacto') }}">Contacto</a>
+          <a href="{{ url('/#quienes-somos') }}">Nosotros</a>
           <a href="{{ url('/products') }}">Productos</a>
           <a href="{{ route('cotizacion.create') }}" class="cta-nav">Cotizar</a>
-          <a href="{{ route('postulacion.create') }}" style="font-weight: bold">Trabaja con nosotros</a>
+          <a href="{{ route('postulacion.create') }}" style="font-weight: 600">Trabaja con nosotros</a>
         </nav>
       </div>
     </div>
