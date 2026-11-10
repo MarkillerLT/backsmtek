@@ -100,12 +100,12 @@
             @if(session('success'))
                 <div class="cotiz-alert-wrap">
                     <div class="cotiz-alert">
-                        <span class="cotiz-alert-icon">🎉</span>
+                        <span class="cotiz-alert-icon"><x-icon name="circle-check" /></span>
                         <div>
                             <strong>¡Solicitud enviada!</strong>
                             <p>{{ session('success') }}</p>
                         </div>
-                        <button class="cotiz-alert-close" onclick="this.closest('.cotiz-alert-wrap').remove()" aria-label="Cerrar">✕</button>
+                        <button class="cotiz-alert-close" onclick="this.closest('.cotiz-alert-wrap').remove()" aria-label="Cerrar"><x-icon name="x" /></button>
                     </div>
                 </div>
             @endif
@@ -129,31 +129,31 @@
 
                     <ul class="cotiz-features">
                         <li>
-                            <span class="cf-icon">🚀</span>
+                            <span class="cf-icon"><x-icon name="trending-up" /></span>
                             <div>
-                                <strong>Crecimiento real</strong>
-                                <span>Plan de carrera y capacitación constante</span>
+                                <strong>Crecimiento profesional</strong>
+                                <span>Oportunidades para aprender y desarrollarte</span>
                             </div>
                         </li>
                         <li>
-                            <span class="cf-icon">🤝</span>
+                            <span class="cf-icon"><x-icon name="handshake" /></span>
                             <div>
                                 <strong>Ambiente colaborativo</strong>
                                 <span>Equipo multidisciplinario y proyectos retadores</span>
                             </div>
                         </li>
                         <li>
-                            <span class="cf-icon">🏭</span>
+                            <span class="cf-icon"><x-icon name="factory" /></span>
                             <div>
                                 <strong>Impacto industrial</strong>
                                 <span>Soluciones que transforman procesos reales</span>
                             </div>
                         </li>
                         <li>
-                            <span class="cf-icon">📄</span>
+                            <span class="cf-icon"><x-icon name="file-text" /></span>
                             <div>
                                 <strong>Proceso transparente</strong>
-                                <span>Te contactamos en menos de 5 días hábiles</span>
+                                <span>Revisamos cada postulación y te contactamos si tu perfil coincide con una vacante</span>
                             </div>
                         </li>
                     </ul>
@@ -269,14 +269,14 @@
                                     class="cv-input-hidden"
                                 />
                                 <div class="cv-dropzone-content" id="cvContent">
-                                    <span class="cv-icon">📄</span>
+                                    <span class="cv-icon"><x-icon name="file-text" /></span>
                                     <span class="cv-label">Arrastra tu CV aquí o <u>haz clic para seleccionar</u></span>
                                     <span class="cv-hint">Solo PDF · Máx. 5 MB</span>
                                 </div>
                                 <div class="cv-selected" id="cvSelected" style="display:none;">
-                                    <span class="cv-icon">✅</span>
+                                    <span class="cv-icon"><x-icon name="circle-check" /></span>
                                     <span class="cv-filename" id="cvFilename"></span>
-                                    <button type="button" class="cv-remove" id="cvRemove" aria-label="Quitar archivo">✕</button>
+                                    <button type="button" class="cv-remove" id="cvRemove" aria-label="Quitar archivo"><x-icon name="x" /></button>
                                 </div>
                             </div>
                             @error('cv')
@@ -450,7 +450,15 @@
         .cotiz-features li div {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             gap: 0.2rem;
+            text-align: left;
+        }
+
+        .cotiz-features li .cf-icon {
+            color: var(--AzulSmtek);
+            font-size: 2.1rem;
+            opacity: 1;
         }
 
         .cotiz-features li strong {
@@ -618,6 +626,12 @@
 
         .cv-icon {
             font-size: 2.8rem;
+            color: var(--AzulSmtek);
+            display: inline-flex;
+        }
+
+        .cv-selected .cv-icon {
+            color: var(--contrastes);
         }
 
         .cv-label {
@@ -680,7 +694,7 @@
             background: rgba(26,35,48,0.95);
         }
 
-        .cotiz-alert-icon { font-size: 2.2rem; flex-shrink: 0; }
+        .cotiz-alert-icon { font-size: 2.2rem; flex-shrink: 0; color: var(--contrastes); display: flex; }
 
         .cotiz-alert div { flex: 1; }
 

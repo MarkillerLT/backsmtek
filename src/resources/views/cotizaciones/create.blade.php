@@ -102,12 +102,12 @@
             @if(session('success'))
                 <div class="cotiz-alert-wrap">
                     <div class="cotiz-alert">
-                        <span class="cotiz-alert-icon">✅</span>
+                        <span class="cotiz-alert-icon"><x-icon name="circle-check" /></span>
                         <div>
                             <strong>¡Solicitud enviada!</strong>
                             <p>{{ session('success') }}</p>
                         </div>
-                        <button class="cotiz-alert-close" onclick="this.closest('.cotiz-alert-wrap').remove()" aria-label="Cerrar">✕</button>
+                        <button class="cotiz-alert-close" onclick="this.closest('.cotiz-alert-wrap').remove()" aria-label="Cerrar"><x-icon name="x" /></button>
                     </div>
                 </div>
             @endif
@@ -121,28 +121,29 @@
                     <h1 class="cotiz-titulo">¿Listo para <span>optimizar</span> tu proceso?</h1>
                     <p class="cotiz-desc">
                         Cuéntanos sobre tu proyecto y nuestro equipo de ingeniería te enviará
-                        una propuesta personalizada en menos de 24 horas.
+                        una propuesta personalizada de acuerdo con el alcance de tu solución.
                     </p>
 
                     <ul class="cotiz-features">
                         <li>
-                            <span class="cf-icon">⚡</span>
+                            <span class="cf-icon"><x-icon name="message-circle" /></span>
                             <div>
-                                <strong>Respuesta rápida</strong>
+                                <strong>Seguimiento oportuno</strong>
+                                <span>Te contactamos de acuerdo con la solución que necesitas</span>
                             </div>
                         </li>
                         <li>
-                            <span class="cf-icon">🎯</span>
+                            <span class="cf-icon"><x-icon name="target" /></span>
                             <div>
                                 <strong>Solución a medida</strong>
                                 <span>Ingeniería adaptada a tu proceso</span>
                             </div>
                         </li>
                         <li>
-                            <span class="cf-icon">🔒</span>
+                            <span class="cf-icon"><x-icon name="lock" /></span>
                             <div>
                                 <strong>Sin compromiso</strong>
-                                <span>La cotización es totalmente gratuita</span>
+                                <span>Solicitar una cotización no te obliga a contratar</span>
                             </div>
                         </li>
                     </ul>
@@ -242,6 +243,41 @@
                                 </option>
                             </select>
                             @error('localidad')
+                                <span class="register-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- Tipo de cotización --}}
+                        <div class="register-field">
+                            <label for="tipo_cotizacion">Tipo de cotización <span class="cotiz-req">*</span></label>
+                            <select id="tipo_cotizacion" name="tipo_cotizacion" required data-tipo-cotizacion>
+                                <option value="" disabled {{ old('tipo_cotizacion') ? '' : 'selected' }}>
+                                    Selecciona el tipo de cotización
+                                </option>
+                                @foreach (\App\Models\Cotizacion::TIPOS as $valor => $etiqueta)
+                                    <option value="{{ $valor }}" {{ old('tipo_cotizacion') === $valor ? 'selected' : '' }}>
+                                        {{ $valor === 'otro' ? 'Otro (especifica)' : $etiqueta }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('tipo_cotizacion')
+                                <span class="register-error">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        {{-- Especificación (solo cuando el tipo es "Otro") --}}
+                        <div class="register-field" data-otro-especificacion-wrap @if(old('tipo_cotizacion') !== 'otro') hidden @endif>
+                            <label for="otro_especificacion">Especifica el tipo de cotización <span class="cotiz-req">*</span></label>
+                            <input
+                                id="otro_especificacion"
+                                type="text"
+                                name="otro_especificacion"
+                                value="{{ old('otro_especificacion') }}"
+                                placeholder="Ej. Mantenimiento de maquinaria"
+                                maxlength="255"
+                                @if(old('tipo_cotizacion') === 'otro') required @else disabled @endif
+                            />
+                            @error('otro_especificacion')
                                 <span class="register-error">{{ $message }}</span>
                             @enderror
                         </div>
@@ -453,7 +489,15 @@
         .cotiz-features li div {
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             gap: 0.2rem;
+            text-align: left;
+        }
+
+        .cotiz-features li .cf-icon {
+            color: var(--AzulSmtek);
+            font-size: 2.1rem;
+            opacity: 1;
         }
 
         .cotiz-features li strong {
@@ -517,6 +561,10 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 1.8rem;
+        }
+
+        .register-field[hidden] {
+            display: none;
         }
 
         .register-field label {
@@ -603,6 +651,8 @@
         .cotiz-alert-icon {
             font-size: 2.2rem;
             flex-shrink: 0;
+            color: var(--contrastes);
+            display: flex;
         }
 
         .cotiz-alert div {
@@ -676,5 +726,27 @@
     </style>
 
     <script src="assets/js/script.js"></script>
+    <script>
+        // Muestra/oculta "Especifica el tipo de cotización" según el tipo elegido
+        (function () {
+            const select = document.querySelector('[data-tipo-cotizacion]');
+            const wrap   = document.querySelector('[data-otro-especificacion-wrap]');
+            if (!select || !wrap) return;
+            const input = wrap.querySelector('input');
+
+            select.addEventListener('change', function () {
+                const esOtro = this.value === 'otro';
+                wrap.hidden    = !esOtro;
+                input.required = esOtro;
+                input.disabled = !esOtro;
+                if (esOtro) {
+                    input.focus();
+                } else {
+                    input.value = '';
+                    wrap.querySelector('.register-error')?.remove();
+                }
+            });
+        })();
+    </script>
 
 </x-guest-layout>

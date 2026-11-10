@@ -128,6 +128,7 @@
         #nuevaCotizacionPanel[open] .panel-summary-chevron { transform: rotate(180deg); }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.8rem; }
         .form-field { display: flex; flex-direction: column; gap: 0.6rem; }
+        .form-field[hidden] { display: none; }
         .form-field.full { grid-column: 1 / -1; }
         .form-field label { font-size: 1.3rem; font-weight: 600; color: var(--text-primary); letter-spacing: 0.02em; }
         .form-field .req { color: var(--error); margin-left: 0.2rem; }
@@ -238,7 +239,7 @@
         {{-- Flash --}}
         @if(session('success'))
             <div class="flash-alert">
-                <span style="font-size:2rem;">✅</span>
+                <span style="font-size:2rem;color:var(--contrastes);display:flex;"><x-icon name="circle-check" /></span>
                 <p>{{ session('success') }}</p>
             </div>
         @endif
@@ -255,7 +256,7 @@
         <details class="panel" id="nuevaCotizacionPanel" {{ $errors->any() ? 'open' : '' }}>
             <summary>
                 <div>
-                    <h2 class="panel-title">➕ Solicitar nueva cotización</h2>
+                    <h2 class="panel-title"><x-icon name="plus" /> Solicitar nueva cotización</h2>
                     <p class="panel-subtitle">Haz clic para {{ $errors->any() ? 'ver' : 'abrir' }} el formulario</p>
                 </div>
                 <span class="panel-summary-chevron">▾</span>
@@ -307,6 +308,23 @@
                             @error('asunto') <span class="field-error">{{ $message }}</span> @enderror
                         </div>
 
+                        <div class="form-field">
+                            <label for="tipo_cotizacion">Tipo de cotización <span class="req">*</span></label>
+                            <select id="tipo_cotizacion" name="tipo_cotizacion" required data-tipo-cotizacion>
+                                <option value="" disabled {{ old('tipo_cotizacion') ? '' : 'selected' }}>Selecciona el tipo de cotización</option>
+                                @foreach (\App\Models\Cotizacion::TIPOS as $valor => $etiqueta)
+                                    <option value="{{ $valor }}" {{ old('tipo_cotizacion') === $valor ? 'selected' : '' }}>{{ $valor === 'otro' ? 'Otro (especifica)' : $etiqueta }}</option>
+                                @endforeach
+                            </select>
+                            @error('tipo_cotizacion') <span class="field-error">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div class="form-field" data-otro-especificacion-wrap @if(old('tipo_cotizacion') !== 'otro') hidden @endif>
+                            <label for="otro_especificacion">Especifica el tipo de cotización <span class="req">*</span></label>
+                            <input type="text" id="otro_especificacion" name="otro_especificacion" value="{{ old('otro_especificacion') }}" placeholder="Ej. Mantenimiento de maquinaria" maxlength="255" @if(old('tipo_cotizacion') === 'otro') required @else disabled @endif>
+                            @error('otro_especificacion') <span class="field-error">{{ $message }}</span> @enderror
+                        </div>
+
                         <div class="form-field full">
                             <label for="mensaje">Mensaje / Descripción del proyecto <span class="req">*</span></label>
                             <textarea id="mensaje" name="mensaje" rows="5" placeholder="Describe tu proyecto..." required>{{ old('mensaje') }}</textarea>
@@ -315,7 +333,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-guardar">📩 Enviar cotización</button>
+                        <button type="submit" class="btn-guardar"><x-icon name="send" /> Enviar cotización</button>
                     </div>
                 </form>
             </div>
@@ -354,7 +372,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $cotizacion->asunto }}</td>
-                                <td><span class="localidad-badge">📍 {{ $cotizacion->localidad }}</span></td>
+                                <td><span class="localidad-badge"><x-icon name="map-pin" /> {{ $cotizacion->localidad }}</span></td>
                                 <td>
                                     <span class="estado-badge {{ $cotizacion->estado }}">
                                         {{ ucfirst(str_replace('_',' ', $cotizacion->estado)) }}
@@ -365,9 +383,9 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="prod-empty">
-                                    <span class="prod-empty-icon">📭</span>
+                                    <span class="prod-empty-icon"><x-icon name="inbox" /></span>
                                     <div class="prod-empty-msg">Aún no has enviado ninguna cotización.</div>
-                                    <div class="prod-empty-sub">Usa el botón "➕ Solicitar nueva cotización" para empezar.</div>
+                                    <div class="prod-empty-sub">Usa el botón "Solicitar nueva cotización" para empezar.</div>
                                 </td>
                             </tr>
                         @endforelse
@@ -377,4 +395,27 @@
         </div>
 
     </x-user.layout>
+
+    <script>
+        // Muestra/oculta "Especifica el tipo de cotización" según el tipo elegido
+        (function () {
+            const select = document.querySelector('[data-tipo-cotizacion]');
+            const wrap   = document.querySelector('[data-otro-especificacion-wrap]');
+            if (!select || !wrap) return;
+            const input = wrap.querySelector('input');
+
+            select.addEventListener('change', function () {
+                const esOtro = this.value === 'otro';
+                wrap.hidden    = !esOtro;
+                input.required = esOtro;
+                input.disabled = !esOtro;
+                if (esOtro) {
+                    input.focus();
+                } else {
+                    input.value = '';
+                    wrap.querySelector('.field-error')?.remove();
+                }
+            });
+        })();
+    </script>
 </x-app-layout>

@@ -304,8 +304,14 @@
             color: var(--error);
         }
         .error-block li::before {
-            content: "⚠";
+            /* Icono "triangle-alert" de Lucide como máscara: toma el color del texto */
+            content: "";
+            width: 1.1em;
+            height: 1.1em;
             flex-shrink: 0;
+            background-color: currentColor;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/%3E%3Cpath d='M12 9v4'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E") no-repeat center / contain;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/%3E%3Cpath d='M12 9v4'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E") no-repeat center / contain;
         }
 
         /* ── Sección de foto de perfil ── */
@@ -526,7 +532,7 @@
 
         @if (session('success'))
             <div class="flash-alert">
-                <span style="font-size:2rem;">✅</span>
+                <span style="font-size:2rem;color:var(--contrastes);display:flex;"><x-icon name="circle-check" /></span>
                 <p>{{ session('success') }}</p>
             </div>
         @endif
@@ -574,7 +580,7 @@
                         <div class="foto-perfil-info">
                             <label for="photo">Foto de perfil</label>
                             <div class="file-input-wrap">
-                                <span class="file-input-btn">📷 Cambiar foto</span>
+                                <span class="file-input-btn"><x-icon name="camera" /> Cambiar foto</span>
                                 <input
                                     type="file"
                                     id="photo"
@@ -613,7 +619,7 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="submit" class="btn-guardar">💾 Guardar cambios</button>
+                        <button type="submit" class="btn-guardar"><x-icon name="save" /> Guardar cambios</button>
                     </div>
                 </form>
             </div>

@@ -174,7 +174,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $cotizacion->asunto }}</td>
-                                <td><span class="localidad-badge">📍 {{ $cotizacion->localidad }}</span></td>
+                                <td><span class="localidad-badge"><x-icon name="map-pin" /> {{ $cotizacion->localidad }}</span></td>
                                 <td>
                                     <span class="estado-badge {{ $cotizacion->estado }}">
                                         {{ ucfirst(str_replace('_',' ', $cotizacion->estado)) }}
@@ -185,7 +185,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="prod-empty">
-                                    <span class="prod-empty-icon">📭</span>
+                                    <span class="prod-empty-icon"><x-icon name="inbox" /></span>
                                     <div class="prod-empty-msg">Aún no has enviado ninguna cotización.</div>
                                     <div class="prod-empty-sub">
                                         <a href="{{ route('cotizacion.create') }}" style="color: var(--AzulSmtek); font-weight: 700;">Solicitar una cotización →</a>

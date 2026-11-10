@@ -164,20 +164,75 @@
     grid-template-columns: 1fr;
   }
 }
-/* ── Corrección: centrar última fila incompleta en servicios ── */
+/* ── ¿Qué hacemos?: 4 columnas; última fila = tarjeta | destacada (2 columnas) | tarjeta ── */
 .servicios-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 2.5rem;
 }
 .servicio-card {
-    flex: 1 1 25rem;
-    max-width: 32rem;
     display: flex;
     flex-direction: column;
     padding: 0;
     overflow: hidden;
+}
+/* Tarjeta "Y mucho más para tu operación": mismo formato que las demás, ocupa 2 columnas */
+.servicio-card.servicio-destacada {
+    grid-column: span 2;
+    container-type: inline-size;
+}
+/* Imagen con la misma altura que la de las tarjetas vecinas (imágenes 2:3).
+   Ancho de 1 columna = (100cqw - gap) / 2  →  alto = 1.5 × eso */
+.servicio-destacada .servicio-imagen {
+    aspect-ratio: 4 / 3;
+    height: calc((100cqw - 2.5rem) * 0.75);
+    overflow: hidden;
+}
+.servicio-destacada .servicio-imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.servicio-destacada .btn-primary {
+    align-self: center;
+    margin: auto 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+.servicio-destacada .btn-primary .icon {
+    transition: transform var(--transition);
+}
+.servicio-destacada .btn-primary:hover .icon {
+    transform: translateX(3px);
+}
+@media (max-width: 1100px) {
+    /* 2 columnas: la destacada ocupa una fila completa y "dense" evita huecos */
+    .servicios-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-flow: dense;
+    }
+    /* A ancho completo, imagen panorámica para que no quede demasiado alta */
+    .servicio-destacada .servicio-imagen {
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+}
+@media (max-width: 640px) {
+    .servicios-grid {
+        grid-template-columns: 1fr;
+    }
+    .servicio-card.servicio-destacada {
+        grid-column: auto;
+    }
+    .servicio-destacada .servicio-imagen {
+        height: auto;
+        aspect-ratio: 4 / 3;
+    }
+    .servicio-destacada .btn-primary {
+        margin-top: 0.8rem;
+    }
 }
 /* ── Imágenes de "¿Qué hacemos?" (alcance): tamaño original, sin recortar ── */
 .servicio-imagen {
@@ -487,6 +542,32 @@
                 <p>
               Sistemas de inspección automática para garantizar calidad y reducir errores humanos.
                 </p>
+              </div>
+            </div>
+            <div class="servicio-card servicio-destacada reveal">
+              <div class="servicio-imagen">
+                <img src="{{ asset('assets/img/alcance/07_Portafolio_de_servicios.webp') }}" alt="Equipo de SMTEK trabajando en el taller" loading="lazy">
+              </div>
+              <div class="servicio-body">
+                <span class="servicio-icono"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 32 32"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                  >
+                    <title>portfolio</title>
+                    <path d="M29 17 L29 28 3 28 3 17 M2 8 L30 8 30 16 C30 16 24 20 16 20 8 20 2 16 2 16 L2 8 Z M16 22 L16 18 M20 8 C20 8 20 4 16 4 12 4 12 8 12 8" /></svg
+                ></span>
+                <h3>Y mucho más para tu operación</h3>
+                <a href="{{ route('servicios') }}" class="btn-primary">
+                  Ir a servicios <x-icon name="arrow-right" />
+                </a>
               </div>
             </div>
             <div class="servicio-card reveal">

@@ -561,7 +561,8 @@
             to   { opacity: 1; transform: scale(1)    translateY(0); }
         }
 
-        .modal-icon  { font-size: 4rem; margin-bottom: 1.4rem; }
+        .modal-icon  { font-size: 4rem; margin-bottom: 1.4rem; color: var(--error); }
+        .stock-punto { display: inline-block; width: 0.8em; height: 0.8em; border-radius: 50%; background-color: currentColor; vertical-align: -0.05em; }
         .modal-title { font-size: 2rem; font-weight: 800; color: var(--text-heading); margin: 0 0 0.8rem; }
         .modal-desc  { font-size: 1.45rem; color: var(--text-muted); margin: 0 0 2.8rem; line-height: 1.6; }
 
@@ -688,7 +689,7 @@
                 </div>
 
                 <div class="prod-search">
-                    <span>🔍</span>
+                    <span style="display:flex;"><x-icon name="search" /></span>
 
                     <input
                         type="text"
@@ -770,19 +771,19 @@
                                     @if($producto->stock <= 0)
 
                                         <span class="prod-stock cero">
-                                            🔴 Agotado
+                                            <span class="stock-punto"></span> Agotado
                                         </span>
 
                                     @elseif($producto->stock <=5)
 
                                         <span class="prod-stock bajo">
-                                            🟡 {{ $producto->stock }}
+                                            <span class="stock-punto"></span> {{ $producto->stock }}
                                         </span>
 
                                     @else
 
                                         <span class="prod-stock ok">
-                                            🟢 {{ $producto->stock }}
+                                            <span class="stock-punto"></span> {{ $producto->stock }}
                                         </span>
 
                                     @endif
@@ -797,7 +798,7 @@
                                             href="{{ route('admin.productos.edit',$producto) }}"
                                             class="btn-editar">
 
-                                            ✏️ Editar
+                                            <x-icon name="pencil" /> Editar
 
                                         </a>
 
@@ -806,7 +807,7 @@
                                             class="btn-eliminar"
                                             onclick="abrirModal('{{ $producto->id }}','{{ addslashes($producto->nombre) }}')">
 
-                                            🗑 Eliminar
+                                            <x-icon name="trash-2" /> Eliminar
 
                                         </button>
 
@@ -823,7 +824,7 @@
                                 <td colspan="7" class="prod-empty">
 
                                     <span class="prod-empty-icon">
-                                        📭
+                                        <x-icon name="inbox" />
                                     </span>
 
                                     <div class="prod-empty-msg">
@@ -862,7 +863,7 @@
             <div class="modal-box">
 
                 <div class="modal-icon">
-                    🗑️
+                    <x-icon name="trash-2" />
                 </div>
 
                 <h3 class="modal-title">

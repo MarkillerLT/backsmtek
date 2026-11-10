@@ -437,7 +437,7 @@
             pointer-events: none;
         }
 
-        .img-dz-icon  { font-size: 3rem; }
+        .img-dz-icon  { font-size: 3rem; color: var(--AzulSmtek); display: inline-flex; }
         .img-dz-label { font-size: 1.4rem; color: var(--text-primary); font-weight: 500; }
         .img-dz-hint  { font-size: 1.2rem; color: var(--text-muted); }
 
@@ -787,7 +787,7 @@
                                         class="img-input-hidden"
                                     />
                                     <div class="img-dropzone-content" id="imgContent">
-                                        <span class="img-dz-icon">🖼️</span>
+                                        <span class="img-dz-icon"><x-icon name="image" /></span>
                                         <span class="img-dz-label">Arrastra la imagen aquí o <u>haz clic para seleccionar</u></span>
                                         <span class="img-dz-hint">JPG, PNG, WEBP · Máx. 2 MB</span>
                                     </div>
@@ -801,10 +801,10 @@
                         {{-- Botones --}}
                         <div class="form-actions">
                             <button type="submit" class="btn-guardar">
-                                💾 Guardar producto
+                                <x-icon name="save" /> Guardar producto
                             </button>
                             <a href="{{ route('admin.productos.index') }}" class="btn-cancelar">
-                                ✕ Cancelar
+                                <x-icon name="x" /> Cancelar
                             </a>
                         </div>
 
@@ -823,16 +823,16 @@
 
                                 {{-- Info del archivo --}}
                                 <div class="preview-file-info" id="previewFileInfo">
-                                    <span style="font-size:1.6rem;">🖼️</span>
+                                    <span style="font-size:1.6rem;display:flex;"><x-icon name="image" /></span>
                                     <span class="preview-file-name" id="previewFileName"></span>
                                     <span class="preview-file-size" id="previewFileSize"></span>
-                                    <button type="button" class="btn-quitar-img" id="btnQuitarImg" aria-label="Quitar imagen">✕</button>
+                                    <button type="button" class="btn-quitar-img" id="btnQuitarImg" aria-label="Quitar imagen"><x-icon name="x" /></button>
                                 </div>
 
                                 {{-- Preview de la imagen --}}
                                 <div class="preview-img-wrap" id="previewWrap">
                                     <div class="preview-placeholder" id="previewPlaceholder">
-                                        <span>📷</span>
+                                        <span class="preview-placeholder-icon"><x-icon name="camera" /></span>
                                         <span>Sin imagen seleccionada</span>
                                     </div>
                                     <img id="previewImg" src="" alt="Preview" style="display:none;" />

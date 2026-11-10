@@ -369,7 +369,13 @@
             justify-content: center;
             flex-shrink: 0;
         }
-        .kpi-mini-icon.total { background-color: var(--AzulClaro); }
+        .kpi-mini-icon.total { background-color: var(--AzulClaro); color: var(--AzulOscuro); }
+        .kpi-mini-icon.pend  { color: #b87a00; }
+        .kpi-mini-icon.aprob { color: #1a7a5c; }
+        .kpi-mini-icon.rech  { color: var(--error); }
+        body.dark-mode .kpi-mini-icon.total { color: var(--AzulSmtek); }
+        body.dark-mode .kpi-mini-icon.pend  { color: var(--acentos); }
+        body.dark-mode .kpi-mini-icon.aprob { color: #2ecc9a; }
         .kpi-mini-icon.pend  { background-color: rgba(240,165,0,0.12); }
         .kpi-mini-icon.aprob { background-color: rgba(29,158,117,0.12); }
         .kpi-mini-icon.rech  { background-color: rgba(226,75,74,0.1); }
@@ -454,28 +460,28 @@
         {{-- KPIs --}}
         <div class="cotiz-kpis">
             <div class="kpi-mini">
-                <div class="kpi-mini-icon total">📥</div>
+                <div class="kpi-mini-icon total"><x-icon name="download" /></div>
                 <div>
                     <div class="kpi-mini-valor">{{ $resumen['recibido'] ?? 0 }}</div>
                     <div class="kpi-mini-label">Recibidos</div>
                 </div>
             </div>
             <div class="kpi-mini">
-                <div class="kpi-mini-icon pend">🔍</div>
+                <div class="kpi-mini-icon pend"><x-icon name="search" /></div>
                 <div>
                     <div class="kpi-mini-valor">{{ $resumen['en_revision'] ?? 0 }}</div>
                     <div class="kpi-mini-label">En revisión</div>
                 </div>
             </div>
             <div class="kpi-mini">
-                <div class="kpi-mini-icon aprob">✅</div>
+                <div class="kpi-mini-icon aprob"><x-icon name="circle-check" /></div>
                 <div>
                     <div class="kpi-mini-valor">{{ $resumen['aceptado'] ?? 0 }}</div>
                     <div class="kpi-mini-label">Aceptados</div>
                 </div>
             </div>
             <div class="kpi-mini">
-                <div class="kpi-mini-icon rech">✕</div>
+                <div class="kpi-mini-icon rech"><x-icon name="x" /></div>
                 <div>
                     <div class="kpi-mini-valor">{{ $resumen['rechazado'] ?? 0 }}</div>
                     <div class="kpi-mini-label">Rechazados</div>
@@ -523,7 +529,7 @@
                                 <td>
                                     @if ($postulacion->cv)
                                         <a href="{{ asset('storage/' . $postulacion->cv) }}" target="_blank" rel="noopener noreferrer" class="btn-ver">
-                                            📄 Ver CV
+                                            <x-icon name="file-text" /> Ver CV
                                         </a>
                                     @else
                                         <span style="color: var(--text-muted);">Sin CV</span>

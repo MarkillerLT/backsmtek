@@ -527,7 +527,7 @@
                                 class="btn-guardar"
                                 style="width: 100%;"
                             >
-                                📄 Abrir CV
+                                <x-icon name="file-text" /> Abrir CV
                             </a>
                         @else
                             <p style="color: var(--text-muted); font-size: 1.4rem;">

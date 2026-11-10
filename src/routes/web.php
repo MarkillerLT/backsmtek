@@ -71,7 +71,7 @@ Route::middleware([
 
                 Route::resource('cotizaciones', CotizacionController::class)
                     ->parameters(['cotizaciones' => 'cotizacion'])
-                    ->only(['index', 'show', 'update']);
+                    ->only(['index', 'show', 'update', 'destroy']);
 
                 Route::get('cotizaciones/exportar/excel', [CotizacionController::class, 'exportExcel'])
                     ->name('cotizaciones.export.excel');

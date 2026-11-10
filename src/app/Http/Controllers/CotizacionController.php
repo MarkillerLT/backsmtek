@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cotizacion;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\CotizacionesExport;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -38,7 +39,16 @@ class CotizacionController extends Controller
             'asunto'    => 'required|max:255',
             'mensaje'   => 'required',
             'localidad' => 'required|in:Queretaro,Silao,Toluca',
+            'tipo_cotizacion'     => ['required', Rule::in(array_keys(Cotizacion::TIPOS))],
+            'otro_especificacion' => ['nullable', 'required_if:tipo_cotizacion,otro', 'string', 'max:255'],
+        ], [
+            'tipo_cotizacion.required'        => 'Selecciona el tipo de cotización.',
+            'tipo_cotizacion.in'              => 'Selecciona un tipo de cotización válido.',
+            'otro_especificacion.required_if' => 'Especifica qué tipo de cotización necesitas.',
+            'otro_especificacion.max'         => 'La especificación no debe superar los 255 caracteres.',
         ]);
+
+        $esOtro = $request->tipo_cotizacion === 'otro';
 
         Cotizacion::create([
             'user_id'   => auth()->id(),
@@ -49,6 +59,8 @@ class CotizacionController extends Controller
             'asunto'    => $request->asunto,
             'mensaje'   => $request->mensaje,
             'localidad' => $request->localidad,
+            'tipo_cotizacion'     => $request->tipo_cotizacion,
+            'otro_especificacion' => $esOtro ? trim($request->otro_especificacion) : null,
             'estado'    => 'pendiente',
             // numcontrol queda null: lo captura el vendedor desde el panel admin
         ]);
@@ -89,6 +101,17 @@ class CotizacionController extends Controller
         return redirect()
             ->route('admin.cotizaciones.show', $cotizacion)
             ->with('success', 'Estado actualizado correctamente.');
+    }
+
+    public function destroy(Cotizacion $cotizacion)
+    {
+        $id = $cotizacion->id;
+
+        $cotizacion->delete();
+
+        return redirect()
+            ->route('admin.cotizaciones.index')
+            ->with('success', "Cotización #{$id} eliminada correctamente.");
     }
 
     public function exportExcel()

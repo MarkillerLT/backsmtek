@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>ID</th><th>Núm. Control</th><th>Nombre</th><th>Empresa</th>
-                <th>Correo</th><th>Ciudad</th><th>Estado</th><th>Fecha</th>
+                <th>Correo</th><th>Ciudad</th><th>Tipo</th><th>Estado</th><th>Fecha</th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +27,12 @@
                     <td>{{ $c->empresa ?: '—' }}</td>
                     <td>{{ $c->correo }}</td>
                     <td>{{ $c->localidad }}</td>
+                    <td>
+                        {{ $c->tipo_cotizacion_label }}
+                        @if($c->tipo_cotizacion === 'otro' && $c->otro_especificacion)
+                            <br><small>{{ $c->otro_especificacion }}</small>
+                        @endif
+                    </td>
                     <td>{{ ucfirst(str_replace('_',' ',$c->estado)) }}</td>
                     <td>{{ $c->created_at->format('d/m/Y') }}</td>
                 </tr>

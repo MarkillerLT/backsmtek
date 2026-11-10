@@ -12,9 +12,9 @@
         };
 
         $estadoIcon = match($estadoSlug) {
-            'pendiente'  => '⏳',
-            'en_proceso' => '🔍',
-            'respondida' => '✅',
+            'pendiente'  => 'hourglass',
+            'en_proceso' => 'refresh-cw',
+            'respondida' => 'circle-check',
         };
 
         $estadoLabel = match($estadoSlug) {
@@ -481,6 +481,15 @@
             margin-bottom: 2rem;
         }
 
+        .toolbar-acciones {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .form-field-hint.warn .icon { vertical-align: -0.15em; }
+
         .estado-preview-label {
             font-size: 1.3rem;
             color: var(--text-muted);
@@ -600,7 +609,7 @@
     {{-- Flash --}}
     @if(session('success'))
         <div class="flash-alert">
-            <span style="font-size:2rem;">✅</span>
+            <span style="font-size:2rem;color:var(--contrastes);display:flex;"><x-icon name="circle-check" /></span>
             <p>{{ session('success') }}</p>
         </div>
     @endif
@@ -617,10 +626,24 @@
                 <span>Detalle</span>
             </div>
         </div>
-        <span class="estado-badge {{ $estadoSlug }}" id="badgeToolbar">
-            {{ $estadoIcon }} {{ $estadoLabel }}
-        </span>
+        <div class="toolbar-acciones">
+            <span class="estado-badge {{ $estadoSlug }}" id="badgeToolbar">
+                <x-icon :name="$estadoIcon" /> {{ $estadoLabel }}
+            </span>
+            <button
+                type="button"
+                class="btn-eliminar"
+                data-eliminar-url="{{ route('admin.cotizaciones.destroy', $cotizacion) }}"
+                data-eliminar-desc="Se eliminará la cotización #{{ $cotizacion->id }} de {{ $cotizacion->nombre }}">
+                <x-icon name="trash-2" /> Eliminar
+            </button>
+        </div>
     </div>
+
+    {{-- Iconos de estado para la vista previa en tiempo real --}}
+    <template id="icono-estado-pendiente"><x-icon name="hourglass" /></template>
+    <template id="icono-estado-en_proceso"><x-icon name="refresh-cw" /></template>
+    <template id="icono-estado-respondida"><x-icon name="circle-check" /></template>
 
     {{-- Layout --}}
     <div class="create-layout">
@@ -633,7 +656,7 @@
                         <h2 class="panel-title">Información del cliente</h2>
                         <p class="panel-subtitle">Datos enviados desde el formulario web</p>
                     </div>
-                    <span class="localidad-badge">📍 {{ $cotizacion->localidad }}</span>
+                    <span class="localidad-badge"><x-icon name="map-pin" /> {{ $cotizacion->localidad }}</span>
                 </div>
                 <div class="panel-body">
                     <div class="form-grid">
@@ -657,6 +680,18 @@
                             <label>Teléfono</label>
                             <input type="text" value="{{ $cotizacion->telefono ?? '—' }}" disabled>
                         </div>
+
+                        <div class="form-field {{ $cotizacion->tipo_cotizacion === 'otro' ? '' : 'full' }}">
+                            <label>Tipo de cotización</label>
+                            <input type="text" value="{{ $cotizacion->tipo_cotizacion_label }}" disabled>
+                        </div>
+
+                        @if($cotizacion->tipo_cotizacion === 'otro')
+                            <div class="form-field">
+                                <label>Especificación del cliente</label>
+                                <input type="text" value="{{ $cotizacion->otro_especificacion ?: '—' }}" disabled>
+                            </div>
+                        @endif
 
                         <div class="form-field full">
                             <label>Asunto</label>
@@ -687,7 +722,7 @@
 
                     <div class="estado-preview">
                         <span class="estado-badge {{ $estadoSlug }}" id="badgePreview">
-                            {{ $estadoIcon }} {{ $estadoLabel }}
+                            <x-icon :name="$estadoIcon" /> {{ $estadoLabel }}
                         </span>
                         <span class="estado-preview-label">Estado actual</span>
                     </div>
@@ -709,7 +744,7 @@
                                 <span class="form-field-hint warn">{{ $message }}</span>
                             @else
                                 @if(!$cotizacion->numcontrol)
-                                    <span class="form-field-hint warn">⚠ Aún sin asignar</span>
+                                    <span class="form-field-hint warn"><x-icon name="triangle-alert" /> Aún sin asignar</span>
                                 @else
                                     <span class="form-field-hint">Asignado por el equipo comercial</span>
                                 @endif
@@ -719,14 +754,14 @@
                         <div class="form-field" style="margin-bottom:2rem;">
                             <label for="selectEstado">Estado</label>
                             <select name="estado" id="selectEstado">
-                                <option value="pendiente"  @selected($cotizacion->estado === 'pendiente')>⏳ Pendiente</option>
-                                <option value="en_proceso" @selected($cotizacion->estado === 'en_proceso')>🔍 En proceso</option>
-                                <option value="respondida" @selected($cotizacion->estado === 'respondida')>✅ Respondida</option>
+                                <option value="pendiente"  @selected($cotizacion->estado === 'pendiente')>Pendiente</option>
+                                <option value="en_proceso" @selected($cotizacion->estado === 'en_proceso')>En proceso</option>
+                                <option value="respondida" @selected($cotizacion->estado === 'respondida')>Respondida</option>
                             </select>
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn-guardar">💾 Guardar cambios</button>
+                            <button type="submit" class="btn-guardar"><x-icon name="save" /> Guardar cambios</button>
                             <a href="{{ route('admin.cotizaciones.index') }}" class="btn-cancelar">Volver</a>
                         </div>
                     </form>
@@ -755,6 +790,15 @@
                         <span>{{ $cotizacion->localidad }}</span>
                     </div>
                     <div class="info-row">
+                        <strong>Tipo de cotización</strong>
+                        <span>
+                            {{ $cotizacion->tipo_cotizacion_label }}
+                            @if($cotizacion->tipo_cotizacion === 'otro' && $cotizacion->otro_especificacion)
+                                — {{ $cotizacion->otro_especificacion }}
+                            @endif
+                        </span>
+                    </div>
+                    <div class="info-row">
                         <strong>Fecha de recepción</strong>
                         <span>{{ $cotizacion->created_at->format('d/m/Y H:i') }}</span>
                     </div>
@@ -772,12 +816,10 @@
         // ── Dark mode ──
         (function () {
             const btn   = document.getElementById('darkToggle');
-            const icon  = document.getElementById('toggleIcon');
             const label = document.getElementById('toggleLabel');
 
             function apply(dark) {
                 document.body.classList.toggle('dark-mode', dark);
-                if (icon)  icon.textContent  = dark ? '☀️' : '🌙';
                 if (label) label.textContent = dark ? 'Claro' : 'Oscuro';
             }
 
@@ -814,9 +856,9 @@
             ];
 
             const config = {
-                pendiente:  { icon: '⏳', label: 'Pendiente',  cls: 'pendiente'  },
-                en_proceso: { icon: '🔍', label: 'En proceso', cls: 'en_proceso' },
-                respondida: { icon: '✅', label: 'Respondida', cls: 'respondida' },
+                pendiente:  { label: 'Pendiente',  cls: 'pendiente'  },
+                en_proceso: { label: 'En proceso', cls: 'en_proceso' },
+                respondida: { label: 'Respondida', cls: 'respondida' },
             };
 
             const clases = Object.values(config).map(c => c.cls);
@@ -828,11 +870,16 @@
                     if (!badge) return;
                     badge.classList.remove(...clases);
                     badge.classList.add(c.cls);
-                    badge.textContent = c.icon + ' ' + c.label;
+                    const icono = document.getElementById('icono-estado-' + c.cls);
+                    badge.replaceChildren(
+                        icono ? icono.content.cloneNode(true) : '',
+                        document.createTextNode(' ' + c.label)
+                    );
                 });
             });
         })();
     </script>
 
 </x-admin.layout>
+@include('admin.cotizaciones.partials.modal-eliminar')
 </x-app-layout>

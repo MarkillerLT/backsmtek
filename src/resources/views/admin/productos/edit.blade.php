@@ -487,7 +487,7 @@
             pointer-events: none;
         }
 
-        .img-dz-icon  { font-size: 3rem; }
+        .img-dz-icon  { font-size: 3rem; color: var(--AzulSmtek); display: inline-flex; }
         .img-dz-label { font-size: 1.4rem; color: var(--text-primary); font-weight: 500; }
         .img-dz-hint  { font-size: 1.2rem; color: var(--text-muted); }
 
@@ -786,7 +786,7 @@
                             class="img-input-hidden"
                         />
                         <div class="img-dropzone-content" id="imgContent">
-                            <span class="img-dz-icon">🖼️</span>
+                            <span class="img-dz-icon"><x-icon name="image" /></span>
                             <span class="img-dz-label">Arrastra una nueva imagen o <u>haz clic para seleccionar</u></span>
                             <span class="img-dz-hint">Dejar vacío para conservar la imagen actual</span>
                         </div>
@@ -800,10 +800,10 @@
             {{-- Botones --}}
             <div class="form-actions">
                 <button type="submit" class="btn-guardar">
-                    💾 Guardar cambios
+                    <x-icon name="save" /> Guardar cambios
                 </button>
                 <a href="{{ route('admin.productos.index') }}" class="btn-cancelar">
-                    ✕ Cancelar
+                    <x-icon name="x" /> Cancelar
                 </a>
             </div>
 
@@ -822,10 +822,10 @@
 
                     {{-- Info del archivo nuevo --}}
                     <div class="preview-file-info" id="previewFileInfo">
-                        <span style="font-size:1.6rem;">🖼️</span>
+                        <span style="font-size:1.6rem;display:flex;"><x-icon name="image" /></span>
                         <span class="preview-file-name" id="previewFileName"></span>
                         <span class="preview-file-size" id="previewFileSize"></span>
-                        <button type="button" class="btn-quitar-img" id="btnQuitarImg" aria-label="Quitar imagen">✕</button>
+                        <button type="button" class="btn-quitar-img" id="btnQuitarImg" aria-label="Quitar imagen"><x-icon name="x" /></button>
                     </div>
 
                     {{-- Preview: nueva imagen seleccionada o imagen actual del producto --}}
@@ -838,7 +838,7 @@
                             />
                         @else
                             <div class="preview-placeholder" id="previewPlaceholder">
-                                <span>📷</span>
+                                <span class="preview-placeholder-icon"><x-icon name="camera" /></span>
                                 <span>Sin imagen</span>
                             </div>
                             <img id="previewImg" src="" alt="Preview" style="display:none;" />
@@ -883,7 +883,6 @@
 
             function apply(dark) {
                 document.body.classList.toggle('dark-mode', dark);
-                if (icon)  icon.textContent  = dark ? '☀️' : '🌙';
                 if (label) label.textContent = dark ? 'Claro' : 'Oscuro';
             }
 
@@ -947,7 +946,7 @@
                 if (fileSize) fileSize.textContent = formatSize(file.size);
                 if (fileInfo) fileInfo.classList.add('visible');
 
-                if (content) content.querySelector('.img-dz-label').innerHTML = '✅ <u>Cambiar imagen</u>';
+                if (content) content.querySelector('.img-dz-label').innerHTML = @json(\Illuminate\Support\Facades\Blade::render('<x-icon name="circle-check" />')) + ' <u>Cambiar imagen</u>';
                 if (dropzone) {
                     dropzone.style.borderStyle = 'solid';
                     dropzone.style.borderColor = 'var(--contrastes)';

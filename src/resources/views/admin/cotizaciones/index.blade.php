@@ -544,6 +544,33 @@
             color: var(--text-primary);
             border: 1px solid var(--border-color);
         }
+        /* ── Tipo de cotización ── */
+        .tipo-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            white-space: nowrap;
+            background-color: var(--AzulClaro);
+            color: var(--AzulOscuro);
+        }
+        body.dark-mode .tipo-badge { background-color: rgba(33,150,186,0.18); color: var(--AzulSmtek); }
+        .tipo-badge.sin-clasificar,
+        body.dark-mode .tipo-badge.sin-clasificar {
+            background-color: var(--bg-body);
+            color: var(--text-muted);
+            border: 1px dashed var(--border-color);
+            font-weight: 600;
+        }
+        .tipo-especificacion {
+            margin-top: 0.4rem;
+            max-width: 22rem;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            overflow-wrap: anywhere;
+        }
         /* ── Badge de estado (nombres corregidos al enum real) ── */
         .estado-badge {
             display: inline-flex;
@@ -660,7 +687,34 @@
             justify-content: center;
             flex-shrink: 0;
         }
-        .kpi-mini-icon.total    { background-color: var(--AzulClaro); }
+        .kpi-mini-icon.total    { background-color: var(--AzulClaro); color: var(--AzulOscuro); }
+        .kpi-mini-icon.pend     { color: #b87a00; }
+        .kpi-mini-icon.proc     { background-color: var(--AzulClaro); color: var(--AzulSmtek); }
+        .kpi-mini-icon.resp     { background-color: rgba(29,158,117,0.12); color: #1a7a5c; }
+        body.dark-mode .kpi-mini-icon.total { color: var(--AzulSmtek); }
+        body.dark-mode .kpi-mini-icon.pend  { color: var(--acentos); }
+        body.dark-mode .kpi-mini-icon.proc  { background-color: rgba(33,150,186,0.18); }
+        body.dark-mode .kpi-mini-icon.resp  { background-color: rgba(29,158,117,0.2); color: #2ecc9a; }
+        .prod-search span { display: flex; }
+        .btn-exportar .icon { font-size: 1.5rem; }
+        .cotiz-acciones { display: flex; align-items: center; gap: 0.6rem; }
+        .btn-eliminar.btn-eliminar-icono { padding: 0.7rem 0.9rem; font-size: 1.5rem; }
+        /* 10 columnas: relleno horizontal más compacto para que quepan las acciones */
+        #tablaCotizaciones th,
+        #tablaCotizaciones td { padding-left: 1.2rem; padding-right: 1.2rem; }
+        .flash-alert {
+            display: flex;
+            align-items: center;
+            gap: 1.4rem;
+            background-color: rgba(29,158,117,0.1);
+            border-left: 4px solid var(--contrastes);
+            border-radius: var(--radius-sm);
+            padding: 1.4rem 1.8rem;
+            box-shadow: var(--shadow-sm);
+        }
+        body.dark-mode .flash-alert { background-color: rgba(29,158,117,0.15); }
+        .flash-alert-icon { font-size: 2rem; color: var(--contrastes); display: flex; }
+        .flash-alert p { font-size: 1.45rem; font-weight: 600; color: var(--contrastes); margin: 0; }
         .kpi-mini-icon.pend     { background-color: rgba(240,165,0,0.12); }
         .kpi-mini-icon.aprob    { background-color: rgba(29,158,117,0.12); }
         .kpi-mini-icon.rech     { background-color: rgba(226,75,74,0.1); }
@@ -734,6 +788,13 @@
     <x-admin.layout
         title="Cotizaciones"
         :cotizacionesPendientes="$cotizacionesPendientes">
+        {{-- Flash --}}
+        @if(session('success'))
+            <div class="flash-alert">
+                <span class="flash-alert-icon"><x-icon name="circle-check" /></span>
+                <p>{{ session('success') }}</p>
+            </div>
+        @endif
         {{-- Toolbar --}}
         <div class="prod-toolbar">
             <div class="prod-toolbar-left">
@@ -762,14 +823,14 @@
         {{-- KPIs --}}
         <div class="cotiz-kpis">
             <div class="kpi-mini">
-                <div class="kpi-mini-icon total">📋</div>
+                <div class="kpi-mini-icon total"><x-icon name="clipboard-list" /></div>
                 <div>
                     <div class="kpi-mini-valor">{{ $cotizaciones->count() }}</div>
                     <div class="kpi-mini-label">Total</div>
                 </div>
             </div>
             <div class="kpi-mini">
-                <div class="kpi-mini-icon pend">⏳</div>
+                <div class="kpi-mini-icon pend"><x-icon name="hourglass" /></div>
                 <div>
                     <div class="kpi-mini-valor">
                         {{ $cotizaciones->where('estado','pendiente')->count() }}
@@ -778,7 +839,7 @@
                 </div>
             </div>
             <div class="kpi-mini">
-                <div class="kpi-mini-icon proc">🔄</div>
+                <div class="kpi-mini-icon proc"><x-icon name="refresh-cw" /></div>
                 <div>
                     <div class="kpi-mini-valor">
                         {{ $cotizaciones->where('estado','en_proceso')->count() }}
@@ -787,7 +848,7 @@
                 </div>
             </div>
             <div class="kpi-mini">
-                <div class="kpi-mini-icon resp">✅</div>
+                <div class="kpi-mini-icon resp"><x-icon name="circle-check" /></div>
                 <div>
                     <div class="kpi-mini-valor">
                         {{ $cotizaciones->where('estado','respondida')->count() }}
@@ -809,7 +870,7 @@
                 <div class="panel-header-actions">
                     <div class="fecha-rango-wrap">
                         <button type="button" class="fecha-rango-btn" id="fechaRangoToggle">
-                            <span class="fecha-rango-icono">📅</span>
+                            <span class="fecha-rango-icono"><x-icon name="calendar" /></span>
                             <span id="fechaRangoLabel">Rango de fechas</span>
                         </button>
 
@@ -839,7 +900,7 @@
                         </div>
                     </div>
                     <div class="prod-search">
-                        <span>🔍</span>
+                        <span><x-icon name="search" /></span>
                         <input
                             type="text"
                             id="buscarCotiz"
@@ -847,10 +908,10 @@
                             autocomplete="off">
                     </div>
                     <a href="{{ route('admin.cotizaciones.export.excel') }}" class="btn-exportar excel">
-                        📊 Excel
+                        <x-icon name="file-spreadsheet" /> Excel
                     </a>
                     <a href="{{ route('admin.cotizaciones.export.pdf') }}" class="btn-exportar pdf" target="_blank">
-                        📄 PDF
+                        <x-icon name="file-text" /> PDF
                     </a>
                 </div>
             </div>
@@ -864,6 +925,7 @@
                             <th>Empresa</th>
                             <th>Correo</th>
                             <th>Ciudad</th>
+                            <th>Tipo</th>
                             <th>Estado</th>
                             <th>Fecha</th>
                             <th></th>
@@ -882,7 +944,15 @@
                                 <td class="cotiz-nombre">{{ $cotizacion->nombre }}</td>
                                 <td class="cotiz-empresa">{{ $cotizacion->empresa ?: '—' }}</td>
                                 <td class="cotiz-correo">{{ $cotizacion->correo }}</td>
-                                <td><span class="localidad-badge">📍 {{ $cotizacion->localidad }}</span></td>
+                                <td><span class="localidad-badge"><x-icon name="map-pin" /> {{ $cotizacion->localidad }}</span></td>
+                                <td>
+                                    <span class="tipo-badge {{ $cotizacion->tipo_cotizacion ? '' : 'sin-clasificar' }}">
+                                        {{ $cotizacion->tipo_cotizacion_label }}
+                                    </span>
+                                    @if($cotizacion->tipo_cotizacion === 'otro' && $cotizacion->otro_especificacion)
+                                        <div class="tipo-especificacion">{{ $cotizacion->otro_especificacion }}</div>
+                                    @endif
+                                </td>
                                 <td>
                                     <span class="estado-badge {{ $cotizacion->estado }}">
                                         {{ ucfirst(str_replace('_',' ', $cotizacion->estado)) }}
@@ -892,26 +962,34 @@
                                     {{ $cotizacion->created_at->format('d/m/Y') }}
                                 </td>
                                 <td>
-                                <a
-
-                                        href="{{ route('admin.cotizaciones.show',$cotizacion) }}"
-                                        class="btn-ver">
-                                        Ver detalle
-                                    </a>
+                                    <div class="cotiz-acciones">
+                                        <a href="{{ route('admin.cotizaciones.show',$cotizacion) }}" class="btn-ver">
+                                            Ver detalle
+                                        </a>
+                                        <button
+                                            type="button"
+                                            class="btn-eliminar btn-eliminar-icono"
+                                            title="Eliminar cotización"
+                                            aria-label="Eliminar cotización #{{ $cotizacion->id }}"
+                                            data-eliminar-url="{{ route('admin.cotizaciones.destroy', $cotizacion) }}"
+                                            data-eliminar-desc="Se eliminará la cotización #{{ $cotizacion->id }} de {{ $cotizacion->nombre }}">
+                                            <x-icon name="trash-2" />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="prod-empty">
-                                    <span class="prod-empty-icon">📭</span>
+                                <td colspan="10" class="prod-empty">
+                                    <span class="prod-empty-icon"><x-icon name="inbox" /></span>
                                     <div class="prod-empty-msg">No hay cotizaciones registradas.</div>
                                 </td>
                             </tr>
                         @endforelse
                         {{-- Fila que se muestra cuando los filtros no encuentran nada --}}
                         <tr id="filaSinResultados" style="display: none;">
-                            <td colspan="9" class="prod-empty">
-                                <span class="prod-empty-icon">🔍</span>
+                            <td colspan="10" class="prod-empty">
+                                <span class="prod-empty-icon"><x-icon name="search" /></span>
                                 <div class="prod-empty-msg">Sin resultados</div>
                                 <div class="prod-empty-sub">Ninguna cotización coincide con los filtros aplicados.</div>
                             </td>
@@ -921,6 +999,7 @@
             </div>
         </div>
     </x-admin.layout>
+    @include('admin.cotizaciones.partials.modal-eliminar')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const filas = Array.from(document.querySelectorAll('#tablaCotizaciones tbody tr[data-estado]'));

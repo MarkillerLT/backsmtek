@@ -243,7 +243,12 @@
             font-size: 2.2rem;
             flex-shrink: 0;
         }
-        .kpi-icon.azul    { background-color: var(--AzulClaro); }
+        .kpi-icon.azul    { background-color: var(--AzulClaro); color: var(--AzulOscuro); }
+        .kpi-icon.amarillo{ color: #b87a00; }
+        .kpi-icon.verde   { color: #1a7a5c; }
+        body.dark-mode .kpi-icon.azul     { color: var(--AzulSmtek); }
+        body.dark-mode .kpi-icon.amarillo { color: var(--acentos); }
+        body.dark-mode .kpi-icon.verde    { color: #2ecc9a; }
         .kpi-icon.amarillo{ background-color: rgba(240,165,0,0.12); }
         .kpi-icon.verde   { background-color: rgba(29,158,117,0.12); }
         body.dark-mode .kpi-icon.azul     { background-color: rgba(33,150,186,0.15); }
@@ -312,28 +317,28 @@
             <div class="user-hero-info">
                 <h1>{{ $user->name }}</h1>
                 <p>{{ $user->email }}</p>
-                <span class="user-hero-id">🆔 ID #{{ $user->id }}</span>
+                <span class="user-hero-id">ID #{{ $user->id }}</span>
             </div>
         </div>
 
         {{-- ── KPIs: cotizaciones hechas vs respondidas ── --}}
         <div class="kpi-grid">
             <div class="kpi-card">
-                <div class="kpi-icon azul">📋</div>
+                <div class="kpi-icon azul"><x-icon name="clipboard-list" /></div>
                 <div>
                     <div class="kpi-valor">{{ $cotizacionesHechas }}</div>
                     <div class="kpi-label">Cotizaciones hechas</div>
                 </div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-icon amarillo">⏳</div>
+                <div class="kpi-icon amarillo"><x-icon name="hourglass" /></div>
                 <div>
                     <div class="kpi-valor">{{ $cotizacionesPendientes + $cotizacionesEnProceso }}</div>
                     <div class="kpi-label">En espera de respuesta</div>
                 </div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-icon verde">✅</div>
+                <div class="kpi-icon verde"><x-icon name="circle-check" /></div>
                 <div>
                     <div class="kpi-valor">{{ $cotizacionesRespondidas }}</div>
                     <div class="kpi-label">Respondidas</div>
