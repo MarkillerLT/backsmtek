@@ -1,0 +1,7 @@
+# Used by BuildKit (CI) instead of the root .dockerignore for this Dockerfile:
+# the Anubis image only needs these files from the repository.
+*
+!docker/anubis/branding/
+!docker/anubis/policy/
+!src/public/assets/img/smteklogo.png
+!src/public/assets/img/heros/tcnos.jpg

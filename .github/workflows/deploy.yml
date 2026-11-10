@@ -55,6 +55,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/anubis/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ env.IMAGE }}/anubis:${{ github.sha }}
+            ${{ env.IMAGE }}/anubis:latest
+          cache-from: type=gha,scope=anubis
+          cache-to: type=gha,mode=max,scope=anubis
+
   deploy:
     needs: build
     if: ${{ !failure() && !cancelled() }}
@@ -98,8 +110,11 @@ jobs:
             StrictHostKeyChecking yes
           EOF
 
-      - name: Upload compose file and bin/prod
-        run: tar -cz docker-compose.prod.yml bin/prod | ssh vps "mkdir -p '$VPS_PATH' && tar -xz -C '$VPS_PATH'"
+      - name: Upload compose file, bin/prod and the edge Caddyfile
+        run: |
+          files="docker-compose.prod.yml bin/prod"
+          [ -f docker/proxy/Caddyfile ] && files="$files docker/proxy/Caddyfile"
+          tar -cz $files | ssh vps "mkdir -p '$VPS_PATH' && tar -xz -C '$VPS_PATH'"
 
       - name: Log in to GHCR from the VPS
         env:
@@ -117,10 +132,20 @@ jobs:
           docker pull "$IMAGE"
           docker tag "$IMAGE" smtek-app:latest
 
+          # Commits before the Anubis integration have no Anubis image
+          if grep -q 'smtek-anubis' docker-compose.prod.yml; then
+            ANUBIS_IMAGE="${IMAGE%:*}/anubis:${IMAGE##*:}"
+            docker pull "$ANUBIS_IMAGE"
+            docker tag "$ANUBIS_IMAGE" smtek-anubis:latest
+            # The edge Caddy runs as UID 1000; make sure fresh volumes are writable (no-op otherwise)
+            bin/prod run --rm --no-deps -T --user 0:0 --entrypoint chown proxy -R 1000:1000 /data/caddy /config/caddy </dev/null
+          fi
+
           bin/prod up -d --no-build --wait db
           # The script arrives on stdin; without </dev/null, compose run would swallow the rest of it
           bin/prod run --rm -T app php artisan migrate --force </dev/null
-          bin/prod up -d --no-build --wait --wait-timeout 180
+          # --remove-orphans: stops proxy/anubis when rolling back to a commit without them
+          bin/prod up -d --no-build --wait --wait-timeout 180 --remove-orphans
 
           # Keep a week of images available for rollbacks
           docker image prune -af --filter "until=168h" >/dev/null

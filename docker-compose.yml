@@ -21,6 +21,8 @@ services:
       DB_USERNAME: ${DB_USERNAME:-laravel}
       DB_PASSWORD: ${DB_PASSWORD:-secret}
       RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      # Only Anubis (on anubis_backend) may set X-Forwarded-* headers
+      TRUSTED_PROXIES: ${ANUBIS_BACKEND_SUBNET:-10.201.53.0/24}
     volumes:
       - ./src:/var/www/html
     depends_on:
@@ -28,6 +30,76 @@ services:
         condition: service_healthy
     networks:
       - smtek
+      - anubis_backend
+
+  # Browser -> proxy (localhost:8081) -> anubis -> app:8000
+  # Direct access to http://localhost:8000 (without Anubis) keeps working.
+  proxy:
+    image: caddy:2.11.9-alpine
+    container_name: smtek_proxy
+    restart: unless-stopped
+    environment:
+      SITE_ADDRESS: ":80"
+      # Debug without Anubis through the same URL: ANUBIS_UPSTREAM=host.docker.internal:8000
+      ANUBIS_UPSTREAM: ${ANUBIS_UPSTREAM:-anubis:8923}
+    ports:
+      - "${PROXY_PORT:-8081}:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Directory mount + --watch: edits to the Caddyfile are applied without a restart
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--watch"]
+    volumes:
+      - ./docker/proxy:/etc/caddy:ro
+      - caddy_data:/data/caddy
+      - caddy_config:/config/caddy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "80"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    depends_on:
+      anubis:
+        condition: service_healthy
+    networks:
+      - edge
+
+  anubis:
+    build:
+      context: .
+      dockerfile: docker/anubis/Dockerfile
+    image: smtek-anubis:latest
+    container_name: smtek_anubis
+    restart: unless-stopped
+    environment:
+      BIND: ":8923"
+      METRICS_BIND: ":9090"
+      TARGET: http://app:8000
+      DIFFICULTY: ${ANUBIS_DIFFICULTY:-4}
+      FORCED_LANGUAGE: es
+      SERVE_ROBOTS_TXT: "false"
+      # Plain HTTP on localhost: no Secure flag, and therefore no Partitioned
+      # flag either (browsers reject Partitioned cookies that are not Secure)
+      COOKIE_SECURE: ${ANUBIS_COOKIE_SECURE:-false}
+      COOKIE_PARTITIONED: ${ANUBIS_COOKIE_PARTITIONED:-false}
+      # Host as typed in the browser, port included (open the site as localhost)
+      REDIRECT_DOMAINS: ${ANUBIS_REDIRECT_DOMAINS:-localhost:${PROXY_PORT:-8081}}
+      SLOG_LEVEL: ${ANUBIS_LOG_LEVEL:-INFO}
+      ED25519_PRIVATE_KEY_HEX: ${ANUBIS_ED25519_PRIVATE_KEY_HEX:-}
+    # Live policy edits: change docker/anubis/policy/botPolicy.yaml, then
+    # `docker compose restart anubis` (Anubis reads the policy at startup)
+    volumes:
+      - ./docker/anubis/policy:/data/cfg:ro
+    healthcheck:
+      test: ["CMD", "anubis", "--healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      - app
+    networks:
+      - edge
+      - anubis_backend
 
   node:
     image: node:lts-alpine
@@ -36,6 +108,11 @@ services:
     user: "${UID:-1000}:${GID:-1000}"
     working_dir: /app
     command: sh -c "npm install && npm run dev"
+    environment:
+      # laravel-vite-plugin's container mode: listen on 0.0.0.0 inside the
+      # container and write http://localhost:5173 to public/hot. Without it Vite
+      # only listened on the container's loopback and :5173 was unreachable.
+      LARAVEL_SAIL: "1"
     ports:
       - "${VITE_PORT:-5173}:5173"
     volumes:
@@ -84,7 +161,19 @@ services:
 
 volumes:
   db_data:
+  caddy_data:
+  caddy_config:
 
 networks:
   smtek:
     driver: bridge
+  # proxy <-> anubis
+  edge:
+    driver: bridge
+  # anubis <-> app. Fixed subnet so Laravel can trust exactly this range.
+  anubis_backend:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: ${ANUBIS_BACKEND_SUBNET:-10.201.53.0/24}

@@ -1,0 +1,111 @@
+# Anubis bot policy for SMTEK (Anubis v1.28.2).
+#
+# Based on the official default policy shipped with v1.28.2
+# (data/botPolicies.yaml in the release tarball). Differences:
+#
+#   - AI bots: ai-block-moderate instead of ai-block-aggressive (the
+#     alternative suggested in the official file). Documented user-triggered
+#     fetchers and search bots with published IP lists are let through.
+#   - Link previews from messengers (official meta/messengers-preview.yaml).
+#   - GeoIP/ASN rules removed: they need a MaxMind database we don't configure.
+#   - Public static files of the Laravel app are allowed without a challenge
+#     so emails, link previews and cached pages keep their images.
+#
+# Imports prefixed with (data) are embedded in the Anubis binary.
+# Docs: https://anubis.techaro.lol/docs/admin/policies
+
+bots:
+  # Pathological bots and spoofing patterns (official defaults)
+  - import: (data)/bots/_deny-pathological.yaml
+  - import: (data)/bots/aggressive-brazilian-scrapers.yaml
+  - import: (data)/common/domain-fronting.yaml
+
+  # AI/LLM bots: block training and undocumented crawlers only
+  - import: (data)/meta/ai-block-moderate.yaml
+
+  # Search engines (Google, Bing, Apple, DuckDuckGo, Yandex, Qwant, Internet
+  # Archive...). Verified by IP range, so a spoofed user agent is not enough.
+  - import: (data)/crawlers/_allow-good.yaml
+
+  # Link previews in Telegram / VK
+  - import: (data)/meta/messengers-preview.yaml
+
+  - import: (data)/clients/x-firefox-ai.yaml
+  - import: (data)/crawlers/xai.yaml
+
+  # /.well-known, favicon, robots.txt and sitemap.xml
+  - import: (data)/common/keep-internet-working.yaml
+
+  # SMTEK: compiled Vite assets, public images/CSS/JS and the storage symlink.
+  # Static files are cheap to serve and are hot-linked by emails and previews.
+  - name: smtek-public-static-files
+    path_regex: ^/(?:build|assets|storage|videoh)/
+    action: ALLOW
+
+  # Generic catch-all for browser-like user agents (official default)
+  - name: generic-browser
+    user_agent_regex: >-
+      Mozilla|Opera
+    action: WEIGH
+    weight:
+      adjust: 10
+
+dnsbl: false
+
+honeypot:
+  enabled: true
+  implementation: naive
+
+openGraph:
+  enabled: false
+  considerHost: false
+  ttl: 24h
+
+# HTTP 200 for challenges and denials (official default, see upstream notes).
+status_codes:
+  CHALLENGE: 200
+  DENY: 200
+
+store:
+  backend: memory
+  parameters: {}
+
+# Official default thresholds. A regular browser gets weight 10, which means
+# a "fast" proof of work with difficulty 2: a fraction of a second on phones.
+thresholds:
+  - name: minimal-suspicion
+    expression: weight <= 0
+    action: ALLOW
+  - name: mild-suspicion
+    expression:
+      all:
+        - weight > 0
+        - weight < 10
+    action: CHALLENGE
+    challenge:
+      algorithm: metarefresh
+      difficulty: 1
+  - name: moderate-suspicion
+    expression:
+      all:
+        - weight >= 10
+        - weight < 20
+    action: CHALLENGE
+    challenge:
+      algorithm: fast
+      difficulty: 2
+  - name: mild-proof-of-work
+    expression:
+      all:
+        - weight >= 20
+        - weight < 30
+    action: CHALLENGE
+    challenge:
+      algorithm: fast
+      difficulty: 4
+  - name: extreme-suspicion
+    expression: weight >= 30
+    action: CHALLENGE
+    challenge:
+      algorithm: fast
+      difficulty: 6

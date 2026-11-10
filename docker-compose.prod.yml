@@ -1,3 +1,12 @@
+# Request path: Internet -> proxy (Caddy, 80/443) -> anubis -> app (FrankenPHP :8080)
+#
+# Networks:
+#   edge            proxy <-> anubis
+#   anubis_backend  anubis <-> app (internal, fixed subnet trusted by Laravel)
+#   smtek           app, queue, scheduler <-> db (and phpmyadmin)
+# The app publishes no ports and the proxy is not on the app's networks, so the
+# only way to reach Laravel from outside is through Anubis.
+
 x-app: &app
   build:
     context: .
@@ -14,17 +23,82 @@ x-app: &app
     - smtek
 
 services:
-  app:
-    <<: *app
-    container_name: smtek_app
+  proxy:
+    image: caddy:2.11.9-alpine
+    container_name: smtek_proxy
+    restart: unless-stopped
+    # Same UID as the user that owned these volumes in the FrankenPHP image,
+    # so existing certificates stay readable/renewable (the binary has
+    # cap_net_bind_service to bind 80/443 without root).
+    user: "1000:1000"
+    environment:
+      SITE_ADDRESS: ${SERVER_NAME:?SERVER_NAME is missing in .env.production}
     ports:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+    # Directory mount + --watch: edits to the Caddyfile are applied without a restart
+    command: ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile", "--watch"]
     volumes:
-      - app_storage:/app/storage
+      - ./docker/proxy:/etc/caddy:ro
       - caddy_data:/data/caddy
       - caddy_config:/config/caddy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "80"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    depends_on:
+      anubis:
+        condition: service_healthy
+    networks:
+      - edge
+
+  anubis:
+    build:
+      context: .
+      dockerfile: docker/anubis/Dockerfile
+    image: smtek-anubis:latest
+    container_name: smtek_anubis
+    restart: unless-stopped
+    environment:
+      BIND: ":8923"
+      METRICS_BIND: ":9090"
+      TARGET: http://app:8080
+      # The policy (docker/anubis/policy/botPolicy.yaml) is baked into the image
+      DIFFICULTY: ${ANUBIS_DIFFICULTY:-4}
+      FORCED_LANGUAGE: es
+      # Laravel serves its own robots.txt (allowed by the policy)
+      SERVE_ROBOTS_TXT: "false"
+      COOKIE_SECURE: "true"
+      REDIRECT_DOMAINS: ${ANUBIS_REDIRECT_DOMAINS:-${SERVER_NAME}}
+      SLOG_LEVEL: ${ANUBIS_LOG_LEVEL:-INFO}
+      # Keeps visitors' Anubis cookies valid across restarts. If empty, a random
+      # key is generated on every start and visitors are challenged again.
+      ED25519_PRIVATE_KEY_HEX: ${ANUBIS_ED25519_PRIVATE_KEY_HEX:-}
+      WEBMASTER_EMAIL: ${ANUBIS_WEBMASTER_EMAIL:-}
+    healthcheck:
+      test: ["CMD", "anubis", "--healthcheck"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      app:
+        condition: service_healthy
+    networks:
+      - edge
+      - anubis_backend
+
+  app:
+    <<: *app
+    container_name: smtek_app
+    environment:
+      # Only Anubis (on anubis_backend) may set X-Forwarded-* headers
+      TRUSTED_PROXIES: ${ANUBIS_BACKEND_SUBNET:-10.201.53.0/24}
+    networks:
+      - smtek
+      - anubis_backend
 
   queue:
     <<: *app
@@ -87,3 +161,9 @@ volumes:
 
 networks:
   smtek:
+  edge:
+  anubis_backend:
+    internal: true
+    ipam:
+      config:
+        - subnet: ${ANUBIS_BACKEND_SUBNET:-10.201.53.0/24}

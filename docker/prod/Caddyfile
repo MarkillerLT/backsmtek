@@ -1,8 +1,11 @@
 {
 	frankenphp
+	# TLS and certificates are handled by the edge proxy (docker/proxy/Caddyfile).
+	# This server is only reachable by Anubis over the internal Docker network.
+	auto_https off
 }
 
-{$SERVER_NAME:localhost} {
+http://:8080 {
 	root * /app/public
 	encode zstd br gzip
 

@@ -1,0 +1,29 @@
+# Edge proxy: Internet -> Caddy (TLS) -> Anubis -> FrankenPHP/Laravel.
+# Shared by docker-compose.yml (development) and docker-compose.prod.yml.
+#
+#   SITE_ADDRESS    production: the domain (automatic HTTPS, Let's Encrypt)
+#                   development: ":80" (plain HTTP, no certificates)
+#   ANUBIS_UPSTREAM host:port of Anubis (default anubis:8923)
+#
+# Caddy does not trust X-Forwarded-* headers sent by clients (no
+# trusted_proxies is configured), so it overwrites X-Forwarded-For with the
+# real peer address and X-Real-IP is set from the TCP connection.
+
+{
+	servers {
+		# Reject requests whose Host differs from the TLS SNI (domain fronting).
+		# Done here instead of sending X-TLS-SNI-Name to Anubis: that TLS
+		# placeholder is left unexpanded on plain HTTP and would trip Anubis'
+		# domain-fronting rule for every request.
+		strict_sni_host on
+	}
+}
+
+{$SITE_ADDRESS:localhost} {
+	encode zstd gzip
+
+	reverse_proxy {$ANUBIS_UPSTREAM:anubis:8923} {
+		header_up X-Real-IP {remote_host}
+		header_up X-Http-Version {http.request.proto}
+	}
+}

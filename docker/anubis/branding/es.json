@@ -1,0 +1,15 @@
+{
+  "making_sure_not_bot": "Verificando tu conexión...",
+  "loading": "Preparando tu experiencia en SMTEK.",
+  "connection_security": "Estamos comprobando que tu conexión sea segura.",
+  "you_are_not_a_bot": "Conexión verificada",
+  "why_am_i_seeing": "¿Por qué veo esta pantalla?",
+  "js_calculating": "Verificando...",
+  "js_calculating_difficulty": "Verificando tu conexión...<br/>Nivel:",
+  "js_success": "¡Conexión verificada!",
+  "js_done_took": "Listo. Tardó",
+  "js_verification_longer": "La verificación está tardando un poco más de lo habitual. Por favor, no recargues la página.",
+  "js_challenge_error_msg": "No se pudo completar la verificación. Intenta recargar la página.",
+  "go_home": "Volver al inicio de SMTEK",
+  "oh_noes": "No pudimos verificar tu conexión"
+}

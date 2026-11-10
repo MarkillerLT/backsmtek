@@ -53,6 +53,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends libcap2-bin \
 
 USER ${USER}
 
-EXPOSE 80 443 443/udp
+EXPOSE 8080
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile.app"]
